@@ -1,5 +1,7 @@
 package com.winlator.bridge;
 
+import android.util.Log;
+
 import com.winlator.core.FileUtils;
 
 import java.io.File;
@@ -16,10 +18,14 @@ import java.util.Map;
  * migration for something only this console needs. Whoever packages the archive already knows which
  * .exe to run and which wrapper it needs, so that knowledge is recorded next to the files.
  *
- * <p>Format is one {@code key=value} per line; {@code #} starts a comment. Recognized keys mirror the
- * intent extras: {@code exe}, {@code args}, {@code screenSize}, {@code graphicsDriver},
- * {@code dxwrapper}, {@code box64Preset}, {@code envVars}, {@code forceFullscreen}.
- * Intent extras from the caller take precedence over anything found here.
+ * <p>Format is one {@code key=value} per line; {@code #} starts a comment, {@code [section]} lines
+ * are ignored, keys are case-sensitive and a later scalar overrides an earlier one. Recognized
+ * scalar keys mirror the intent extras where one exists: {@code exe}, {@code args},
+ * {@code screenSize}, {@code graphicsDriver}, {@code dxwrapper}, {@code dxwrapperConfig},
+ * {@code box64Preset}, {@code envVars}, {@code forceFullscreen}, {@code controlsProfile}; and the
+ * manifest-only container knobs {@code startupSelection}, {@code wincomponents},
+ * {@code audioDriver}, {@code showFPS}. Intent extras from the caller take precedence over anything
+ * found here.
  *
  * <p>{@code copy} is the exception: it may repeat, and it is manifest-only. Plenty of 90s Windows
  * titles keep their settings in {@code %WINDIR%} rather than beside the executable — the original
@@ -27,14 +33,35 @@ import java.util.Map;
  * outside my folder":
  * <pre>copy=Sizuku/Sizuku.ini -&gt; C:\windows\Sizuku.ini</pre>
  *
+ * <p>{@code reg} may repeat too: each names a {@code .reg} file to merge into the prefix before
+ * launch, for games whose installer wrote registry keys the disk image never carried.
+ *
  * <p>{@code cd} may also repeat, one line per disc in disc order. Each names a folder inside the
  * game directory holding that disc's file tree, optionally with the volume label the game expects:
  * <pre>cd=CD1 -&gt; FF8_DISC1</pre>
  * The discs share the container's single CD-ROM drive (X:) and are swapped from the in-game menu,
  * mirroring how multi-disc games ran on a one-drive PC.
+ *
+ * <h3>On-device edits — the override file</h3>
+ *
+ * <p>DGPlayer lets the player edit these settings on the device and sends the result as the
+ * {@code manifest_ini} intent extra. Rewriting the archive for that would be wrong twice over: the
+ * payload fingerprint would change and force a full re-import, and a 1 GB zip cannot be rewritten
+ * in place cheaply. So the bridge materializes the text as {@link #OVERRIDE_FILENAME} next to the
+ * package's own file and {@link #read} prefers it. A file — not an in-memory merge — because the
+ * save machinery ({@code SaveSync}, {@code SaveSnapshot}) re-reads the manifest later for its
+ * {@code copy=} exclusions and must see the same configuration this launch used. The package's
+ * {@code dgplayer.ini} is never modified; deleting the override reverts to it.
  */
 class GameManifest {
+    private static final String TAG = "DGPlayerBridge";
+
     static final String FILENAME = "dgplayer.ini";
+    /**
+     * Bridge-owned copy of the settings DGPlayer sent for this launch. Wins over {@link #FILENAME}
+     * when present; absent means the package's own file applies. Excluded from save tracking.
+     */
+    static final String OVERRIDE_FILENAME = ".dgp_manifest.ini";
     private static final String KEY_COPY = "copy";
     private static final String KEY_REG = "reg";
     private static final String KEY_CD = "cd";
@@ -46,12 +73,52 @@ class GameManifest {
 
     private GameManifest() {}
 
+    /**
+     * Reads the effective manifest of a game folder: the DGPlayer override when one exists, else
+     * the package's own {@code dgplayer.ini}, else an empty manifest.
+     */
     static GameManifest read(File gameDir) {
-        GameManifest manifest = new GameManifest();
-        File file = new File(gameDir, FILENAME);
-        if (!file.isFile()) return manifest;
+        File override = new File(gameDir, OVERRIDE_FILENAME);
+        if (override.isFile()) return parse(FileUtils.readLines(override));
 
-        for (String line : FileUtils.readLines(file)) {
+        File file = new File(gameDir, FILENAME);
+        if (!file.isFile()) return new GameManifest();
+        return parse(FileUtils.readLines(file));
+    }
+
+    /**
+     * Writes or removes the override file for this launch.
+     *
+     * <p>Non-blank text is written through a temp file and renamed, so a crash mid-write cannot
+     * leave a truncated manifest that would then be trusted on the next launch. Null or blank text
+     * removes the override, which is how "delete my edits" in DGPlayer takes effect here.
+     *
+     * @return the source the next {@link #read} will use: {@code "intent"}, {@code "archive"} or
+     *         {@code "none"} — for the launch log
+     */
+    static String applyOverride(File gameDir, String iniText) {
+        File override = new File(gameDir, OVERRIDE_FILENAME);
+        if (iniText == null || iniText.trim().isEmpty()) {
+            if (override.exists() && !override.delete()) {
+                Log.w(TAG, "could not remove stale manifest override "+override);
+            }
+            return new File(gameDir, FILENAME).isFile() ? "archive" : "none";
+        }
+
+        File tmp = new File(gameDir, OVERRIDE_FILENAME+".tmp");
+        if (!FileUtils.writeString(tmp, iniText) || !tmp.renameTo(override)) {
+            tmp.delete();
+            Log.w(TAG, "could not write manifest override, using the archive's file");
+            return new File(gameDir, FILENAME).isFile() ? "archive" : "none";
+        }
+        return "intent";
+    }
+
+    /** Parses manifest lines. Package-visible so the grammar has exactly one implementation. */
+    static GameManifest parse(List<String> lines) {
+        GameManifest manifest = new GameManifest();
+
+        for (String line : lines) {
             line = line.trim();
             if (line.isEmpty() || line.startsWith("#") || line.startsWith("[")) continue;
 

@@ -19,6 +19,7 @@ import com.winlator.MainActivity;
 import com.winlator.R;
 import com.winlator.XServerDisplayActivity;
 import com.winlator.box64.Box64Preset;
+import com.winlator.container.AudioDrivers;
 import com.winlator.container.Container;
 import com.winlator.container.ContainerManager;
 import com.winlator.container.GraphicsDrivers;
@@ -26,8 +27,10 @@ import com.winlator.core.AppUtils;
 import com.winlator.core.EnvVars;
 import com.winlator.core.FileUtils;
 import com.winlator.core.GPUHelper;
+import com.winlator.core.KeyValueSet;
 import com.winlator.core.PreloaderDialog;
 import com.winlator.core.WineUtils;
+import com.winlator.widget.FrameRating;
 import com.winlator.xenvironment.RootFS;
 
 import org.json.JSONException;
@@ -82,6 +85,13 @@ public class GameLaunchActivity extends AppCompatActivity {
      * player can edit the layout in DGPlayer and see it here on the next launch.
      */
     public static final String EXTRA_CONTROLS_PROFILE = "controls_profile_json";
+    /**
+     * The full text of a {@code dgplayer.ini} the player edited in DGPlayer. When present it
+     * replaces the archive's own file for this launch (see {@link GameManifest#applyOverride});
+     * absent or blank means the archive's file applies again. Introduced in versionCode 32 —
+     * DGPlayer gates sending it on that, older builds simply never see the extra.
+     */
+    public static final String EXTRA_MANIFEST_INI = "manifest_ini";
 
     /** Directory inside the container's C: drive that holds every game imported from DGPlayer. */
     public static final String GAMES_DIR = "DGPlayer";
@@ -206,7 +216,12 @@ public class GameLaunchActivity extends AppCompatActivity {
             SaveSync.onPayloadInstalled(this, container, gameId);
         }
 
-        // Settings ship inside the archive; anything the caller sent explicitly overrides them.
+        // Settings ship inside the archive, but the player may have edited them in DGPlayer: that
+        // text arrives as an extra and is materialized as a bridge-owned override file here — after
+        // a possible reinstall wiped the folder, and before anything reads the manifest. Anything
+        // the caller sent as an individual extra still overrides the resolved manifest below.
+        String manifestSource = GameManifest.applyOverride(gameDir, getIntent().getStringExtra(EXTRA_MANIFEST_INI));
+        Log.i(TAG, "manifest source="+manifestSource+" gameId="+gameId);
         GameManifest manifest = GameManifest.read(gameDir);
 
         String exe = resolve(EXTRA_EXE, manifest.get("exe"));
@@ -570,7 +585,90 @@ public class GameLaunchActivity extends AppCompatActivity {
             changed = true;
         }
 
+        // Manifest-only knobs (no intent extra of their own — the edited manifest text already
+        // travels whole in EXTRA_MANIFEST_INI). Same rule as above: unset means Winlator default.
+        byte startupSelection = parseStartupSelection(manifest.get("startupSelection"));
+        if (startupSelection != container.getStartupSelection()) {
+            container.setStartupSelection(startupSelection);
+            changed = true;
+        }
+
+        // Merged onto the defaults like envVars: a package that only needs directshow=1 must not
+        // switch every other component off. XServerDisplayActivity compares the result with the
+        // components it last extracted and only re-extracts DLLs when the set actually changed.
+        String wincomponents = mergeWinComponents(manifest.get("wincomponents"));
+        if (!wincomponents.equals(container.getWinComponents())) {
+            container.setWinComponents(wincomponents);
+            changed = true;
+        }
+
+        String audioDriver = manifest.get("audioDriver");
+        if (!AudioDrivers.ALSA.equals(audioDriver) && !AudioDrivers.PULSEAUDIO.equals(audioDriver)) {
+            audioDriver = Container.DEFAULT_AUDIO_DRIVER;
+        }
+        if (!audioDriver.equals(container.getAudioDriver())) {
+            container.setAudioDriver(audioDriver);
+            changed = true;
+        }
+
+        byte hudMode = parseShowFps(manifest.get("showFPS"));
+        if (hudMode != container.getHUDMode()) {
+            container.setHUDMode(hudMode);
+            changed = true;
+        }
+
         if (changed) container.saveData();
+    }
+
+    /** {@code startupSelection=0|1|2} (normal / essential / aggressive); anything else = essential. */
+    private static byte parseStartupSelection(String value) {
+        if (value == null) return Container.STARTUP_SELECTION_ESSENTIAL;
+        try {
+            byte selection = Byte.parseByte(value.trim());
+            if (selection == Container.STARTUP_SELECTION_NORMAL
+                    || selection == Container.STARTUP_SELECTION_ESSENTIAL
+                    || selection == Container.STARTUP_SELECTION_AGGRESSIVE) return selection;
+        }
+        catch (NumberFormatException ignored) {}
+        Log.w(TAG, "ignoring unknown startupSelection: "+value);
+        return Container.STARTUP_SELECTION_ESSENTIAL;
+    }
+
+    /**
+     * {@code showFPS=0|1|2} maps onto {@link FrameRating.Mode} (disabled / simple / full);
+     * {@code true} is the simple HUD. Anything else = disabled.
+     */
+    private static byte parseShowFps(String value) {
+        if (value == null) return (byte)FrameRating.Mode.DISABLED.ordinal();
+        String v = value.trim();
+        if (v.equals("1") || v.equalsIgnoreCase("true")) return (byte)FrameRating.Mode.SIMPLE.ordinal();
+        if (v.equals("2")) return (byte)FrameRating.Mode.FULL.ordinal();
+        if (!v.equals("0") && !v.equalsIgnoreCase("false")) Log.w(TAG, "ignoring unknown showFPS: "+value);
+        return (byte)FrameRating.Mode.DISABLED.ordinal();
+    }
+
+    /**
+     * Overlays the manifest's {@code wincomponents} pairs onto {@link Container#DEFAULT_WINCOMPONENTS}.
+     * Only keys the container already knows are accepted, so a typo cannot introduce a component
+     * name {@code extractWinComponentFiles} has no archive for.
+     */
+    private static String mergeWinComponents(String value) {
+        KeyValueSet merged = new KeyValueSet(Container.DEFAULT_WINCOMPONENTS);
+        if (value == null || value.trim().isEmpty()) return merged.toString();
+
+        for (String pair : value.split(",")) {
+            int eq = pair.indexOf('=');
+            if (eq <= 0) continue;
+            String key = pair.substring(0, eq).trim();
+            String v = pair.substring(eq+1).trim();
+            if (key.isEmpty() || merged.get(key, null) == null) {
+                Log.w(TAG, "ignoring unknown wincomponent: "+pair);
+                continue;
+            }
+            boolean enabled = v.equals("1") || v.equalsIgnoreCase("true");
+            merged.put(key, enabled ? "1" : "0");
+        }
+        return merged.toString();
     }
 
     /** Pulls {@code LC_ALL}/{@code LANG} out of an env var string, or null if neither is set. */
