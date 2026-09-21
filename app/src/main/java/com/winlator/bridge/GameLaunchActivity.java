@@ -249,6 +249,11 @@ public class GameLaunchActivity extends AppCompatActivity {
 
         // Everything below edits the prefix's registry hives as plain files, so it has to happen
         // while Wine is stopped — i.e. before XServerDisplayActivity starts.
+
+        // Ahead of the per-game registry work: the prefix ships without Wine's own VfW codec
+        // mappings, and a game whose cutscenes need one cannot start at all.
+        VfwCodecs.ensureRegistered(container);
+
         String locale = localeOf(resolve(EXTRA_ENV_VARS, manifest.get("envVars")));
         if (locale != null) CjkFontSubstitutes.apply(container, locale);
 
