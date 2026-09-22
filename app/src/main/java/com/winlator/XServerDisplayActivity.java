@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.PictureInPictureParams;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.winlator.alsaserver.ALSAClient;
+import com.winlator.bridge.GameLaunchActivity;
 import com.winlator.bridge.SaveSync;
 import com.winlator.container.AudioDrivers;
 import com.winlator.container.Container;
@@ -119,6 +121,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
      * but the save export below must not run twice.
      */
     private final AtomicBoolean exiting = new AtomicBoolean(false);
+    /** Set by {@link #onNewIntent}; the launch to restart into once this session has torn down. */
+    private Intent relaunchIntent;
     private XServer xServer;
     private InputControlsManager inputControlsManager;
     private RootFS rootFS;
@@ -354,6 +358,35 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         ForegroundService.setPipMode(isInPictureInPictureMode);
     }
 
+    /**
+     * This activity is {@code singleTask}, so a second launch from the bridge arrives here instead
+     * of {@code onCreate}. Without this the new intent would be dropped on the floor and the
+     * running session would simply come back to the foreground: the player edits a setting in
+     * DGPlayer, presses Play, and nothing changes - or presses Play on a different game and gets
+     * the old one.
+     *
+     * <p>A session cannot be replaced in place; everywhere else in this app switching sessions is a
+     * process restart ({@code AppUtils.restartApplication}). So end this session through the normal
+     * exit path, which exports its saves first, and let it restart into the bridge with the new
+     * intent.
+     *
+     * <p>Identical launches are left alone. Pressing Play on the game already running must resume
+     * it, not restart it and throw away everything since the last in-game save, so the decision
+     * rests on the session key the bridge computes over the whole launch configuration.
+     */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (!intent.getBooleanExtra("from_bridge", false)) return;
+
+        String incoming = intent.getStringExtra(GameLaunchActivity.EXTRA_SESSION_KEY);
+        String current = getIntent().getStringExtra(GameLaunchActivity.EXTRA_SESSION_KEY);
+        if (incoming == null || incoming.equals(current)) return;
+
+        relaunchIntent = intent;
+        exit();
+    }
+
     @Override
     protected void onDestroy() {
         winHandler.stop();
@@ -484,7 +517,17 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                         intent.getParcelableExtra(SaveSync.EXTRA_SAVE_URI));
                 runOnUiThread(() -> {
                     setResult(RESULT_OK);
-                    finish();
+                    if (relaunchIntent != null) {
+                        // Same shape as AppUtils.restartApplication: hand the launch to a fresh
+                        // task, then take the process down so the next session starts clean.
+                        Intent restart = Intent.makeRestartActivityTask(
+                                new ComponentName(this, GameLaunchActivity.class));
+                        restart.putExtras(relaunchIntent);
+                        startActivity(restart);
+                        finish();
+                        Runtime.getRuntime().exit(0);
+                    }
+                    else finish();
                 });
             };
             // File I/O, so never on the UI thread. The guest termination path already runs on the

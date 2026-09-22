@@ -87,6 +87,21 @@ class GameManifest {
     }
 
     /**
+     * The exact text {@link #read} would parse, or an empty string when the game has no manifest.
+     *
+     * <p>Every container knob a launch can change lives in this file, so its bytes are what tell
+     * one launch configuration from another - see {@code GameLaunchActivity}'s session key.
+     */
+    static String rawText(File gameDir) {
+        File override = new File(gameDir, OVERRIDE_FILENAME);
+        File file = override.isFile() ? override : new File(gameDir, FILENAME);
+        if (!file.isFile()) return "";
+        StringBuilder sb = new StringBuilder();
+        for (String line : FileUtils.readLines(file)) sb.append(line).append('\n');
+        return sb.toString();
+    }
+
+    /**
      * Writes or removes the override file for this launch.
      *
      * <p>Non-blank text is written through a temp file and renamed, so a crash mid-write cannot

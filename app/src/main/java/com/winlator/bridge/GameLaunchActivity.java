@@ -38,7 +38,11 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -74,6 +78,12 @@ public class GameLaunchActivity extends AppCompatActivity {
     public static final String EXTRA_BOX64_PRESET = "box64_preset";
     public static final String EXTRA_ENV_VARS = "env_vars";
     public static final String EXTRA_FORCE_FULLSCREEN = "force_fullscreen";
+    /**
+     * Fingerprint of everything this launch configures, so {@code XServerDisplayActivity} can tell
+     * "the player pressed Play again" from "the player changed something and pressed Play".
+     * Not part of the caller's contract - the bridge sets it for itself.
+     */
+    public static final String EXTRA_SESSION_KEY = "session_key";
     /**
      * Content URI of DGPlayer's per-game save archive, granted read + write. Optional: without it
      * the game still runs, it just keeps its in-game saves to itself. See {@link SaveSync}.
@@ -280,6 +290,12 @@ public class GameLaunchActivity extends AppCompatActivity {
         Intent intent = new Intent(this, XServerDisplayActivity.class);
         intent.putExtra("container_id", container.id);
         intent.putExtra("exec_path", execPath);
+        // Identifies the session this launch would produce. The manifest text is in here because
+        // the container knobs it sets (screen size, graphics driver, box64 preset, env vars...)
+        // are applied to the shared container above and are invisible in the intent itself.
+        intent.putExtra(EXTRA_SESSION_KEY, sessionKey(gameId, execPath,
+                GameManifest.rawText(gameDir), String.valueOf(controlsProfileId),
+                String.valueOf(forceFullscreen), Arrays.deepToString(cdDiscs)));
         // Tells XServerDisplayActivity.exit() to finish instead of restarting into MainActivity.
         intent.putExtra("from_bridge", true);
         // XServerDisplayActivity.exit() is where a session ends, so that is where saves are
@@ -298,6 +314,27 @@ public class GameLaunchActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    /**
+     * SHA-256 of the given parts, hex. Only equality matters, and a hash keeps the intent small
+     * however large the manifest grows.
+     */
+    private static String sessionKey(String... parts) {
+        StringBuilder sb = new StringBuilder();
+        for (String part : parts) sb.append(part == null ? "" : part).append('\0');
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256")
+                    .digest(sb.toString().getBytes(StandardCharsets.UTF_8));
+            StringBuilder hex = new StringBuilder(digest.length * 2);
+            for (byte b : digest) hex.append(String.format("%02x", b));
+            return hex.toString();
+        }
+        catch (NoSuchAlgorithmException e) {
+            // Every Android release ships SHA-256; fall back to the raw text rather than failing
+            // the launch, which only costs a bigger extra.
+            return sb.toString();
+        }
     }
 
     /**
