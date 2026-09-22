@@ -97,6 +97,11 @@
     <string name="press_any_button_on_your_controller">Press any button on your controller</string>
     <string name="bindings">Bindings</string>
     <string name="show_touchscreen_controls">Show Touchscreen Controls</string>
+    <string name="touch_vibration">Touch Vibration</string>
+    <string name="vibration_strength">Vibration Strength</string>
+    <string name="vibration_mode_off">Off</string>
+    <string name="vibration_mode_press">On Press</string>
+    <string name="vibration_mode_press_release">On Press and Release</string>
     <string name="dxwrapper" translatable="false">DX Wrapper</string>
     <string name="mouse_warp_override" translatable="false">Mouse Warp Override</string>
     <string name="direct3d" translatable="false">Direct3D</string>

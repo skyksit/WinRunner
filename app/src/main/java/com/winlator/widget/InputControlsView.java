@@ -18,12 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.preference.PreferenceManager;
+
 import com.winlator.inputcontrols.Binding;
 import com.winlator.inputcontrols.ControlElement;
 import com.winlator.inputcontrols.ControlsProfile;
 import com.winlator.inputcontrols.ExternalController;
 import com.winlator.inputcontrols.ExternalControllerBinding;
 import com.winlator.inputcontrols.GamepadState;
+import com.winlator.inputcontrols.TouchHaptics;
 import com.winlator.math.Mathf;
 import com.winlator.winhandler.WinHandler;
 import com.winlator.xserver.Pointer;
@@ -61,9 +64,14 @@ public class InputControlsView extends View {
     private Timer mouseMoveTimer;
     private final PointF mouseMoveOffset = new PointF();
     private boolean showTouchscreenControls = true;
+    private final TouchHaptics touchHaptics;
 
     public InputControlsView(Context context) {
         super(context);
+        // Unlike overlayOpacity, which the activity pushes in, the haptics settings are read here:
+        // ControlsEditorActivity builds this view too and has nobody to push them from.
+        touchHaptics = new TouchHaptics(context);
+        touchHaptics.loadFromPreferences(PreferenceManager.getDefaultSharedPreferences(context));
         setClickable(true);
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -85,6 +93,24 @@ public class InputControlsView extends View {
 
     public float getOverlayOpacity() {
         return overlayOpacity;
+    }
+
+    public void setVibrationMode(int mode) {
+        touchHaptics.setMode(mode);
+    }
+
+    public void setVibrationStrength(float strength) {
+        touchHaptics.setStrength(strength);
+    }
+
+    /**
+     * Called by {@link ControlElement} whenever a control is newly pressed or released.
+     * Edit mode never reaches those handlers, but guard anyway so dragging elements stays silent.
+     */
+    public void performTouchHaptic(boolean pressed) {
+        if (editMode) return;
+        if (pressed) touchHaptics.performPress();
+        else touchHaptics.performRelease();
     }
 
     public int getSnappingSize() {

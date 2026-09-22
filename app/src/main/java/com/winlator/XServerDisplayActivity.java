@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
@@ -70,12 +71,14 @@ import com.winlator.inputcontrols.Binding;
 import com.winlator.inputcontrols.ControlsProfile;
 import com.winlator.inputcontrols.ExternalController;
 import com.winlator.inputcontrols.InputControlsManager;
+import com.winlator.inputcontrols.TouchHaptics;
 import com.winlator.math.Mathf;
 import com.winlator.renderer.GLRenderer;
 import com.winlator.services.ForegroundService;
 import com.winlator.widget.FrameRating;
 import com.winlator.widget.InputControlsView;
 import com.winlator.widget.MagnifierView;
+import com.winlator.widget.SeekBar;
 import com.winlator.widget.TouchpadView;
 import com.winlator.widget.XServerView;
 import com.winlator.winhandler.TaskManagerDialog;
@@ -778,6 +781,24 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         final CheckBox cbShowTouchscreenControls = dialog.findViewById(R.id.CBShowTouchscreenControls);
         cbShowTouchscreenControls.setChecked(inputControlsView.isShowTouchscreenControls());
 
+        final View llVibrationStrength = dialog.findViewById(R.id.LLVibrationStrength);
+        final SeekBar sbVibrationStrength = dialog.findViewById(R.id.SBVibrationStrength);
+        sbVibrationStrength.setValue(preferences.getFloat(TouchHaptics.PREF_STRENGTH, TouchHaptics.DEFAULT_STRENGTH) * 100);
+
+        final Spinner sVibrationMode = dialog.findViewById(R.id.SVibrationMode);
+        int currentVibrationMode = preferences.getInt(TouchHaptics.PREF_MODE, TouchHaptics.DEFAULT_MODE);
+        llVibrationStrength.setVisibility(currentVibrationMode != TouchHaptics.MODE_OFF ? View.VISIBLE : View.GONE);
+        sVibrationMode.setSelection(currentVibrationMode);
+        sVibrationMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                llVibrationStrength.setVisibility(position != TouchHaptics.MODE_OFF ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         dialog.findViewById(R.id.BTSettings).setOnClickListener((v) -> {
             int position = sProfile.getSelectedItemPosition();
             Intent intent = new Intent(this, MainActivity.class);
@@ -794,6 +815,16 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         dialog.setOnConfirmCallback(() -> {
             xServer.setRelativeMouseMovement(cbRelativeMouseMovement.isChecked());
             inputControlsView.setShowTouchscreenControls(cbShowTouchscreenControls.isChecked());
+
+            // Unlike the rest of this dialog, the vibration settings are global and persisted here,
+            // so the same values show up in Settings > Input Controls and survive the session.
+            int vibrationMode = sVibrationMode.getSelectedItemPosition();
+            float vibrationStrength = sbVibrationStrength.getValue() / 100.0f;
+            preferences.edit().putInt(TouchHaptics.PREF_MODE, vibrationMode)
+                              .putFloat(TouchHaptics.PREF_STRENGTH, vibrationStrength).apply();
+            inputControlsView.setVibrationMode(vibrationMode);
+            inputControlsView.setVibrationStrength(vibrationStrength);
+
             int position = sProfile.getSelectedItemPosition();
             if (position > 0) {
                 showInputControls(inputControlsManager.getProfiles().get(position - 1));

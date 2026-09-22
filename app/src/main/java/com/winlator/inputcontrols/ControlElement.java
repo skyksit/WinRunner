@@ -815,6 +815,9 @@ public class ControlElement {
     public boolean handleTouchDown(int pointerId, float x, float y) {
         if (currentPointerId == -1 && containsPoint(x, y)) {
             currentPointerId = pointerId;
+            // Every type passes through here exactly once per finger, so this is the one place a
+            // new press can be detected without knowing the type.
+            inputControlsView.performTouchHaptic(true);
             if (type == Type.BUTTON) {
                 if (isKeepButtonPressedAfterMinTime()) touchTime = System.currentTimeMillis();
                 if (!propertyFlags.isSet(FLAG_TOGGLE_SWITCH) || !propertyFlags.isSet(FLAG_SELECTED)) inputControlsView.handleInputEvent(bindings, true);
@@ -950,14 +953,20 @@ public class ControlElement {
             }
             else {
                 final boolean[] states = {deltaY <= -DPAD_DEAD_ZONE, deltaX >= DPAD_DEAD_ZONE, deltaY >= DPAD_DEAD_ZONE, deltaX <= -DPAD_DEAD_ZONE};
+                boolean directionPressed = false;
 
                 for (byte i = 0; i < 4; i++) {
                     float value = i == 1 || i == 3 ? deltaX : deltaY;
                     Binding binding = getBindingAt(i);
                     boolean state = binding.isMouseMove() ? (states[i] || states[(i+2)%4]) : states[i];
                     inputControlsView.handleInputEvent(binding, state, value);
+                    if (state && !this.states[i]) directionPressed = true;
                     this.states[i] = state;
                 }
+
+                // Sliding across the dpad without lifting: feedback on each new direction, once per
+                // event. Sticks and the trackpad get none here on purpose, they would buzz forever.
+                if (directionPressed) inputControlsView.performTouchHaptic(true);
             }
 
             return true;
@@ -979,6 +988,7 @@ public class ControlElement {
 
     public boolean handleTouchUp(int pointerId, float x, float y) {
         if (pointerId == currentPointerId) {
+            inputControlsView.performTouchHaptic(false);
             if (type == Type.BUTTON) {
                 boolean selected = propertyFlags.isSet(FLAG_SELECTED);
                 if (isKeepButtonPressedAfterMinTime() && touchTime != null) {

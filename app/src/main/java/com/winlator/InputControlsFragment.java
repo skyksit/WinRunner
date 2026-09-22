@@ -36,6 +36,7 @@ import com.winlator.core.HttpUtils;
 import com.winlator.inputcontrols.ControlsProfile;
 import com.winlator.inputcontrols.ExternalController;
 import com.winlator.inputcontrols.InputControlsManager;
+import com.winlator.inputcontrols.TouchHaptics;
 import com.winlator.widget.InputControlsView;
 import com.winlator.widget.SeekBar;
 
@@ -131,6 +132,30 @@ public class InputControlsFragment extends Fragment {
         SeekBar sbOverlayOpacity = view.findViewById(R.id.SBOverlayOpacity);
         sbOverlayOpacity.setOnValueChangeListener((seekBar, value) -> preferences.edit().putFloat("overlay_opacity", value / 100.0f).apply());
         sbOverlayOpacity.setValue(preferences.getFloat("overlay_opacity", InputControlsView.DEFAULT_OVERLAY_OPACITY) * 100);
+
+        final TextView tvVibrationStrength = view.findViewById(R.id.TVVibrationStrength);
+        final SeekBar sbVibrationStrength = view.findViewById(R.id.SBVibrationStrength);
+        sbVibrationStrength.setOnValueChangeListener((seekBar, value) -> preferences.edit().putFloat(TouchHaptics.PREF_STRENGTH, value / 100.0f).apply());
+        sbVibrationStrength.setValue(preferences.getFloat(TouchHaptics.PREF_STRENGTH, TouchHaptics.DEFAULT_STRENGTH) * 100);
+
+        final Spinner sVibrationMode = view.findViewById(R.id.SVibrationMode);
+        int vibrationMode = preferences.getInt(TouchHaptics.PREF_MODE, TouchHaptics.DEFAULT_MODE);
+        int strengthVisibility = vibrationMode != TouchHaptics.MODE_OFF ? View.VISIBLE : View.GONE;
+        tvVibrationStrength.setVisibility(strengthVisibility);
+        sbVibrationStrength.setVisibility(strengthVisibility);
+        sVibrationMode.setSelection(vibrationMode);
+        sVibrationMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                preferences.edit().putInt(TouchHaptics.PREF_MODE, position).apply();
+                int visibility = position != TouchHaptics.MODE_OFF ? View.VISIBLE : View.GONE;
+                tvVibrationStrength.setVisibility(visibility);
+                sbVibrationStrength.setVisibility(visibility);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         view.findViewById(R.id.BTAddProfile).setOnClickListener((v) -> ContentDialog.prompt(context, R.string.profile_name, null, (name) -> {
             currentProfile = manager.createProfile(name);
