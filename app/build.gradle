@@ -19,7 +19,14 @@ if (dgpDebugKeystorePath != null && !dgpDebugKeystorePath.trim().isEmpty()) {
 }
 
 android {
-    compileSdk 34
+    namespace 'com.winlator'
+    compileSdk 35
+
+    buildFeatures {
+        // AGP 8 defaults this off, and the fork needs it: the rebrand replaced every
+        // hardcoded "com.winlator" path with BuildConfig.APPLICATION_ID.
+        buildConfig true
+    }
 
     defaultConfig {
         // Must stay exactly 12 bytes long, same as upstream's 'com.winlator'. The prebuilt rootfs
@@ -36,8 +43,8 @@ android {
         // Must stay 28. Winlator execve()s proot/box64/wine out of filesDir, which Android 10+
         // (targetSdk 29+) blocks as a W^X violation. This is a functional requirement, not laziness.
         targetSdkVersion 28
-        versionCode 34
-        versionName "11.4"
+        versionCode 35
+        versionName "11.5"
     }
 
     // Release builds are signed with the same key dsam3/retrople releases use
@@ -162,4 +169,5 @@ dependencies {
     implementation 'com.github.luben:zstd-jni:1.5.2-3@aar'
     implementation 'org.tukaani:xz:1.7'
     implementation 'org.apache.commons:commons-compress:1.20'
+    implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
 }

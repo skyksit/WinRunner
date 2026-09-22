@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.KeyEvent;
@@ -69,12 +70,12 @@ import com.winlator.inputcontrols.ExternalController;
 import com.winlator.inputcontrols.InputControlsManager;
 import com.winlator.math.Mathf;
 import com.winlator.renderer.GLRenderer;
+import com.winlator.services.ForegroundService;
 import com.winlator.widget.FrameRating;
 import com.winlator.widget.InputControlsView;
 import com.winlator.widget.MagnifierView;
 import com.winlator.widget.TouchpadView;
 import com.winlator.widget.XServerView;
-import com.winlator.winhandler.GamepadHandler;
 import com.winlator.winhandler.TaskManagerDialog;
 import com.winlator.winhandler.WinHandler;
 import com.winlator.xconnector.UnixSocketConfig;
@@ -142,7 +143,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private boolean capturePointerOnExternalMouse = true;
     private MagnifierView magnifierView;
     private DebugDialog debugDialog;
-    private int frameRatingWindowId = -1;
+    public int frameRatingWindowId = -1;
     private Win32AppWorkarounds win32AppWorkarounds;
     private String screenEffectProfile;
     // Multi-disc games from the DGPlayer bridge: the container's single CD-ROM drive (X:) holds
@@ -158,6 +159,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         AppUtils.hideSystemUI(this);
         AppUtils.keepScreenOn(this);
         setContentView(R.layout.xserver_display_activity);
+        ForegroundService.startSession(this);
 
         final PreloaderDialog preloaderDialog = new PreloaderDialog(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -333,10 +335,12 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             xServerView.onResume();
             environment.onResume();
         }
+        ForegroundService.onResumeSession(this);
     }
 
     @Override
     public void onPause() {
+        ForegroundService.onPauseSession(this);
         super.onPause();
         if (environment != null && !isInPictureInPictureMode()) {
             environment.onPause();
@@ -345,9 +349,16 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     }
 
     @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
+        ForegroundService.setPipMode(isInPictureInPictureMode);
+    }
+
+    @Override
     protected void onDestroy() {
         winHandler.stop();
         if (environment != null) environment.stopEnvironmentComponents();
+        ForegroundService.stopSession(this);
         super.onDestroy();
     }
 
@@ -490,6 +501,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             AppUtils.restartApplication(this, options);
         }
         else AppUtils.restartApplication(this);
+        ForegroundService.stopSession(this);
     }
 
     private void setupWineSystemFiles() {
@@ -797,7 +809,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         else cacheId += graphicsDriver[0]+"-"+DefaultVersion.valueOf(graphicsDriver[0]);
         cacheId += "-"+graphicsDriver[1]+"-"+DefaultVersion.valueOf(graphicsDriver[1]);
 
-        boolean changed = !cacheId.equals(container.getExtra("graphicsDriver"));
+        String currentGraphicsDriver = preferences.getString("current_graphics_driver", "");
+        boolean changed = !cacheId.equals(currentGraphicsDriver);
         File rootDir = rootFS.getRootDir();
         File libDir = rootFS.getLibDir();
 
@@ -810,12 +823,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             FileUtils.delete(vulkanICDDir);
             vulkanICDDir.mkdirs();
 
-            container.putExtra("graphicsDriver", cacheId);
-            container.saveData();
+            preferences.edit().putString("current_graphics_driver", cacheId).apply();
         }
 
         if (graphicsDriver[0].equals(GraphicsDrivers.TURNIP)) {
-            envVars.put("MESA_VK_WSI_PRESENT_MODE", "mailbox");
             TurnipConfigDialog.setEnvVars(this, graphicsDriverConfig[0], envVars);
 
             if (changed) {
@@ -1047,7 +1058,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             execArgs = shortcut.getExtra("execArgs");
             execArgs = !execArgs.isEmpty() ? " "+execArgs : "";
 
-            if (shortcut.path.endsWith(".lnk") || shortcut.path.contains("://")) {
+            if (shortcut.isLinkPath()) {
                 cmdArgs = "\""+shortcut.path+"\""+execArgs;
             }
             else execPath = shortcut.path;
@@ -1176,19 +1187,27 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "rootfs_patches.tzst", rootDir);
         TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "pulseaudio.tzst", new File(getFilesDir(), "pulseaudio"));
         WineUtils.applySystemTweaks(this, wineInfo);
-        container.putExtra("graphicsDriver", null);
         container.putExtra("dxwrapper", null);
         container.putExtra("desktopTheme", null);
-        SettingsFragment.resetBox64Version(this);
+        SettingsFragment.resetPreferenceVersions(this);
     }
 
-    private void changeFrameRatingVisibility(Window window, boolean visible) {
+    public void changeFrameRatingVisibility(Window window, boolean visible) {
         if (frameRating == null) return;
         if (visible) {
-            Window child = window.getChildCount() > 0 ? window.getChildren().get(0) : null;
+            if (window.id == frameRatingWindowId) return;
+            Window child = window.getChildAt(0);
             boolean viewable = window.attributes.isMapped() && window.getWidth() >= ScreenInfo.MIN_WIDTH && window.getHeight() >= ScreenInfo.MIN_HEIGHT;
+            Window frameRatingWindow = null;
             if (viewable && (window.isSurface() || (child != null && child.isSurface()))) {
-                Window frameRatingWindow = window.isSurface() ? window : child;
+                frameRatingWindow = window.isSurface() ? window : child;
+            }
+            else if (window.isSurface() && !window.isApplicationWindow()) {
+                Window parent = window.getParent();
+                if (parent != null && parent.isApplicationWindow() && !parent.isSurface()) frameRatingWindow = window;
+            }
+
+            if (frameRatingWindow != null) {
                 if (frameRating.getMode() == FrameRating.Mode.FULL) {
                     Property gpuInfo = frameRatingWindow.getProperty(Atom._NET_WM_GPU_INFO);
                     frameRating.setGPUInfo(gpuInfo != null ? new String(gpuInfo.data.array()) : "N/A");
