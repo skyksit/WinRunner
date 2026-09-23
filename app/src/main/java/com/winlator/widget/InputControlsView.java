@@ -407,12 +407,13 @@ public class InputControlsView extends View {
                     float x = event.getX(actionIndex);
                     float y = event.getY(actionIndex);
 
-                    touchpadView.setPointerButtonLeftEnabled(true);
+                    // Upstream switched tap-to-click off whenever the layout had a lone MOUSE_LEFT_BUTTON
+                    // element, silently overriding "Tap to Left Click" - every DGPlayer layout with an
+                    // Ⓛ button hit it. That choice is the user's setting now (TouchpadView.tapToClickEnabled).
+                    // Pressing the button itself never doubles the click: the element handles that touch,
+                    // so the touchpad never sees it.
                     for (ControlElement element : profile.getElements()) {
                         if (element.handleTouchDown(pointerId, x, y)) handled = true;
-                        if (element.getBindingAt(0) == Binding.MOUSE_LEFT_BUTTON && element.getLastBindingIndex() == 0) {
-                            touchpadView.setPointerButtonLeftEnabled(false);
-                        }
                     }
                     if (!handled) touchpadView.onTouchEvent(event);
                     break;

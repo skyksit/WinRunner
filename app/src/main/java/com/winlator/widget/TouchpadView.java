@@ -35,7 +35,8 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     private boolean pointerButtonLeftEnabled = true;
     private boolean pointerButtonRightEnabled = true;
     private boolean moveCursorToTouchpoint = false;
-    // Separate from pointerButtonLeftEnabled: that one is flipped on every touch by InputControlsView.
+    // The user's "Tap to Left Click" setting. Kept apart from pointerButtonLeftEnabled, which also
+    // gates drag-lock and is reset by hideInputControls().
     private boolean tapToClickEnabled = DEFAULT_TAP_TO_CLICK;
     private Finger fingerPointerButtonLeft;
     private Finger fingerPointerButtonRight;
