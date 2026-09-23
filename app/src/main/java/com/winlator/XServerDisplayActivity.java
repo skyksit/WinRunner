@@ -35,6 +35,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.winlator.alsaserver.ALSAClient;
+import com.winlator.bridge.ControlsReturn;
 import com.winlator.bridge.GameLaunchActivity;
 import com.winlator.bridge.SaveSync;
 import com.winlator.container.AudioDrivers;
@@ -135,11 +136,14 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private final AtomicBoolean exiting = new AtomicBoolean(false);
     /** Set by {@link #onNewIntent}; the launch to restart into once this session has torn down. */
     private Intent relaunchIntent;
+    /** Null unless DGPlayer asked for in-game layout edits back. */
+    private ControlsReturn controlsReturn;
     private XServer xServer;
     private InputControlsManager inputControlsManager;
     private RootFS rootFS;
     private FrameRating frameRating;
     private Runnable editInputControlsCallback;
+    private static final int EDIT_CONTROLS_PROFILE_REQUEST_CODE = 100;
     private Shortcut shortcut;
     private String[] graphicsDriver = {GraphicsDrivers.DEFAULT_VULKAN_DRIVER, GraphicsDrivers.DEFAULT_OPENGL_DRIVER};
     private String audioDriver = Container.DEFAULT_AUDIO_DRIVER;
@@ -329,6 +333,13 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 editInputControlsCallback.run();
                 editInputControlsCallback = null;
             }
+            returnControlsProfile();
+        }
+        else if (requestCode == EDIT_CONTROLS_PROFILE_REQUEST_CODE) {
+            // resultCode ignored: ControlsEditorActivity never sets one, it writes every change
+            // straight to the profile file. That file is what has to be picked up again.
+            reloadInputControls();
+            returnControlsProfile();
         }
     }
 
@@ -397,7 +408,14 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         String incoming = intent.getStringExtra(GameLaunchActivity.EXTRA_SESSION_KEY);
         String current = getIntent().getStringExtra(GameLaunchActivity.EXTRA_SESSION_KEY);
-        if (incoming == null || incoming.equals(current)) return;
+        if (incoming == null || incoming.equals(current)) {
+            // Same session, so the game resumes - but GameLaunchActivity has already written the
+            // layout DGPlayer sent into the profile file, and an edited layout keeps its id (and so
+            // the session key). Without this the resumed game keeps drawing the old one.
+            reloadInputControls();
+            if (controlsReturn != null) controlsReturn.rebase();
+            return;
+        }
 
         relaunchIntent = intent;
         exit();
@@ -534,7 +552,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             if (profile != null) {
                 Intent intent = new Intent(this, ControlsEditorActivity.class);
                 intent.putExtra("profile_id", profile.id);
-                startActivity(intent);
+                startActivityForResult(intent, EDIT_CONTROLS_PROFILE_REQUEST_CODE);
             }
         }
     }
@@ -556,6 +574,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 // is gone. exportOnExit never throws and no-ops when the caller sent no save_uri.
                 SaveSync.exportOnExit(this, container, intent.getStringExtra(SaveSync.EXTRA_GAME_ID),
                         intent.getParcelableExtra(SaveSync.EXTRA_SAVE_URI));
+                // Normally already sent when the editor closed; this catches an edit that did not
+                // come back through onActivityResult (process death while the editor was open).
+                if (controlsReturn != null) controlsReturn.exportIfChanged();
                 runOnUiThread(() -> {
                     setResult(RESULT_OK);
                     if (relaunchIntent != null) {
@@ -801,6 +822,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             // DGPlayer bridge launches have no shortcut; the profile id arrives as an intent extra
             // (imported from the game package's .icp by GameLaunchActivity).
             int controlsProfileId = getIntent().getIntExtra("controls_profile", 0);
+            controlsReturn = ControlsReturn.from(this, controlsProfileId,
+                    getIntent().getParcelableExtra(ControlsReturn.EXTRA_CONTROLS_RETURN_URI));
             if (controlsProfileId > 0) {
                 ControlsProfile profile = inputControlsManager.getProfile(controlsProfileId);
                 if (profile != null) showInputControls(profile);
@@ -956,6 +979,31 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         }
 
         inputControlsView.invalidate();
+    }
+
+    /**
+     * Sends an in-game layout edit back to DGPlayer right away rather than only on exit: the player
+     * may go back and press Play again without ever ending the game, and that launch pushes
+     * DGPlayer's copy over the edit before this session sees it.
+     */
+    private void returnControlsProfile() {
+        final ControlsReturn target = controlsReturn;
+        if (target != null) Executors.newSingleThreadExecutor().execute(target::exportIfChanged);
+    }
+
+    /**
+     * Re-reads the shown profile from disk. The one on screen is a snapshot: its elements are
+     * parsed once, on first draw, and nothing tells it when the editor or the bridge rewrites the
+     * file underneath.
+     */
+    private void reloadInputControls() {
+        ControlsProfile current = inputControlsView.getProfile();
+        if (current == null) return;
+
+        inputControlsManager.loadProfiles(true);
+        ControlsProfile profile = inputControlsManager.getProfile(current.id);
+        if (profile != null) showInputControls(profile);
+        else hideInputControls();
     }
 
     private void hideInputControls() {

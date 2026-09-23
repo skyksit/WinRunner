@@ -302,7 +302,12 @@ public class GameLaunchActivity extends AppCompatActivity {
         // exported. It needs the sanitized id (not DGPlayer's file name) to find the state file.
         intent.putExtra(SaveSync.EXTRA_GAME_ID, gameId);
         if (saveUri != null) intent.putExtra(EXTRA_SAVE_URI, saveUri);
-        if (controlsProfileId > 0) intent.putExtra("controls_profile", controlsProfileId);
+        if (controlsProfileId > 0) {
+            intent.putExtra("controls_profile", controlsProfileId);
+            // Only meaningful for a profile DGPlayer sent: the URI names one entry of its library.
+            Uri controlsReturnUri = getIntent().getParcelableExtra(ControlsReturn.EXTRA_CONTROLS_RETURN_URI);
+            if (controlsReturnUri != null) intent.putExtra(ControlsReturn.EXTRA_CONTROLS_RETURN_URI, controlsReturnUri);
+        }
         intent.putExtra("force_fullscreen", forceFullscreen);
         if (cdDiscs != null) {
             intent.putExtra("cd_paths", cdDiscs[0]);
