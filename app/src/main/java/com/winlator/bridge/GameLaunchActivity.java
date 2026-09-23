@@ -118,11 +118,14 @@ public class GameLaunchActivity extends AppCompatActivity {
         AppUtils.setActivityTheme(this);
         super.onCreate(savedInstanceState);
 
-        if (!isCallerTrusted()) {
-            finishWithError("Caller not authorized");
-            return;
-        }
+        // May ask the user first, so everything after it runs from the callback.
+        BridgeSecurity.authorize(this, allowed -> {
+            if (allowed) onCallerAuthorized();
+            else finishWithError("Caller not authorized");
+        });
+    }
 
+    private void onCallerAuthorized() {
         final String gameId = sanitizeGameId(getIntent().getStringExtra(EXTRA_GAME_ID));
         if (gameId == null) {
             finishWithError("Missing or invalid game_id");
@@ -168,11 +171,6 @@ public class GameLaunchActivity extends AppCompatActivity {
         // An id of only underscores (or "..", which collapses to "__") carries no identity.
         String result = sanitized.toString();
         return result.replace("_", "").isEmpty() ? null : result;
-    }
-
-    /** Rejects callers that are not signed with our certificate — see {@link BridgeSecurity}. */
-    private boolean isCallerTrusted() {
-        return BridgeSecurity.isCallerTrusted(this);
     }
 
     private void prepareAndLaunch(String gameId) {

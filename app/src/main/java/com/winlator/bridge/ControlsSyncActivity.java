@@ -73,11 +73,14 @@ public class ControlsSyncActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!BridgeSecurity.isCallerTrusted(this)) {
-            finishWithError("Caller not authorized");
-            return;
-        }
+        // May ask the user first, so everything after it runs from the callback.
+        BridgeSecurity.authorize(this, allowed -> {
+            if (allowed) onCallerAuthorized();
+            else finishWithError("Caller not authorized");
+        });
+    }
 
+    private void onCallerAuthorized() {
         Set<String> pushed = applyIncoming(getIntent().getStringExtra(EXTRA_CONTROLS_PROFILES));
         if (getIntent().getBooleanExtra(EXTRA_PRUNE_OWNED, false)) pruneOwned(pushed);
 

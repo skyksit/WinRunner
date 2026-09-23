@@ -51,18 +51,22 @@ public class ControlsEditActivity extends AppCompatActivity {
         AppUtils.setActivityTheme(this);
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null && savedInstanceState.getInt(STATE_PROFILE_ID, 0) > 0) {
             // Restored after the process was killed while the editor was in front. The editor is
             // still on the stack, so just remember which profile it is editing and wait for it.
+            // (No profile id means we were recreated while the consent dialog was up: ask again.)
             profileId = savedInstanceState.getInt(STATE_PROFILE_ID, 0);
             return;
         }
 
-        if (!BridgeSecurity.isCallerTrusted(this)) {
-            finishWithError("Caller not authorized");
-            return;
-        }
+        // May ask the user first, so everything after it runs from the callback.
+        BridgeSecurity.authorize(this, allowed -> {
+            if (allowed) onCallerAuthorized();
+            else finishWithError("Caller not authorized");
+        });
+    }
 
+    private void onCallerAuthorized() {
         String json = getIntent().getStringExtra(GameLaunchActivity.EXTRA_CONTROLS_PROFILE);
         if (json == null || json.isEmpty()) {
             finishWithError("Missing "+GameLaunchActivity.EXTRA_CONTROLS_PROFILE);
