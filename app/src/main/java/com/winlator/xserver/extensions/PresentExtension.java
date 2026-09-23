@@ -7,6 +7,7 @@ import android.util.SparseArray;
 import com.winlator.core.GPUHelper;
 import com.winlator.renderer.GPUImage;
 import com.winlator.renderer.Texture;
+import com.winlator.speed.Timescale;
 import com.winlator.xconnector.XInputStream;
 import com.winlator.xconnector.XOutputStream;
 import com.winlator.xconnector.XStreamLock;
@@ -43,6 +44,17 @@ public class PresentExtension extends Extension implements WindowManager.OnWindo
     private SyncExtension syncExtension;
     private long eglContextPtr;
     private ScheduledExecutorService idleNotifyScheduler;
+    /**
+     * Game speed. The UST/MSC pair below is the only vblank DRI3/Present clients (wined3d over GLX)
+     * ever see, so it has to run on the same scaled clock the guest's ntdll reports or the two
+     * disagree about how much time a frame took. Static because a session has one X server; set from
+     * {@link com.winlator.speed.SpeedController}.
+     */
+    private static volatile float timeScale = 1.0f;
+
+    public static void setTimeScale(float scale) {
+        timeScale = scale > 0 ? scale : 1.0f;
+    }
 
     private static abstract class ClientOpcodes {
         private static final byte QUERY_VERSION = 0;
@@ -103,7 +115,9 @@ public class PresentExtension extends Extension implements WindowManager.OnWindo
     }
 
     private void sendIdleNotifyScheduled(final Window window, final Pixmap pixmap, final int serial, final int idleFence) {
-        final long frameTime = 1000000000L / 60;
+        // A virtual frame, expressed in real nanoseconds: at 2x the guest gets its idle notify twice
+        // as often, which is what lets it submit twice as many frames.
+        final long frameTime = (long)((1000000000L / 60) / timeScale);
         long now = System.nanoTime();
 
         long lastIdleTime = (long)window.getTag("lastIdleTime", now);
@@ -172,8 +186,10 @@ public class PresentExtension extends Extension implements WindowManager.OnWindo
         Drawable content = window.getContent();
         if (pixmap != null && content.visual.depth != pixmap.drawable.visual.depth) throw new BadMatch();
 
+        // UST is the guest's clock, not ours, so MSC keeps counting one vblank per 1/60 of a
+        // *virtual* second and advances faster or slower along with the game.
         final int frameTime = 1000000 / 60;
-        long ust = System.nanoTime() / 1000L;
+        long ust = Timescale.virtualNanos() / 1000L;
         long msc = ust / frameTime;
 
         synchronized (content.renderLock) {

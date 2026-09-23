@@ -7,6 +7,7 @@
         <item android:icon="@drawable/icon_fullscreen" android:id="@+id/menu_item_toggle_fullscreen" android:title="@string/toggle_fullscreen" />
         <item android:icon="@drawable/icon_task_manager" android:id="@+id/menu_item_task_manager" android:title="@string/task_manager" />
         <item android:icon="@drawable/icon_active_windows" android:id="@+id/menu_item_active_windows" android:title="@string/active_windows" />
+        <item android:icon="@drawable/icon_game_speed" android:id="@+id/menu_item_game_speed" android:title="@string/game_speed" />
         <item android:icon="@drawable/icon_magnifier" android:id="@+id/menu_item_magnifier" android:title="@string/magnifier" />
         <item android:icon="@drawable/icon_screen_effect" android:id="@+id/menu_item_screen_effect" android:title="@string/screen_effect" />
         <item android:icon="@drawable/icon_pip_mode" android:id="@+id/menu_item_pip_mode" android:title="@string/pip_mode" />

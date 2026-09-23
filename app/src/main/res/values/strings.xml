@@ -368,4 +368,12 @@
     <string name="fgs_notification_content_else">Winlator is running in the background</string>
     <string name="save_mem_on_run_from_steam">Save memory on run from Steam</string>
     <string name="present_mode">Present Mode</string>
+
+    <!-- Game speed -->
+    <string name="game_speed">Game Speed</string>
+    <string name="fast_forward">Fast Forward</string>
+    <string name="slow_motion">Slow Motion</string>
+    <string name="normal_speed">Normal Speed</string>
+    <string name="show_speed_notification">Show a notification when the speed changes</string>
+    <string name="game_speed_help">Scales the clock the game reads. Fast forward is limited by how much spare performance the device has; games that keep their own time with rdtsc are not affected.</string>
 </resources>

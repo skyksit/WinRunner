@@ -9,8 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +48,7 @@ import com.winlator.contentdialog.AudioDriverConfigDialog;
 import com.winlator.contentdialog.ContentDialog;
 import com.winlator.contentdialog.DXVKConfigDialog;
 import com.winlator.contentdialog.DebugDialog;
+import com.winlator.contentdialog.GameSpeedDialog;
 import com.winlator.contentdialog.ScreenEffectDialog;
 import com.winlator.contentdialog.TurnipConfigDialog;
 import com.winlator.contentdialog.VKD3DConfigDialog;
@@ -75,6 +80,9 @@ import com.winlator.inputcontrols.TouchHaptics;
 import com.winlator.math.Mathf;
 import com.winlator.renderer.GLRenderer;
 import com.winlator.services.ForegroundService;
+import com.winlator.speed.GameSpeed;
+import com.winlator.speed.SpeedController;
+import com.winlator.speed.Timescale;
 import com.winlator.widget.FrameRating;
 import com.winlator.widget.InputControlsView;
 import com.winlator.widget.MagnifierView;
@@ -158,6 +166,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private String[] cdPaths;
     private String[] cdLabels;
     private int currentCdIndex = 0;
+    private SpeedController speedController;
+    private TextView speedIndicator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -394,6 +404,11 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     protected void onDestroy() {
         winHandler.stop();
         if (environment != null) environment.stopEnvironmentComponents();
+        // Back to 1x first: the audio and Present scales are static, and a relaunched session that
+        // reuses this process must not inherit them. Then invalidate the mapping, so any guest
+        // process still holding it falls back to real time.
+        if (speedController != null) speedController.reset();
+        Timescale.close();
         ForegroundService.stopSession(this);
         super.onDestroy();
     }
@@ -430,6 +445,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 break;
             case R.id.menu_item_active_windows:
                 (new ActiveWindowsDialog(this)).show();
+                drawerLayout.closeDrawers();
+                break;
+            case R.id.menu_item_game_speed:
+                (new GameSpeedDialog(this)).show();
                 drawerLayout.closeDrawers();
                 break;
             case R.id.menu_item_magnifier:
@@ -482,8 +501,18 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         return preferences;
     }
 
+    public SpeedController getSpeedController() {
+        return speedController;
+    }
+
     private void handleControlsCommand(Binding binding) {
-        if (binding == Binding.KEY_DGP_KEYBOARD) {
+        if (binding == Binding.KEY_DGP_FAST_FORWARD) {
+            speedController.toggleFastForward();
+        }
+        else if (binding == Binding.KEY_DGP_SLOW_MOTION) {
+            speedController.toggleSlowMotion();
+        }
+        else if (binding == Binding.KEY_DGP_KEYBOARD) {
             // Already a toggle (InputMethodManager.toggleSoftInput).
             AppUtils.showKeyboard(this);
         }
@@ -616,6 +645,13 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         FileUtils.clear(rootFS.getTmpDir());
 
+        // Game speed: the patched ntdll in the rootfs maps this file and derives its monotonic clock
+        // from it. Created after the wipe above, and named by an env var rather than a fixed guest
+        // path because the container has no chroot - the guest sees these host paths verbatim.
+        File timescaleFile = new File(rootFS.getRootDir(), Timescale.FILE_NAME);
+        Timescale.open(timescaleFile);
+        envVars.put(Timescale.ENV_VAR, timescaleFile.getPath());
+
         GuestProgramLauncherComponent guestProgramLauncherComponent = new GuestProgramLauncherComponent();
 
         if (container != null) {
@@ -679,6 +715,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             overrideEnvVars = null;
         }
         environment.startEnvironmentComponents();
+        // Timescale.open() above reset the mapping to 1x; push whatever the session is actually on.
+        speedController.reapply();
 
         winHandler.start();
         envVars.clear();
@@ -692,6 +730,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
     private void setupUI() {
         FrameLayout rootView = findViewById(R.id.FLXServerDisplay);
+        // Ahead of the views below: the controls overlay installs its command handler here, and that
+        // handler toggles the speed.
+        speedController = new SpeedController(this, preferences);
         xServerView = new XServerView(this, xServer);
         final GLRenderer renderer = xServerView.getRenderer();
         renderer.setCursorVisible(false);
@@ -732,6 +773,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             rootView.addView(frameRating);
         }
 
+        speedIndicator = createSpeedIndicator();
+        rootView.addView(speedIndicator);
+        speedController.setListener((mode, factor) -> runOnUiThread(() -> updateSpeedIndicator(mode, factor)));
+
         if (shortcut != null) {
             String controlsProfile = shortcut.getExtra("controlsProfile");
             if (!controlsProfile.isEmpty()) {
@@ -751,6 +796,30 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         if (MainActivity.DEBUG_MODE) rootView.addView(AppUtils.createDebugMsgTextView(this));
         AppUtils.observeSoftKeyboardVisibility(drawerLayout, renderer::setScreenOffsetYRelativeToCursor);
+    }
+
+    /** Top centre, so it stays clear of the FPS HUD in the corner. */
+    private TextView createSpeedIndicator() {
+        TextView textView = new TextView(this);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        textView.setTextColor(Color.WHITE);
+        textView.setBackgroundColor(0x80000000);
+        textView.setPadding(16, 4, 16, 4);
+        textView.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.TOP | Gravity.CENTER_HORIZONTAL));
+        textView.setVisibility(View.GONE);
+        return textView;
+    }
+
+    private void updateSpeedIndicator(SpeedController.Mode mode, float factor) {
+        if (speedIndicator == null) return;
+        if (mode == SpeedController.Mode.NORMAL) {
+            speedIndicator.setVisibility(View.GONE);
+            return;
+        }
+        speedIndicator.setText((mode == SpeedController.Mode.FAST_FORWARD ? ">> " : "<< ")+GameSpeed.formatFactor(factor));
+        speedIndicator.setVisibility(View.VISIBLE);
     }
 
     private void showInputControlsDialog() {

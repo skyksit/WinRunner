@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.media.PlaybackParams;
 
 import com.winlator.contentdialog.AudioDriverConfigDialog;
 import com.winlator.core.KeyValueSet;
@@ -12,10 +13,16 @@ import com.winlator.sysvshm.SysVSharedMemory;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ALSAClient {
     public static final boolean USE_SHARED_MEMORY = true;
     public static final byte BUFFER_OFFSET = 4;
+    /** The window AudioTrack resampling is reliable in across devices. */
+    private static final float MIN_TRACK_SPEED = 0.25f;
+    private static final float MAX_TRACK_SPEED = 4.0f;
     public enum DataType {
         U8(1), S16LE(2), S16BE(2), FLOATLE(4), FLOATBE(4);
         public final byte byteCount;
@@ -37,6 +44,9 @@ public class ALSAClient {
     private ByteBuffer auxBuffer;
     protected final Options options;
     private static short framesPerBuffer = 256;
+    private volatile boolean dropSamples = false;
+    private static volatile float playbackSpeed = 1.0f;
+    private static final Set<ALSAClient> liveClients = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     public static class Options {
         public short latencyMillis = AudioDriverConfigDialog.DEFAULT_LATENCY_MILLIS;
@@ -68,7 +78,63 @@ public class ALSAClient {
         this.options = options;
     }
 
+    /**
+     * Matches the AudioTrack drain rate to the game speed.
+     *
+     * <p>This is not cosmetic: {@link #writeDataToTrack} blocks, so at 2x the guest's audio thread
+     * would sit in {@code AudioTrack.write} waiting for a 1x mixer and drag the whole game back to
+     * real time. Resampling shifts pitch, which is what dsam3 does too.
+     */
+    public static void setGlobalPlaybackSpeed(float speed) {
+        playbackSpeed = speed;
+        for (ALSAClient client : liveClients) client.applyPlaybackSpeed();
+    }
+
+    private void applyPlaybackSpeed() {
+        AudioTrack track = audioTrack;
+        if (track == null) return;
+
+        float speed = playbackSpeed;
+        float trackSpeed = speed;
+        boolean mute = false;
+        dropSamples = false;
+
+        if (speed > MAX_TRACK_SPEED) {
+            // Nothing intelligible comes out at 9x anyway, and the write must not hold the guest
+            // back, so the samples are discarded instead of resampled.
+            trackSpeed = 1.0f;
+            mute = true;
+            dropSamples = true;
+        }
+        else if (speed < MIN_TRACK_SPEED) {
+            // The guest now feeds the track slower than any supported rate drains it, which only
+            // ever crackles. Play the floor rate silently.
+            trackSpeed = MIN_TRACK_SPEED;
+            mute = true;
+        }
+
+        try {
+            track.setPlaybackParams(new PlaybackParams().setSpeed(trackSpeed));
+        }
+        catch (Exception e) {
+            // Some devices refuse resampling on low-latency tracks. Speeding up then has to fall
+            // back to discarding samples or the blocking write caps the game at 1x; slowing down
+            // needs no fallback, because a guest feeding less audio never blocks.
+            if (speed > 1.0f) {
+                mute = true;
+                dropSamples = true;
+            }
+        }
+
+        try {
+            track.setVolume(mute ? 0.0f : options.volume);
+        }
+        catch (Exception e) {}
+    }
+
     public void release() {
+        liveClients.remove(this);
+
         if (sharedBuffer != null) {
             SysVSharedMemory.unmapSHMSegment(sharedBuffer, sharedBuffer.capacity());
             sharedBuffer = null;
@@ -124,6 +190,11 @@ public class ALSAClient {
         bufferCapacity = audioTrack.getBufferCapacityInFrames();
         if (options.volume != 1.0f) audioTrack.setVolume(options.volume);
         audioTrack.play();
+
+        // release() above dropped the registration; take it back now the track exists, and carry
+        // the session's current speed over to it.
+        liveClients.add(this);
+        if (playbackSpeed != 1.0f) applyPlaybackSpeed();
     }
 
     public void start() {
@@ -156,6 +227,14 @@ public class ALSAClient {
         }
 
         if (audioTrack != null) {
+            if (dropSamples) {
+                // Advance the play cursor as if the buffer had drained, so the guest keeps feeding
+                // instead of blocking on a mixer that can never keep up at this speed.
+                position += data.limit();
+                data.rewind();
+                return;
+            }
+
             int bytesWritten;
             data.position(0);
 
