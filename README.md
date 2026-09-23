@@ -45,6 +45,22 @@ The `vortek` and `gladio` submodules are upstream repositories and are left unto
 
 `scripts/` holds the fork tooling: `patch_tzst.py` (asset path rebranding with built-in verification) and `gen_branding.py` (logo and launcher icon generation).
 
+`wine_patches/` holds source dropped into the Wine tree built in [`skyksit/DGwine`](https://github.com/skyksit/DGwine), the same arrangement as `glibc_patches/` and `android_alsa/` — nothing there is compiled by Gradle. See [`wine_patches/README.md`](wine_patches/README.md).
+
+## Game speed (fast forward / slow motion)
+
+Windows games are not emulated here, so there is no core loop to run more or fewer times the way DGPlayer/dsam3 does it for libretro and PS2. Speed is changed by scaling the clock the game reads, which lands in three places:
+
+| Layer | Where |
+|---|---|
+| The guest's monotonic clock — QPC, `GetTickCount`, `timeGetTime`, `Sleep`, wait timeouts | patched ntdll, built from [`wine_patches/`](wine_patches/README.md) |
+| AudioTrack drain rate — without it the blocking write in `ALSAClient` pulls a fast forward back to 1x | `com.winlator.alsaserver.ALSAClient` |
+| The synthesised vblank the GLX/wined3d path paces on | `com.winlator.xserver.extensions.PresentExtension` |
+
+`com.winlator.speed.SpeedController` is the single source of truth and publishes the mapping to the guest through a small shared file (`com.winlator.speed.Timescale`). The speed steps and the preference keys (`fast_forward_speed_x`, `slow_motion_speed`) match dsam3. Reachable in-game from the drawer (Game Speed) or from `KEY_DGP_FAST_FORWARD` / `KEY_DGP_SLOW_MOTION` buttons in a controls layout.
+
+Until a patched ntdll ships in the rootfs the feature is incomplete rather than inert: audio rate and the GLX/wined3d vblank already follow the factor, so titles that pace themselves on either of those move, but anything timing itself with `QueryPerformanceCounter` keeps running at 1x.
+
 ## Building
 
 1. Clone with submodules:
