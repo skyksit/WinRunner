@@ -65,6 +65,7 @@ import com.winlator.core.PreloaderDialog;
 import com.winlator.core.ProcessHelper;
 import com.winlator.core.StringUtils;
 import com.winlator.core.TarCompressorUtils;
+import com.winlator.core.UnitUtils;
 import com.winlator.core.Win32AppWorkarounds;
 import com.winlator.core.WineInfo;
 import com.winlator.core.WineInstaller;
@@ -168,6 +169,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private int currentCdIndex = 0;
     private SpeedController speedController;
     private TextView speedIndicator;
+    private TextView mouseModeIndicator;
+    private final Runnable hideMouseModeIndicator = () -> mouseModeIndicator.setVisibility(View.GONE);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -512,6 +515,12 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         else if (binding == Binding.KEY_DGP_SLOW_MOTION) {
             speedController.toggleSlowMotion();
         }
+        else if (binding == Binding.KEY_DGP_MOUSE_MODE) {
+            // Session-only, like the relative mouse toggle; the startup mode lives in Settings > Mouse.
+            boolean touchMode = !touchpadView.isMoveCursorToTouchpoint();
+            touchpadView.setMoveCursorToTouchpoint(touchMode);
+            showMouseModeIndicator(touchMode);
+        }
         else if (binding == Binding.KEY_DGP_KEYBOARD) {
             // Already a toggle (InputMethodManager.toggleSoftInput).
             AppUtils.showKeyboard(this);
@@ -751,6 +760,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         touchpadView = new TouchpadView(this, xServer, capturePointerOnExternalMouse);
         touchpadView.setSensitivity(globalCursorSpeed);
         touchpadView.setMoveCursorToTouchpoint(preferences.getBoolean("move_cursor_to_touchpoint", false));
+        touchpadView.setTapToClickEnabled(preferences.getBoolean(TouchpadView.PREF_TAP_TO_CLICK, TouchpadView.DEFAULT_TAP_TO_CLICK));
         touchpadView.setFourFingersTapCallback(() -> {
             if (!drawerLayout.isDrawerOpen(GravityCompat.START)) drawerLayout.openDrawer(GravityCompat.START);
         });
@@ -773,8 +783,11 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             rootView.addView(frameRating);
         }
 
-        speedIndicator = createSpeedIndicator();
+        speedIndicator = createOverlayIndicator(0);
         rootView.addView(speedIndicator);
+        // One line below the speed indicator, so toggling the mouse mode during fast forward covers neither.
+        mouseModeIndicator = createOverlayIndicator((int)UnitUtils.dpToPx(28));
+        rootView.addView(mouseModeIndicator);
         speedController.setListener((mode, factor) -> runOnUiThread(() -> updateSpeedIndicator(mode, factor)));
 
         if (shortcut != null) {
@@ -799,17 +812,26 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     }
 
     /** Top centre, so it stays clear of the FPS HUD in the corner. */
-    private TextView createSpeedIndicator() {
+    private TextView createOverlayIndicator(int topMargin) {
         TextView textView = new TextView(this);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         textView.setTextColor(Color.WHITE);
         textView.setBackgroundColor(0x80000000);
         textView.setPadding(16, 4, 16, 4);
-        textView.setLayoutParams(new FrameLayout.LayoutParams(
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,
-                Gravity.TOP | Gravity.CENTER_HORIZONTAL));
+                Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+        layoutParams.topMargin = topMargin;
+        textView.setLayoutParams(layoutParams);
         textView.setVisibility(View.GONE);
         return textView;
+    }
+
+    private void showMouseModeIndicator(boolean touchMode) {
+        mouseModeIndicator.setText(touchMode ? "TOUCH" : "SWIPE");
+        mouseModeIndicator.setVisibility(View.VISIBLE);
+        mouseModeIndicator.removeCallbacks(hideMouseModeIndicator);
+        mouseModeIndicator.postDelayed(hideMouseModeIndicator, 1000);
     }
 
     private void updateSpeedIndicator(SpeedController.Mode mode, float factor) {
@@ -847,6 +869,13 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         final CheckBox cbRelativeMouseMovement = dialog.findViewById(R.id.CBRelativeMouseMovement);
         cbRelativeMouseMovement.setChecked(xServer.isRelativeMouseMovement());
 
+        // From the widget, not the preferences: a DGP MOUSE MODE button may have changed it this session.
+        final CheckBox cbMoveCursorToTouchpoint = dialog.findViewById(R.id.CBMoveCursorToTouchpoint);
+        cbMoveCursorToTouchpoint.setChecked(touchpadView.isMoveCursorToTouchpoint());
+
+        final CheckBox cbTapToClick = dialog.findViewById(R.id.CBTapToClick);
+        cbTapToClick.setChecked(touchpadView.isTapToClickEnabled());
+
         final CheckBox cbShowTouchscreenControls = dialog.findViewById(R.id.CBShowTouchscreenControls);
         cbShowTouchscreenControls.setChecked(inputControlsView.isShowTouchscreenControls());
 
@@ -883,14 +912,18 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         dialog.setOnConfirmCallback(() -> {
             xServer.setRelativeMouseMovement(cbRelativeMouseMovement.isChecked());
+            touchpadView.setMoveCursorToTouchpoint(cbMoveCursorToTouchpoint.isChecked());
             inputControlsView.setShowTouchscreenControls(cbShowTouchscreenControls.isChecked());
 
-            // Unlike the rest of this dialog, the vibration settings are global and persisted here,
-            // so the same values show up in Settings > Input Controls and survive the session.
+            // Unlike the rest of this dialog, tap to click and the vibration settings are global and
+            // persisted here, so the same values show up in Settings and survive the session.
+            boolean tapToClick = cbTapToClick.isChecked();
             int vibrationMode = sVibrationMode.getSelectedItemPosition();
             float vibrationStrength = sbVibrationStrength.getValue() / 100.0f;
-            preferences.edit().putInt(TouchHaptics.PREF_MODE, vibrationMode)
+            preferences.edit().putBoolean(TouchpadView.PREF_TAP_TO_CLICK, tapToClick)
+                              .putInt(TouchHaptics.PREF_MODE, vibrationMode)
                               .putFloat(TouchHaptics.PREF_STRENGTH, vibrationStrength).apply();
+            touchpadView.setTapToClickEnabled(tapToClick);
             inputControlsView.setVibrationMode(vibrationMode);
             inputControlsView.setVibrationStrength(vibrationStrength);
 

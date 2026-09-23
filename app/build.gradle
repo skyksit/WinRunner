@@ -43,9 +43,9 @@ android {
         // Must stay 28. Winlator execve()s proot/box64/wine out of filesDir, which Android 10+
         // (targetSdk 29+) blocks as a W^X violation. This is a functional requirement, not laziness.
         targetSdkVersion 28
-        // 37 marks the KEY_DGP_FAST_FORWARD / KEY_DGP_SLOW_MOTION bindings, which DGPlayer gates on
-        // before putting them in a layout - older builds do not know the names.
-        versionCode 37
+        // 38 marks the KEY_DGP_MOUSE_MODE binding (37: KEY_DGP_FAST_FORWARD / KEY_DGP_SLOW_MOTION),
+        // which DGPlayer gates on before putting it in a layout - older builds do not know the names.
+        versionCode 38
         versionName "11.6"
     }
 

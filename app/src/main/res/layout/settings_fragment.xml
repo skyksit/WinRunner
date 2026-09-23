@@ -86,6 +86,13 @@
                         android:text="@string/move_cursor_to_touchpoint" />
 
                     <CheckBox
+                        android:id="@+id/CBTapToClick"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tap_to_left_click"
+                        android:layout_marginTop="8dp" />
+
+                    <CheckBox
                         android:id="@+id/CBCapturePointerOnExternalMouse"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

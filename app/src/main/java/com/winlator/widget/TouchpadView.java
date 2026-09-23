@@ -26,6 +26,8 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     public static final short MAX_TAP_MILLISECONDS = 200;
     public static final float CURSOR_ACCELERATION = 1.5f;
     public static final byte CURSOR_ACCELERATION_THRESHOLD = 6;
+    public static final String PREF_TAP_TO_CLICK = "tap_to_click";
+    public static final boolean DEFAULT_TAP_TO_CLICK = true;
     private final Finger[] fingers = new Finger[MAX_FINGERS];
     private byte numFingers = 0;
     private float sensitivity = 1.0f;
@@ -33,6 +35,8 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     private boolean pointerButtonLeftEnabled = true;
     private boolean pointerButtonRightEnabled = true;
     private boolean moveCursorToTouchpoint = false;
+    // Separate from pointerButtonLeftEnabled: that one is flipped on every touch by InputControlsView.
+    private boolean tapToClickEnabled = DEFAULT_TAP_TO_CLICK;
     private Finger fingerPointerButtonLeft;
     private Finger fingerPointerButtonRight;
     private float scrollAccumY = 0;
@@ -195,7 +199,7 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
             case 1:
                 if (finger1.isTap()) {
                     if (moveCursorToTouchpoint) xServer.injectPointerMove(finger1.x, finger1.y);
-                    pressPointerButtonLeft(finger1);
+                    if (tapToClickEnabled) pressPointerButtonLeft(finger1);
                 }
                 break;
             case 2:
@@ -351,6 +355,14 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
 
     public void setMoveCursorToTouchpoint(boolean moveCursorToTouchpoint) {
         this.moveCursorToTouchpoint = moveCursorToTouchpoint;
+    }
+
+    public boolean isTapToClickEnabled() {
+        return tapToClickEnabled;
+    }
+
+    public void setTapToClickEnabled(boolean tapToClickEnabled) {
+        this.tapToClickEnabled = tapToClickEnabled;
     }
 
     public boolean onExternalMouseEvent(MotionEvent event) {

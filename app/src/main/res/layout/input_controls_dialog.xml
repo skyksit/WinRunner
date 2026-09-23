@@ -43,6 +43,18 @@
             android:layout_height="wrap_content"
             android:text="@string/relative_mouse_movement" />
 
+        <CheckBox
+            android:id="@+id/CBMoveCursorToTouchpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/move_cursor_to_touchpoint" />
+
+        <CheckBox
+            android:id="@+id/CBTapToClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tap_to_left_click" />
+
         <!-- Label beside the widget instead of above it: this dialog also opens in landscape,
              where four stacked rows no longer fit and the slider ends up half scrolled away. -->
         <LinearLayout

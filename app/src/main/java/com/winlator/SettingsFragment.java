@@ -58,6 +58,7 @@ import com.winlator.services.NotificationUtils;
 import com.winlator.widget.ColorPickerView;
 import com.winlator.widget.LogView;
 import com.winlator.widget.SeekBar;
+import com.winlator.widget.TouchpadView;
 import com.winlator.winhandler.GamepadHandler;
 import com.winlator.xenvironment.RootFS;
 import com.winlator.xenvironment.RootFSInstaller;
@@ -135,6 +136,9 @@ public class SettingsFragment extends Fragment {
 
         final CheckBox cbMoveCursorToTouchpoint = view.findViewById(R.id.CBMoveCursorToTouchpoint);
         cbMoveCursorToTouchpoint.setChecked(preferences.getBoolean("move_cursor_to_touchpoint", false));
+
+        final CheckBox cbTapToClick = view.findViewById(R.id.CBTapToClick);
+        cbTapToClick.setChecked(preferences.getBoolean(TouchpadView.PREF_TAP_TO_CLICK, TouchpadView.DEFAULT_TAP_TO_CLICK));
 
         final CheckBox cbCapturePointerOnExternalMouse = view.findViewById(R.id.CBCapturePointerOnExternalMouse);
         cbCapturePointerOnExternalMouse.setChecked(preferences.getBoolean("capture_pointer_on_external_mouse", true));
@@ -228,6 +232,7 @@ public class SettingsFragment extends Fragment {
             editor.putString("box64_version", StringUtils.parseIdentifier(sBox64Version.getSelectedItem()));
             editor.putString("box64_preset", Box64PresetManager.getSpinnerSelectedId(sBox64Preset));
             editor.putBoolean("move_cursor_to_touchpoint", cbMoveCursorToTouchpoint.isChecked());
+            editor.putBoolean(TouchpadView.PREF_TAP_TO_CLICK, cbTapToClick.isChecked());
             editor.putBoolean("capture_pointer_on_external_mouse", cbCapturePointerOnExternalMouse.isChecked());
             editor.putFloat("cursor_speed", sbCursorSpeed.getValue() / 100.0f);
             editor.putFloat("cursor_scale", sbCursorSize.getValue() / 100.0f);
