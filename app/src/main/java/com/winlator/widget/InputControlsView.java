@@ -556,12 +556,6 @@ public class InputControlsView extends View {
             return;
         }
 
-        if (binding == Binding.KEY_DGP_RELATIVE_MOUSE) {
-            // No plumbing needed: the view already holds the server.
-            if (xServer != null) xServer.setRelativeMouseMovement(!xServer.isRelativeMouseMovement());
-            return;
-        }
-
         // The rest need the hosting activity, which this widget deliberately does not know about -
         // ControlsEditorActivity builds one of these too, and there the commands must do nothing.
         if (commandHandler != null) commandHandler.onCommand(binding);

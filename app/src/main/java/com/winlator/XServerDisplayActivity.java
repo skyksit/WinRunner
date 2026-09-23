@@ -533,8 +533,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         else if (binding == Binding.KEY_DGP_SLOW_MOTION) {
             speedController.toggleSlowMotion();
         }
-        else if (binding == Binding.KEY_DGP_MOUSE_MODE) {
-            // Session-only, like the relative mouse toggle; the startup mode lives in Settings > Mouse.
+        else if (binding == Binding.KEY_DGP_RELATIVE_MOUSE) {
+            // Touch <-> Swipe, which is what DGPlayer's MOUSE_TOUCH_SWIPE (mapped to this binding)
+            // means. It used to flip xServer's relative mouse movement instead; that stays on the
+            // Input Controls dialog checkbox. Session-only - the startup mode lives in Settings > Mouse.
             boolean touchMode = !touchpadView.isMoveCursorToTouchpoint();
             touchpadView.setMoveCursorToTouchpoint(touchMode);
             showMouseModeIndicator(touchMode);
@@ -892,7 +894,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         final CheckBox cbRelativeMouseMovement = dialog.findViewById(R.id.CBRelativeMouseMovement);
         cbRelativeMouseMovement.setChecked(xServer.isRelativeMouseMovement());
 
-        // From the widget, not the preferences: a DGP MOUSE MODE button may have changed it this session.
+        // From the widget, not the preferences: a DGP REL MOUSE button may have changed it this session.
         final CheckBox cbMoveCursorToTouchpoint = dialog.findViewById(R.id.CBMoveCursorToTouchpoint);
         cbMoveCursorToTouchpoint.setChecked(touchpadView.isMoveCursorToTouchpoint());
 
