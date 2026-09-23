@@ -47,7 +47,7 @@ android {
         // which DGPlayer gates on before putting it in a layout - older builds do not know the names.
         // 39: in-game layout edits go back to DGPlayer through controls_return_uri.
         // 40: KEY_DGP_RELATIVE_MOUSE toggles Touch/Swipe; KEY_DGP_MOUSE_MODE is only a load-time alias.
-        versionCode 40
+        versionCode 41
         versionName "11.6"
     }
 
