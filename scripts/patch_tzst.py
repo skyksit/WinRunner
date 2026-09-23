@@ -34,6 +34,12 @@ import tarfile
 
 import zstandard
 
+# The failure report below contains an em dash, and a Windows console is cp949 here,
+# so printing it used to raise UnicodeEncodeError - the script crashed on exactly the
+# path that was meant to tell you what went wrong.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(errors="replace")
+
 OLD = b"com.dgplayer"
 NEW = b"com.retrople"
 OLD16 = "com.dgplayer".encode("utf-16-le")
@@ -45,14 +51,20 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # expected content-hit counts from the pre-patch survey (advisory cross-check;
 # the hard gate is baseline == replaced and residual == 0)
+#
+# ⚠ An upstream merge that bumps a component renames its archive, and the entry here
+# then points at a file that no longer exists - which is how box64 0.4.0, gladio 1.0
+# and turnip 26.1.0 were left behind by fef8b44. Nothing shipped wrong (the new
+# archives had been rebranded by hand), but the script failed every run until this
+# list caught up. check_coverage() below now says so instead of letting it rot.
 TARGETS = {
     "app/app/src/main/assets/rootfs.tzst": 447,
     "app/app/src/main/assets/container_pattern.tzst": 1,
-    "app/app/src/main/assets/box64/box64-0.4.0.tzst": 2,
+    "app/app/src/main/assets/box64/box64-0.4.4.tzst": 2,
     "app/app/src/main/assets/graphics_driver/vortek-2.1.tzst": 3,
-    "app/app/src/main/assets/graphics_driver/gladio-1.0.tzst": 2,
+    "app/app/src/main/assets/graphics_driver/gladio-1.1.tzst": 2,
     "app/app/src/main/assets/graphics_driver/virgl-23.1.9.tzst": 2,
-    "app/app/src/main/assets/graphics_driver/turnip-26.1.0.tzst": 1,
+    "app/app/src/main/assets/graphics_driver/turnip-26.2.0.tzst": 1,
     "app/app/src/main/assets/rootfs_patches.tzst": 1,
     "installable_components/box64/box64-0.3.3.tzst": 2,
     "installable_components/box64/box64-0.3.5.tzst": 2,
@@ -60,6 +72,14 @@ TARGETS = {
     "installable_components/turnip/turnip-24.1.0.tzst": 1,
     "installable_components/turnip/turnip-25.0.0.tzst": 1,
     "installable_components/turnip/turnip-26.0.3.tzst": 1,
+}
+
+# Archives that sit in the same directories but carry none of the three ids, verified
+# by a full scan. Listing them is what lets check_coverage() treat anything else it
+# finds as an oversight rather than noise.
+NO_ID = {
+    "app/app/src/main/assets/pulseaudio.tzst",
+    "app/app/src/main/assets/graphics_driver/zink-22.2.5.tzst",
 }
 
 
@@ -118,8 +138,37 @@ def patch_archive(path):
     return out_path, replaced
 
 
+def check_coverage():
+    """Report .tzst files in the covered directories that nobody has classified.
+
+    Filename-level only, so it costs nothing: the point is to catch a component bump
+    that renamed an archive out from under TARGETS, which is the way this list rots.
+    """
+    covered = set(TARGETS) | NO_ID
+    dirs = sorted({os.path.dirname(rel) for rel in covered})
+    unlisted = []
+    for d in dirs:
+        abs_dir = os.path.join(REPO, d.replace("/", os.sep))
+        if not os.path.isdir(abs_dir):
+            continue
+        for name in sorted(os.listdir(abs_dir)):
+            if not name.endswith(".tzst"):
+                continue
+            rel = f"{d}/{name}"
+            if rel not in covered:
+                unlisted.append(rel)
+    return unlisted
+
+
 def main():
     failures = []
+
+    unlisted = check_coverage()
+    if unlisted:
+        print("Not in TARGETS or NO_ID - a component bump probably renamed one of these:")
+        for rel in unlisted:
+            print("  " + rel)
+        print()
     print(f"{'archive':<62}{'baseline':>9}{'replaced':>9}{'expected':>9}{'residual':>9}")
     for rel, expected in TARGETS.items():
         path = os.path.join(REPO, rel.replace("/", os.sep))
