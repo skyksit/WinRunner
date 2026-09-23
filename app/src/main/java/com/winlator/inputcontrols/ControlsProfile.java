@@ -198,21 +198,30 @@ public class ControlsProfile implements Comparable<ControlsProfile>, GamepadSlot
             if (!profileJSONObject.has("controllers")) return controllers;
             JSONArray controllersJSONArray = profileJSONObject.getJSONArray("controllers");
             for (int i = 0; i < controllersJSONArray.length(); i++) {
-                JSONObject controllerJSONObject = controllersJSONArray.getJSONObject(i);
-                String id = controllerJSONObject.getString("id");
-                ExternalController controller = new ExternalController();
-                controller.setId(id);
-                controller.setName(controllerJSONObject.getString("name"));
+                // Same reasoning as loadElements below: Binding.fromString throws
+                // IllegalArgumentException on a name this build does not know, and the outer catch
+                // only handles JSONException - so one physical-pad mapping written by a newer
+                // DGPlayer would throw out of getController() instead of just being dropped.
+                try {
+                    JSONObject controllerJSONObject = controllersJSONArray.getJSONObject(i);
+                    String id = controllerJSONObject.getString("id");
+                    ExternalController controller = new ExternalController();
+                    controller.setId(id);
+                    controller.setName(controllerJSONObject.getString("name"));
 
-                JSONArray controllerBindingsJSONArray = controllerJSONObject.getJSONArray("controllerBindings");
-                for (int j = 0; j < controllerBindingsJSONArray.length(); j++) {
-                    JSONObject controllerBindingJSONObject = controllerBindingsJSONArray.getJSONObject(j);
-                    ExternalControllerBinding controllerBinding = new ExternalControllerBinding();
-                    controllerBinding.setKeyCode(controllerBindingJSONObject.getInt("keyCode"));
-                    controllerBinding.setBinding(Binding.fromString(controllerBindingJSONObject.getString("binding")));
-                    controller.addControllerBinding(controllerBinding);
+                    JSONArray controllerBindingsJSONArray = controllerJSONObject.getJSONArray("controllerBindings");
+                    for (int j = 0; j < controllerBindingsJSONArray.length(); j++) {
+                        JSONObject controllerBindingJSONObject = controllerBindingsJSONArray.getJSONObject(j);
+                        ExternalControllerBinding controllerBinding = new ExternalControllerBinding();
+                        controllerBinding.setKeyCode(controllerBindingJSONObject.getInt("keyCode"));
+                        controllerBinding.setBinding(Binding.fromString(controllerBindingJSONObject.getString("binding")));
+                        controller.addControllerBinding(controllerBinding);
+                    }
+                    controllers.add(controller);
                 }
-                controllers.add(controller);
+                catch (JSONException | IllegalArgumentException e) {
+                    Log.w("DGPlayerBridge", "skipping unreadable controller "+i+": "+e);
+                }
             }
             controllersLoaded = true;
         }
@@ -261,6 +270,16 @@ public class ControlsProfile implements Comparable<ControlsProfile>, GamepadSlot
 
                 boolean hasGamepadBinding = true;
                 JSONArray bindingsJSONArray = elementJSONObject.getJSONArray("bindings");
+
+                // A radial menu draws one sector per binding, and the constructor defaults to three.
+                // setBindingAt only grows the array, so a profile declaring two sectors would render
+                // a third, empty one that does nothing when picked. DGPlayer deliberately sends
+                // exactly as many bindings as the group has children, so honour that count.
+                if (element != null && element.getType() == ControlElement.Type.RADIAL_MENU
+                        && bindingsJSONArray.length() > 0) {
+                    element.setBindingCount(bindingsJSONArray.length());
+                }
+
                 for (int j = 0; j < bindingsJSONArray.length(); j++) {
                     Binding binding = Binding.fromString(bindingsJSONArray.getString(j));
                     if (element != null) element.setBindingAt(j, binding);
