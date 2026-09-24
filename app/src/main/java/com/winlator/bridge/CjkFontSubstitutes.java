@@ -77,16 +77,30 @@ abstract class CjkFontSubstitutes {
         List<String> faces = new ArrayList<>();
         for (String line : FileUtils.readLines(userReg)) {
             Matcher m = EXTERNAL_FONT.matcher(line);
-            if (m.find()) faces.add(m.group(1));
+            // Entries are full names ("Noto Sans CJK KR Regular"); Replacements wants the family.
+            if (m.find()) faces.add(m.group(1).replaceFirst(" Regular$", ""));
         }
 
-        // Prefer the region's own face, then a sans CJK face, then anything CJK at all.
+        // Prefer the region's own gothic face, then any gothic CJK face, then anything CJK at all.
+        // Serif and monospace faces go last: the requested faces (굴림, 돋움, MS Sans Serif, …) are
+        // all proportional gothics, and a game that renders its own glyph cells at 9–11pt — Korean
+        // StarCraft draws every syllable with 굴림 into a fixed bitmap — comes out as broken strokes
+        // with a serif face. That was the result on Samsung, which registers "Noto Serif CJK KR"
+        // ahead of "SEC CJK KR" and names its Noto Sans entry "Noto Sans CJK KR Regular".
         if (region != null) {
             for (String f : faces) if (f.endsWith(" "+region) && f.contains("Sans")) return f;
-            for (String f : faces) if (f.endsWith(" "+region)) return f;
+            for (String f : faces) if (f.endsWith(" "+region) && isGothic(f)) return f;
         }
         for (String f : faces) if (f.contains("CJK") && f.contains("Sans")) return f;
+        for (String f : faces) if (f.contains("CJK") && isGothic(f)) return f;
+        if (region != null) {
+            for (String f : faces) if (f.endsWith(" "+region)) return f;
+        }
         for (String f : faces) if (f.contains("CJK")) return f;
         return null;
+    }
+
+    private static boolean isGothic(String face) {
+        return !face.contains("Serif") && !face.contains("Mono");
     }
 }
