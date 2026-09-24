@@ -365,6 +365,8 @@
     <string name="dgp_consent_title">Allow %1$s to use WinRunner?</string>
     <string name="dgp_consent_message">%1$s (%2$s) wants to install and run Windows games through WinRunner, change their settings and edit your on-screen control layouts.\n\nAllow this only for apps you trust. You will not be asked again for this app.</string>
     <string name="dgp_consent_allow">Allow</string>
+    <string name="dgp_screenshot_saved">Screenshot saved to gallery</string>
+    <string name="dgp_screenshot_failed">Failed to save screenshot</string>
     <string name="dgp_consent_deny">Don\'t allow</string>
     <string name="change_disc">Change Disc</string>
     <string name="fgs_notification_channel_desc">Keeps Winlator running in the background so a wine session is not interrupted by Android\'s background process management.</string>

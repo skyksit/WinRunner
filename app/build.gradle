@@ -48,7 +48,7 @@ android {
         // 39: in-game layout edits go back to DGPlayer through controls_return_uri.
         // 40: KEY_DGP_RELATIVE_MOUSE toggles Touch/Swipe; KEY_DGP_MOUSE_MODE is only a load-time alias.
         // 43: CJK font substitutes prefer a gothic face (Samsung used to get Noto Serif CJK KR).
-        versionCode 43
+        versionCode 44
         versionName "11.6"
     }
 

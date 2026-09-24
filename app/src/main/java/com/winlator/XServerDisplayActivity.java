@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.TypedValue;
@@ -64,6 +65,7 @@ import com.winlator.core.KeyValueSet;
 import com.winlator.core.LocaleHelper;
 import com.winlator.core.PreloaderDialog;
 import com.winlator.core.ProcessHelper;
+import com.winlator.core.ScreenshotSaver;
 import com.winlator.core.StringUtils;
 import com.winlator.core.TarCompressorUtils;
 import com.winlator.core.UnitUtils;
@@ -81,6 +83,7 @@ import com.winlator.inputcontrols.InputControlsManager;
 import com.winlator.inputcontrols.TouchHaptics;
 import com.winlator.math.Mathf;
 import com.winlator.renderer.GLRenderer;
+import com.winlator.renderer.ViewTransformation;
 import com.winlator.services.ForegroundService;
 import com.winlator.speed.GameSpeed;
 import com.winlator.speed.SpeedController;
@@ -549,6 +552,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             // Opens the drawer, or closes it when it is already open.
             onBackPressed();
         }
+        else if (binding == Binding.KEY_DGP_SCREENSHOT) {
+            takeGalleryScreenshot();
+        }
         else if (binding == Binding.KEY_DGP_EDIT_CONTROLS) {
             ControlsProfile profile = inputControlsView.getProfile();
             if (profile != null) {
@@ -557,6 +563,19 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 startActivityForResult(intent, EDIT_CONTROLS_PROFILE_REQUEST_CODE);
             }
         }
+    }
+
+    /** DGPlayer VPAD camera button: the game image (letterbox cropped) goes to the phone's gallery. */
+    private void takeGalleryScreenshot() {
+        GLRenderer renderer = xServerView.getRenderer();
+        Rect crop = null;
+        if (!renderer.isFullscreen()) {
+            ViewTransformation vt = renderer.viewTransformation;
+            crop = new Rect(vt.viewOffsetX, vt.viewOffsetY, vt.viewOffsetX + vt.viewWidth, vt.viewOffsetY + vt.viewHeight);
+        }
+        String execPath = getIntent().getStringExtra("exec_path");
+        String baseName = execPath != null ? FileUtils.getName(execPath) : "winrunner";
+        ScreenshotSaver.capture(this, xServerView, crop, baseName);
     }
 
     private void exit() {
