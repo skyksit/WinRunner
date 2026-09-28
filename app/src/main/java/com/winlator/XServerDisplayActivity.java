@@ -603,8 +603,15 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                     if (relaunchIntent != null) {
                         // Same shape as AppUtils.restartApplication: hand the launch to a fresh
                         // task, then take the process down so the next session starts clean.
+                        // Straight into a new session, not back through GameLaunchActivity: the
+                        // bridge already prepared this launch before handing it here (container,
+                        // copies, save restore, session baseline), and relaunchIntent is its
+                        // XServerDisplayActivity intent. Routing it through GameLaunchActivity
+                        // again was refused by BridgeSecurity in release builds (a same-app
+                        // startActivity has no calling package), lacked DGPlayer's extras
+                        // (content_uri, manifest_ini) and re-ran the save restore.
                         Intent restart = Intent.makeRestartActivityTask(
-                                new ComponentName(this, GameLaunchActivity.class));
+                                new ComponentName(this, XServerDisplayActivity.class));
                         restart.putExtras(relaunchIntent);
                         startActivity(restart);
                         finish();

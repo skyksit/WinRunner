@@ -185,12 +185,14 @@ public class GameLaunchActivity extends AppCompatActivity {
         Uri contentUri = getIntent().getParcelableExtra(EXTRA_CONTENT_URI);
         Uri saveUri = getIntent().getParcelableExtra(EXTRA_SAVE_URI);
 
-        // A session that never reached exit() (crash, force-stop, battery) never exported its
-        // saves. Catch up here, while the previous payload and its dgplayer.ini are both still in
-        // place -- the reinstall below would take the in-folder saves with them.
-        if (saveUri != null && SaveSync.hasPendingExport(this, gameId)) {
-            SaveSync.exportOnExit(this, container, gameId, saveUri);
-        }
+        // A session that never reached exit() (crash, force-stop, battery, or still running) never
+        // exported its saves. Catch up here, while the previous payload and its dgplayer.ini are both
+        // still in place -- the reinstall below would take the in-folder saves with them -- and for
+        // every game, not just this one: the container is shared, and once this launch restores its
+        // saves into it, the other game's changes can no longer be told apart (SaveSync.flush...).
+        // An archive replaced since that session began (cloud restore, an imported zip, another
+        // device) is kept instead: exporting over it would erase what the player chose later.
+        SaveSync.flushPendingSessions(this, container, gameId, saveUri);
 
         // Before anything can wipe the game dir (reinstall below), rescue the previous session's
         // log files to public Downloads. Every drive the container maps lives in app-private
@@ -245,15 +247,19 @@ public class GameLaunchActivity extends AppCompatActivity {
         }
 
         applyPreset(container, manifest, gameDir);
-        applyCopies(container, manifest, gameDir);
 
         // After the payload (a reinstall would delete what we restore) and after applyPreset, whose
         // drives string is what resolves D: for the manifest copy targets. The executable check
         // above stays ahead of this on purpose: a game binary must come from the package, never
         // from a save archive.
         if (saveUri != null) {
-            SaveSync.restoreIfNeeded(this, container, gameId, saveUri, manifest, payloadReinstalled);
+            SaveSync.restoreIfNeeded(this, container, gameId, saveUri, payloadReinstalled);
         }
+        // After the restore: copies only seed what is missing, so a copy target the archive holds (a
+        // game's progress .ini) is restored first and then left alone. The other way round, on a
+        // recreated container the package default would land first and the restore - which only
+        // fills gaps in the shared roots there - would skip the player's copy.
+        applyCopies(container, manifest, gameDir, gameId, payloadReinstalled);
 
         // Everything below edits the prefix's registry hives as plain files, so it has to happen
         // while Wine is stopped — i.e. before XServerDisplayActivity starts.
@@ -283,7 +289,7 @@ public class GameLaunchActivity extends AppCompatActivity {
                 : manifest.getBoolean("forceFullscreen");
 
         // As late as possible, so every file the bridge itself just wrote counts as pre-existing.
-        if (saveUri != null) SaveSync.beginSession(this, container, gameId, manifest);
+        if (saveUri != null) SaveSync.beginSession(this, container, gameId, saveUri);
 
         Intent intent = new Intent(this, XServerDisplayActivity.class);
         intent.putExtra("container_id", container.id);
@@ -531,8 +537,15 @@ public class GameLaunchActivity extends AppCompatActivity {
     /**
      * Copies files the package wants placed outside its own folder — typically settings the original
      * installer would have written into {@code C:\windows}.
+     *
+     * <p>Only seeds: a destination that already exists is left alone unless the payload was just
+     * re-imported, and even then not when the game has written to it (it is a tracked save). These
+     * files are commonly where a 90s game keeps its progress — cleared stages, the last slot, unlocks
+     * — so rewriting them from the package on every launch reset the player's progress each time,
+     * and no save archive could bring it back.
      */
-    private void applyCopies(Container container, GameManifest manifest, File gameDir) {
+    private void applyCopies(Container container, GameManifest manifest, File gameDir, String gameId,
+                             boolean payloadReinstalled) {
         for (String[] copy : manifest.getCopies()) {
             File source = new File(gameDir, copy[0].replace('\\', '/'));
             String destination = WineUtils.dosToUnixPath(copy[1], container);
@@ -544,6 +557,13 @@ public class GameLaunchActivity extends AppCompatActivity {
             // Guard the same way the payload extraction does: a copy target is attacker-controlled
             // text, and dosToUnixPath happily resolves anything the drive table can reach.
             File destinationFile = new File(destination);
+            if (destinationFile.isFile()) {
+                if (!payloadReinstalled) continue;
+                if (SaveSync.isTrackedSave(this, container, gameId, destinationFile)) {
+                    Log.i(TAG, "keeping copy target the game has written: "+copy[1]);
+                    continue;
+                }
+            }
             if (!FileUtils.copy(source, destinationFile)) {
                 Log.w(TAG, "copy failed: "+source+" -> "+destinationFile);
                 continue;

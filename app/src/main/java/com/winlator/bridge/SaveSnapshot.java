@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.winlator.container.Container;
 import com.winlator.core.FileUtils;
-import com.winlator.core.WineUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,13 +73,11 @@ abstract class SaveSnapshot {
         final List<File> recursive = new ArrayList<>();
         /** Only the files directly inside are considered (no descent). */
         final List<File> topLevelOnly = new ArrayList<>();
-        /** Relative paths the bridge rewrites on every launch. */
-        final Set<String> excludedRel = new HashSet<>();
         /** Relative path prefixes excluded wholesale. */
         final List<String> excludedPrefixes = new ArrayList<>();
     }
 
-    static Roots roots(Container container, String gameId, GameManifest manifest) {
+    static Roots roots(Container container, String gameId) {
         Roots roots = new Roots();
         roots.driveC = new File(container.getRootDir(), ".wine/drive_c");
         roots.gameDirPrefix = GameLaunchActivity.GAMES_DIR + "/" + gameId + "/";
@@ -101,18 +98,9 @@ abstract class SaveSnapshot {
         roots.excludedPrefixes.add(PROGRAM_DATA + "/Microsoft/Windows/Start Menu/");
         roots.excludedPrefixes.add(USERS_XUSER + "AppData/Roaming/Microsoft/Windows/Recent/");
 
-        // copy= targets are rewritten from the package on every launch (GameLaunchActivity
-        // .applyCopies), so tracking them would preserve the package default rather than the
-        // player's edit. Resolve them the way applyCopies does so both agree on the path.
-        if (manifest != null) {
-            for (String[] copy : manifest.getCopies()) {
-                String destination = WineUtils.dosToUnixPath(copy[1], container);
-                if (destination == null || destination.isEmpty()) continue;
-                String rel = rel(roots.driveC, new File(destination));
-                // Destinations outside drive_c (E:, Z:) are not watched in the first place.
-                if (rel != null) roots.excludedRel.add(rel);
-            }
-        }
+        // copy= targets are NOT excluded. They used to be, because applyCopies rewrote them from the
+        // package on every launch; now it only seeds them, so a game that keeps its progress in its
+        // C:\windows .ini (common for 90s titles) gets that file tracked and restored like any save.
         return roots;
     }
 
@@ -163,7 +151,6 @@ abstract class SaveSnapshot {
     }
 
     static boolean isExcluded(Roots roots, String rel) {
-        if (roots.excludedRel.contains(rel)) return true;
         for (String prefix : roots.excludedPrefixes) {
             if (rel.startsWith(prefix)) return true;
         }

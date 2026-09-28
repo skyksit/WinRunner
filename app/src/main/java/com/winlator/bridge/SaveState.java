@@ -9,8 +9,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +38,11 @@ class SaveState {
     private static final String KEY_LAST_STAMP = "lastStamp";
     private static final String KEY_LAST_EXPORT_AT = "lastExportAt";
     private static final String KEY_PENDING_EXPORT = "pendingExport";
+    private static final String KEY_SESSION_STAMP = "sessionStamp";
+    private static final String KEY_SESSION_TOKEN = "sessionToken";
+    private static final String KEY_SAVE_URI = "saveUri";
+
+    private static final String STATE_SUFFIX = ".json";
     private static final String KEY_TRACKED = "tracked";
     private static final String KEY_GAME_DIR_BASELINE = "gameDirBaseline";
     private static final String KEY_SHARED_BASELINE = "sharedBaseline";
@@ -45,6 +52,25 @@ class SaveState {
     String lastStamp;
     long lastExportAt;
     boolean pendingExport;
+    /**
+     * Identity of the archive as {@link SaveSync#beginSession} found it ({@link SaveArchive#peekStamp}),
+     * {@code ""} when there was none. Lets the next launch tell a session that died without exporting
+     * apart from an archive the player replaced afterwards. Null = not recorded (state written by a
+     * build before this field existed), which must fall back to the old behaviour.
+     */
+    String sessionStamp;
+    /**
+     * Minted by {@link SaveSync#beginSession} and mirrored into the container-wide marker. When the
+     * marker no longer holds it, another game's session has started since, and this game's view of
+     * the shared roots (profile, ProgramData, C:\windows) is no longer its own.
+     */
+    String sessionToken;
+    /**
+     * The {@code save_uri} of this game's last session. Lets another game's launch export this one's
+     * pending session with the right archive before anything else touches the container. The grant
+     * DGPlayer gave with that launch outlives the activity (until revoke or reboot).
+     */
+    String saveUri;
     /** Every path this game is known to write. Union across sessions; the export contents. */
     final Map<String, long[]> tracked = new LinkedHashMap<>();
     /** Game folder contents as of the last install or export. Persistent across sessions. */
@@ -61,7 +87,21 @@ class SaveState {
     }
 
     static File fileFor(Context context, String gameId) {
-        return new File(dirFor(context), gameId+".json");
+        return new File(dirFor(context), gameId+STATE_SUFFIX);
+    }
+
+    /** Every game whose last session never got exported. Normally zero or one (the last session). */
+    static List<String> pendingGameIds(Context context) {
+        List<String> ids = new ArrayList<>();
+        File[] files = dirFor(context).listFiles();
+        if (files == null) return ids;
+        for (File file : files) {
+            String name = file.getName();
+            if (!file.isFile() || !name.endsWith(STATE_SUFFIX)) continue;
+            String gameId = name.substring(0, name.length() - STATE_SUFFIX.length());
+            if (load(context, gameId).pendingExport) ids.add(gameId);
+        }
+        return ids;
     }
 
     /** Never fails: a missing or unreadable state file yields a fresh, empty state. */
@@ -76,6 +116,9 @@ class SaveState {
             state.lastStamp = data.has(KEY_LAST_STAMP) ? data.optString(KEY_LAST_STAMP, null) : null;
             state.lastExportAt = data.optLong(KEY_LAST_EXPORT_AT, 0L);
             state.pendingExport = data.optBoolean(KEY_PENDING_EXPORT, false);
+            state.sessionStamp = data.has(KEY_SESSION_STAMP) ? data.optString(KEY_SESSION_STAMP, "") : null;
+            state.sessionToken = data.has(KEY_SESSION_TOKEN) ? data.optString(KEY_SESSION_TOKEN, null) : null;
+            state.saveUri = data.has(KEY_SAVE_URI) ? data.optString(KEY_SAVE_URI, null) : null;
             readMap(data.optJSONObject(KEY_TRACKED), state.tracked);
             if (data.has(KEY_GAME_DIR_BASELINE)) {
                 state.gameDirBaseline = new LinkedHashMap<>();
@@ -108,6 +151,9 @@ class SaveState {
             if (lastStamp != null) data.put(KEY_LAST_STAMP, lastStamp);
             data.put(KEY_LAST_EXPORT_AT, lastExportAt);
             data.put(KEY_PENDING_EXPORT, pendingExport);
+            if (sessionStamp != null) data.put(KEY_SESSION_STAMP, sessionStamp);
+            if (sessionToken != null) data.put(KEY_SESSION_TOKEN, sessionToken);
+            if (saveUri != null) data.put(KEY_SAVE_URI, saveUri);
             data.put(KEY_TRACKED, writeMap(tracked));
             if (gameDirBaseline != null) data.put(KEY_GAME_DIR_BASELINE, writeMap(gameDirBaseline));
             data.put(KEY_SHARED_BASELINE, writeMap(sharedBaseline));

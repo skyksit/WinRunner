@@ -18,12 +18,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -76,6 +79,12 @@ abstract class SaveArchive {
     /**
      * Stages the archive behind {@code saveUri} and validates its metadata.
      *
+     * <p>An archive without {@value #META_ENTRY} is accepted: DGPlayer imports a zip the player built
+     * by hand (laid out relative to {@code drive_c}) as a documented recovery path, and rejecting it
+     * here made that import report success while restoring nothing. Its stamp is the content hash, so
+     * the same file is applied once, not on every launch. {@link #isAllowed} still decides which
+     * entries may land.
+     *
      * @return null when there is nothing usable there — no file yet, an empty archive, a revoked
      *         grant, or an archive belonging to another game or a newer format. All of those mean
      *         "do not restore", never "fail the launch".
@@ -122,9 +131,10 @@ abstract class SaveArchive {
         try (ZipFile zip = new ZipFile(staged)) {
             ZipEntry metaEntry = zip.getEntry(META_ENTRY);
             if (metaEntry == null) {
-                Log.w(TAG, "save archive has no " + META_ENTRY + ", ignoring it");
-                staged.delete();
-                return null;
+                String stamp = contentStamp(staged);
+                Log.i(TAG, "save archive has no " + META_ENTRY + ", treating it as a hand-made import"
+                        + " stamp=" + stamp);
+                return new Archive(staged, stamp, zip.size());
             }
 
             JSONObject meta;
@@ -164,24 +174,82 @@ abstract class SaveArchive {
     }
 
     /**
+     * Identifies the archive behind {@code saveUri} without staging it.
+     *
+     * <p>{@link #write} always puts {@value #META_ENTRY} first, so reading the first entry is enough
+     * for every archive this bridge produced. Anything else (a hand-made zip) is identified by its
+     * content hash, streamed - the value only has to be stable across calls to this method.
+     *
+     * @return {@code ""} when there is no archive, null when it could not be read (callers must then
+     *         assume nothing), otherwise an identity that changes whenever the archive does
+     */
+    static String peekStamp(Context context, Uri saveUri) {
+        try {
+            try (ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(saveUri, "r")) {
+                if (pfd == null || pfd.getStatSize() <= EMPTY_ZIP_SIZE) return "";
+            }
+            catch (java.io.FileNotFoundException e) {
+                return "";
+            }
+
+            try (ZipInputStream zipStream = new ZipInputStream(context.getContentResolver().openInputStream(saveUri))) {
+                ZipEntry first = zipStream.getNextEntry();
+                if (first != null && META_ENTRY.equals(first.getName())) {
+                    JSONObject meta = new JSONObject(new String(StreamUtils.copyToByteArray(zipStream), "UTF-8"));
+                    String stamp = meta.optString(META_STAMP, "");
+                    if (!stamp.isEmpty()) return stamp;
+                }
+            }
+
+            try (InputStream inStream = context.getContentResolver().openInputStream(saveUri)) {
+                if (inStream == null) return null;
+                return contentStamp(inStream);
+            }
+        }
+        catch (Exception e) {
+            Log.w(TAG, "could not identify the save archive", e);
+            return null;
+        }
+    }
+
+    private static String contentStamp(File file) throws Exception {
+        try (InputStream inStream = new FileInputStream(file)) {
+            return contentStamp(inStream);
+        }
+    }
+
+    private static String contentStamp(InputStream inStream) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] buffer = new byte[StreamUtils.BUFFER_SIZE];
+        try (DigestInputStream digestStream = new DigestInputStream(inStream, digest)) {
+            while (digestStream.read(buffer) != -1) {
+                // digesting
+            }
+        }
+        StringBuilder hex = new StringBuilder("sha256:");
+        for (byte b : digest.digest()) hex.append(String.format(Locale.ENGLISH, "%02x", b));
+        return hex.toString();
+    }
+
+    /**
      * Extracts the archive into the container.
      *
      * <p>Nothing is ever deleted: the archive holds only the paths this game is known to write, so a
      * path being absent is not evidence it was deleted — and the shared roots belong to every game
      * in the container.
      *
-     * @param gameDirOnly restore only the game folder, used when the payload was just re-imported
-     *                    and wiped it while the rest of the container survived
-     * @param onlyMissing  write only files that are absent from the container. Used when the archive
-     *                     was already applied here: the container's copies are then at least as new,
-     *                     so they must not be overwritten, but a gap means the file was lost and the
-     *                     archive is the only copy left
+     * <p>Each side decides on its own whether the archive may overwrite what is there. When it may
+     * not, only files absent from the container are written: the container's copies are then at
+     * least as new, but a gap means the file was lost and the archive is the only copy left.
+     *
+     * @param overwriteGameDir the archive wins inside the game folder
+     * @param overwriteShared  the archive wins in the shared roots (profile, ProgramData, C:\windows)
      * @param restored    receives the stat of each file written, so the caller can record it without
      *                    a second walk
      * @return the number of files written
      */
-    static int extract(Archive archive, SaveSnapshot.Roots roots, boolean gameDirOnly,
-                       boolean onlyMissing, Map<String, long[]> restored) {
+    static int extract(Archive archive, SaveSnapshot.Roots roots, boolean overwriteGameDir,
+                       boolean overwriteShared, Map<String, long[]> restored) {
         int written = 0;
         try (ZipFile zip = new ZipFile(archive.file)) {
             java.util.Enumeration<? extends ZipEntry> entries = zip.entries();
@@ -191,13 +259,14 @@ abstract class SaveArchive {
 
                 String name = entry.getName().replace('\\', '/');
                 if (name.equals(META_ENTRY)) continue;
-                if (!isAllowed(roots, name, gameDirOnly)) {
+                if (!isAllowed(roots, name)) {
                     Log.w(TAG, "rejecting save entry " + name);
                     continue;
                 }
 
                 File file = new File(roots.driveC, name);
-                if (onlyMissing && file.exists()) continue;
+                boolean overwrite = name.startsWith(roots.gameDirPrefix) ? overwriteGameDir : overwriteShared;
+                if (!overwrite && file.exists()) continue;
                 // Zip slip, the same guard PayloadInstaller uses.
                 if (!file.getCanonicalPath().startsWith(roots.driveC.getCanonicalPath() + File.separator)) {
                     Log.w(TAG, "rejecting escaping save entry " + name);
@@ -236,13 +305,12 @@ abstract class SaveArchive {
      * Only the places a save can legitimately live. A tampered archive must not be able to drop a
      * DLL beside the executable, flip the install marker, or rewrite the manifest.
      */
-    private static boolean isAllowed(SaveSnapshot.Roots roots, String name, boolean gameDirOnly) {
+    private static boolean isAllowed(SaveSnapshot.Roots roots, String name) {
         if (name.isEmpty() || name.startsWith("/")) return false;
         if (name.equals("..") || name.startsWith("../") || name.contains("/../") || name.endsWith("/..")) return false;
         if (SaveSnapshot.isExcluded(roots, name)) return false;
 
         if (name.startsWith(roots.gameDirPrefix)) return true;
-        if (gameDirOnly) return false;
         if (name.startsWith("users/xuser/")) return true;
         if (name.startsWith("ProgramData/")) return true;
         // C:\windows: top level only, mirroring what the snapshot watches.

@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.winlator.container.Container;
+import com.winlator.core.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Keeps a Windows game's in-game saves alive outside this app.
@@ -70,9 +72,128 @@ public abstract class SaveSync {
         return dir;
     }
 
+    /** Holds the {@link SaveState#sessionToken} of the most recent session in the shared container. */
+    private static final String SESSION_MARKER = "current_session";
+
     static boolean hasPendingExport(Context context, String gameId) {
         if (context == null || gameId == null) return false;
         return SaveState.load(context, gameId).pendingExport;
+    }
+
+    /**
+     * Exports every session that never reached {@code exit()} — of <em>any</em> game — before this
+     * launch touches the container.
+     *
+     * <p>The container is shared by the whole library and sessions run one at a time, so right now it
+     * holds exactly what the last session left. That is the only moment a dead session's changes to
+     * the shared roots can still be told apart. Deferring the catch-up to that game's own next launch
+     * (as before) diffed it against a baseline older than every game played in between, and pulled
+     * their saves into its archive: A crashes, B is played, A is launched → B's saves in A.save.zip.
+     *
+     * <p>A game whose session is still running (the player went back to DGPlayer without exiting and
+     * pressed Play on another game) is pending too, and is exported here for the same reason — the
+     * restore below is about to write the launching game's saves into the shared roots under it.
+     *
+     * <p>Each game is exported through its own archive: the launching game's through the fresh
+     * {@code save_uri}, others through the one recorded at their last session. A revoked grant
+     * (reboot) just leaves that game pending; its later export then skips the shared roots (see
+     * {@link #export}).
+     */
+    static void flushPendingSessions(Context context, Container container, String launchingGameId,
+                                     Uri launchingSaveUri) {
+        for (String gameId : SaveState.pendingGameIds(context)) {
+            try {
+                Uri saveUri;
+                if (gameId.equals(launchingGameId)) saveUri = launchingSaveUri;
+                else {
+                    String recorded = SaveState.load(context, gameId).saveUri;
+                    saveUri = recorded != null ? Uri.parse(recorded) : null;
+                }
+                if (saveUri == null) {
+                    Log.w(TAG, "pending save export for " + gameId + " has no archive uri, leaving it");
+                    continue;
+                }
+                Log.i(TAG, "flushing pending save export gameId=" + gameId
+                        + (gameId.equals(launchingGameId) ? " (this game)" : " (launching " + launchingGameId + ")"));
+                if (archiveReplacedSinceSession(context, gameId, saveUri)) discardPendingExport(context, gameId);
+                else exportOnExit(context, container, gameId, saveUri);
+            }
+            catch (Throwable t) {
+                Log.e(TAG, "could not flush the pending export of " + gameId, t);
+            }
+        }
+    }
+
+    private static File sessionMarker(Context context) {
+        return new File(SaveState.dirFor(context), SESSION_MARKER);
+    }
+
+    /** Null when no session has recorded itself yet (state from a build before the marker existed). */
+    private static String currentSessionToken(Context context) {
+        File marker = sessionMarker(context);
+        if (!marker.isFile()) return null;
+        String token = FileUtils.readString(marker);
+        return token != null && !token.trim().isEmpty() ? token.trim() : null;
+    }
+
+    /**
+     * True when the archive is no longer the one {@link #beginSession} saw — the player restored from
+     * the cloud, imported a zip, or brought one from another device after that session died.
+     *
+     * <p>Compared against the session's own observation, not {@code lastStamp}: that is "last
+     * applied", and stays null when the first launch could not read the archive, which would make a
+     * crashed session's real progress look replaceable. Unknown on either side means false, i.e. the
+     * old behaviour (export the dead session).
+     */
+    static boolean archiveReplacedSinceSession(Context context, String gameId, Uri saveUri) {
+        try {
+            SaveState state = SaveState.load(context, gameId);
+            if (state.sessionStamp == null) return false;
+            String now = SaveArchive.peekStamp(context, saveUri);
+            if (now == null || now.equals(state.sessionStamp)) return false;
+            Log.w(TAG, "save archive replaced since the last session (" + state.sessionStamp + " -> "
+                    + now + "), keeping it instead of exporting that session");
+            return true;
+        }
+        catch (Throwable t) {
+            Log.e(TAG, "could not compare the save archive", t);
+            return false;
+        }
+    }
+
+    /**
+     * Drops a dead session's pending export in favour of an archive the player replaced since.
+     *
+     * <p>Baselines are deliberately left alone: rebuilding them now would record files that session
+     * created in the game folder as part of the package, hiding them from every later export. Left
+     * as they are, the persistent game folder baseline still catches them at the next exit. What the
+     * dead session wrote into the shared roots is lost — the new archive is restored over it anyway.
+     */
+    static void discardPendingExport(Context context, String gameId) {
+        try {
+            SaveState state = SaveState.load(context, gameId);
+            state.pendingExport = false;
+            state.save(context);
+        }
+        catch (Throwable t) {
+            Log.e(TAG, "could not discard the pending export", t);
+        }
+    }
+
+    /**
+     * True when {@code file} is one of this game's tracked saves — something the game itself wrote,
+     * as opposed to a file the bridge placed there.
+     */
+    static boolean isTrackedSave(Context context, Container container, String gameId, File file) {
+        try {
+            String rel = SaveSnapshot.rel(new File(container.getRootDir(), ".wine/drive_c"), file);
+            if (rel == null) return false;
+            long[] stat = SaveState.load(context, gameId).tracked.get(rel);
+            return stat != null && stat.length >= 2;
+        }
+        catch (Throwable t) {
+            return false;
+        }
     }
 
     /**
@@ -85,7 +206,7 @@ public abstract class SaveSync {
     static void onPayloadInstalled(Context context, Container container, String gameId) {
         try {
             SaveState state = SaveState.load(context, gameId);
-            SaveSnapshot.Roots roots = SaveSnapshot.roots(container, gameId, null);
+            SaveSnapshot.Roots roots = SaveSnapshot.roots(container, gameId);
             state.gameDirBaseline = SaveSnapshot.snapshot(roots, SaveSnapshot.Scope.GAME_DIR);
             state.containerId = container.id;
             state.save(context);
@@ -105,9 +226,12 @@ public abstract class SaveSync {
      *
      * <ul>
      *   <li>different stamp (or nothing restored here yet) — restore everything. This is cloud
-     *       restore, a manual import, a reinstalled app, a recreated container</li>
-     *   <li>same stamp but the payload was just re-imported — restore the game folder only; the
-     *       shared roots were never wiped and this device's copies of them are at least as new</li>
+     *       restore, a manual import, a reinstalled app</li>
+     *   <li>same stamp but the payload was just re-imported — the game folder was wiped, so it is
+     *       restored in full; the shared roots only get what is missing. Usually nothing is: they
+     *       survived and this device's copies are at least as new. But a re-import also happens when
+     *       the container itself was recreated, and then the profile saves exist only in the archive
+     *       (restoring the game folder alone lost them)</li>
      *   <li>same stamp, no re-import — fill in only what is missing. The container's copies are at
      *       least as new so they are left alone, but a file that is simply gone (the container was
      *       cleared, a save was deleted) has the archive as its last copy</li>
@@ -116,13 +240,13 @@ public abstract class SaveSync {
      * @return true when files were written into the container
      */
     static boolean restoreIfNeeded(Context context, Container container, String gameId, Uri saveUri,
-                                   GameManifest manifest, boolean payloadReinstalled) {
+                                   boolean payloadReinstalled) {
         if (context == null || container == null || gameId == null || saveUri == null) return false;
 
         try {
             long started = SystemClock.elapsedRealtime();
             SaveState state = SaveState.load(context, gameId);
-            SaveSnapshot.Roots roots = SaveSnapshot.roots(container, gameId, manifest);
+            SaveSnapshot.Roots roots = SaveSnapshot.roots(container, gameId);
 
             SaveArchive.Archive archive = SaveArchive.open(context, saveUri, tempDir(context), gameId);
             if (archive == null) {
@@ -132,13 +256,13 @@ public abstract class SaveSync {
 
             try {
                 boolean sameStamp = archive.stamp.equals(state.lastStamp);
-                boolean gameDirOnly = sameStamp && payloadReinstalled;
-                boolean onlyMissing = sameStamp && !payloadReinstalled;
+                boolean overwriteGameDir = !sameStamp || payloadReinstalled;
+                boolean overwriteShared = !sameStamp;
 
                 Map<String, long[]> restored = new LinkedHashMap<>();
-                int written = SaveArchive.extract(archive, roots, gameDirOnly, onlyMissing, restored);
+                int written = SaveArchive.extract(archive, roots, overwriteGameDir, overwriteShared, restored);
 
-                String mode = gameDirOnly ? "gameDirOnly" : (onlyMissing ? "missingOnly" : "full");
+                String mode = overwriteShared ? "full" : (overwriteGameDir ? "gameDir" : "missingOnly");
                 if (written == 0) {
                     Log.i(TAG, "save restore gameId=" + gameId + " stamp=" + archive.stamp
                             + " -> nothing to do (" + mode + ")");
@@ -184,14 +308,21 @@ public abstract class SaveSync {
      * The game folder baseline is not reset here — it is persistent, so in-folder changes made by a
      * session that crashed are still caught at the next exit.
      */
-    static void beginSession(Context context, Container container, String gameId, GameManifest manifest) {
+    static void beginSession(Context context, Container container, String gameId, Uri saveUri) {
         try {
             SaveState state = SaveState.load(context, gameId);
-            SaveSnapshot.Roots roots = SaveSnapshot.roots(container, gameId, manifest);
+            SaveSnapshot.Roots roots = SaveSnapshot.roots(container, gameId);
             state.sharedBaseline = SaveSnapshot.snapshot(roots, SaveSnapshot.Scope.SHARED);
             state.containerId = container.id;
+            // Unreadable (null) is stored as unknown, so a later comparison falls back to exporting.
+            state.sessionStamp = SaveArchive.peekStamp(context, saveUri);
+            state.saveUri = saveUri != null ? saveUri.toString() : null;
+            state.sessionToken = UUID.randomUUID().toString();
             state.pendingExport = true;
             state.save(context);
+            // After the state: a marker pointing at a token no state holds would distrust everyone.
+            File dir = SaveState.dirFor(context);
+            if (dir.isDirectory() || dir.mkdirs()) FileUtils.writeString(sessionMarker(context), state.sessionToken);
             Log.i(TAG, "save session gameId=" + gameId + " containerId=" + container.id
                     + " sharedBaseline=" + state.sharedBaseline.size() + " files tracked="
                     + state.tracked.size());
@@ -221,8 +352,7 @@ public abstract class SaveSync {
     private static void export(Context context, Container container, String gameId, Uri saveUri) {
         long started = SystemClock.elapsedRealtime();
         SaveState state = SaveState.load(context, gameId);
-        SaveSnapshot.Roots roots = SaveSnapshot.roots(container, gameId,
-                GameManifest.read(gameDirOf(container, gameId)));
+        SaveSnapshot.Roots roots = SaveSnapshot.roots(container, gameId);
 
         Map<String, long[]> current = SaveSnapshot.snapshot(roots, SaveSnapshot.Scope.ALL);
 
@@ -243,13 +373,30 @@ public abstract class SaveSync {
         if (gameDirBaselineKnown) baseline.putAll(state.gameDirBaseline);
         baseline.putAll(state.sharedBaseline);
 
+        // Another game's session started after this one (it is still exiting under a new launch, or it
+        // died and a flush could not reach its archive). The shared roots now hold that game's
+        // restored and written files, which this baseline would read as ours. Only the game folder
+        // is still this game's alone. Tracked paths keep being exported with their current content.
+        String latestSession = currentSessionToken(context);
+        boolean sharedTrusted = latestSession == null || latestSession.equals(state.sessionToken);
+        int sharedSkipped = 0;
+
         List<String> changed = new ArrayList<>();
         for (String rel : SaveSnapshot.diff(baseline, current)) {
             // Games imported before this feature existed have no install baseline. Claiming their
             // whole folder as "new" would upload the game itself, so skip the folder for one run and
             // rebuild the baseline below; only later changes are then picked up.
-            if (!gameDirBaselineKnown && rel.startsWith(roots.gameDirPrefix)) continue;
+            boolean inGameDir = rel.startsWith(roots.gameDirPrefix);
+            if (!gameDirBaselineKnown && inGameDir) continue;
+            if (!sharedTrusted && !inGameDir) {
+                sharedSkipped++;
+                continue;
+            }
             changed.add(rel);
+        }
+        if (sharedSkipped > 0) {
+            Log.w(TAG, "save export gameId=" + gameId + ": another game's session started since this one,"
+                    + " ignoring " + sharedSkipped + " shared-root change(s)");
         }
         if (!gameDirBaselineKnown) {
             Log.w(TAG, "no install baseline for " + gameId + ", rebuilding it and skipping the "
@@ -318,11 +465,6 @@ public abstract class SaveSync {
                         + "dropped=%d ms=%d",
                 gameId, stamp, existing, bytes[0], added, changed.size(), missing, untracked,
                 SystemClock.elapsedRealtime() - started));
-    }
-
-    private static File gameDirOf(Container container, String gameId) {
-        return new File(container.getRootDir(),
-                ".wine/drive_c/" + GameLaunchActivity.GAMES_DIR + "/" + gameId);
     }
 
     private static void rebuildBaselines(SaveState state, SaveSnapshot.Roots roots,
