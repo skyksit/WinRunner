@@ -50,7 +50,9 @@ android {
         // 43: CJK font substitutes prefer a gothic face (Samsung used to get Noto Serif CJK KR).
         // 45: save sync no longer skips copy= targets, restores profile saves after a container
         //     rebuild, and keeps other games' saves out of an archive (flushPendingSessions).
-        versionCode 45
+        // 46: 📷 screenshots are named after the caller's game_id (not the .exe) and saved in the
+        //     Pictures/ folder the caller names through screenshot_folder (default dosgameplayer).
+        versionCode 46
         versionName "11.6"
     }
 
