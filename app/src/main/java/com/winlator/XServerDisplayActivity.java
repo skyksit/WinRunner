@@ -573,9 +573,25 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             ViewTransformation vt = renderer.viewTransformation;
             crop = new Rect(vt.viewOffsetX, vt.viewOffsetY, vt.viewOffsetX + vt.viewWidth, vt.viewOffsetY + vt.viewHeight);
         }
+        ScreenshotSaver.capture(this, xServerView, crop, screenshotBaseName(),
+                getIntent().getStringExtra(GameLaunchActivity.EXTRA_SCREENSHOT_FOLDER));
+    }
+
+    /**
+     * Named after the game the caller launched (its game_id, i.e. the zip's file name without
+     * extension - what DGPlayer names screenshots of every other console after), falling back to the
+     * executable only for launches from Winlator's own UI. The extension is stripped here rather than
+     * in ScreenshotSaver: game_id already has none, and a name such as "foo-1.03" has a dot that is
+     * not an extension.
+     */
+    private String screenshotBaseName() {
+        String name = getIntent().getStringExtra(GameLaunchActivity.EXTRA_SCREENSHOT_NAME);
+        // Both callers send it extension-less today; drop an archive extension should one ever arrive,
+        // but nothing else ("foo-1.03" keeps its dot).
+        if (name != null) name = name.trim().replaceFirst("(?i)\\.(zip|7z)$", "");
+        if (name != null && !name.isEmpty()) return name;
         String execPath = getIntent().getStringExtra("exec_path");
-        String baseName = execPath != null ? FileUtils.getName(execPath) : "winrunner";
-        ScreenshotSaver.capture(this, xServerView, crop, baseName);
+        return execPath != null ? FileUtils.getBasename(execPath) : "winrunner";
     }
 
     private void exit() {

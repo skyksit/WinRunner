@@ -33,13 +33,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class ScreenshotSaver {
     private static final String TAG = "DGPlayerScreenshot";
-    private static final String RELATIVE_PATH = Environment.DIRECTORY_PICTURES + "/dosgameplayer";
+    /** Pictures/ subfolder when the caller names none - DGPlayer (dsam3) keeps its screenshots here. */
+    public static final String DEFAULT_FOLDER = "dosgameplayer";
     private static final AtomicBoolean inFlight = new AtomicBoolean(false);
 
     private ScreenshotSaver() {}
 
-    /** @param crop the rect of the surface that holds the game image, or null for the whole surface */
-    public static void capture(Activity activity, SurfaceView view, Rect crop, String baseName) {
+    /**
+     * @param crop the rect of the surface that holds the game image, or null for the whole surface
+     * @param folder Pictures/ subfolder the calling app keeps its own screenshots in, so a WIN game's
+     *               pictures land beside that app's other consoles; null or invalid means [DEFAULT_FOLDER]
+     */
+    public static void capture(Activity activity, SurfaceView view, Rect crop, String baseName, String folder) {
+        final String relativePath = Environment.DIRECTORY_PICTURES + "/" + safeFolder(folder);
         int width = view.getWidth();
         int height = view.getHeight();
         if (width <= 0 || height <= 0 || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -61,7 +67,7 @@ public final class ScreenshotSaver {
                 }
                 new Thread(() -> {
                     Bitmap image = cropTo(bitmap, crop);
-                    boolean ok = save(activity.getContentResolver(), image, fileName(baseName));
+                    boolean ok = save(activity.getContentResolver(), image, fileName(baseName), relativePath);
                     if (image != bitmap) image.recycle();
                     bitmap.recycle();
                     inFlight.set(false);
@@ -85,21 +91,30 @@ public final class ScreenshotSaver {
         return Bitmap.createBitmap(source, r.left, r.top, r.width(), r.height());
     }
 
+    /** @param baseName already without an extension - it may be a game title whose dots belong to it */
     private static String fileName(String baseName) {
-        String safe = baseName == null || baseName.trim().isEmpty() ? "screenshot" : baseName;
-        int dot = safe.lastIndexOf('.');
-        if (dot > 0) safe = safe.substring(0, dot);
-        safe = safe.replaceAll("[\\\\/:*?\"<>|]", "_");
+        String safe = baseName == null || baseName.trim().isEmpty() ? "screenshot" : baseName.trim();
+        safe = safe.replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", "_");
         // Numbers only, so pin the locale (a Thai default would render the Buddhist-era year).
         String stamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         return safe + "_" + stamp + ".png";
     }
 
-    private static boolean save(ContentResolver resolver, Bitmap bitmap, String displayName) {
+    /**
+     * A single plain folder name only. The value comes from another app's intent, so no separators,
+     * no ".." and nothing that would put the file outside Pictures/.
+     */
+    static String safeFolder(String folder) {
+        if (folder == null) return DEFAULT_FOLDER;
+        String f = folder.trim();
+        return f.matches("[A-Za-z0-9][A-Za-z0-9 _.-]{0,63}") && !f.contains("..") ? f : DEFAULT_FOLDER;
+    }
+
+    private static boolean save(ContentResolver resolver, Bitmap bitmap, String displayName, String relativePath) {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.DISPLAY_NAME, displayName);
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
-        values.put(MediaStore.Images.Media.RELATIVE_PATH, RELATIVE_PATH);
+        values.put(MediaStore.Images.Media.RELATIVE_PATH, relativePath);
         values.put(MediaStore.Images.Media.IS_PENDING, 1);
 
         Uri uri = null;

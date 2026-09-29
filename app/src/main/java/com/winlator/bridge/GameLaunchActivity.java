@@ -68,6 +68,14 @@ public class GameLaunchActivity extends AppCompatActivity {
 
     public static final String EXTRA_GAME_ID = "game_id";
     public static final String EXTRA_TITLE = "title";
+    /** Internal: bridge -> XServerDisplayActivity only. The unsanitized game_id, for screenshot names. */
+    public static final String EXTRA_SCREENSHOT_NAME = "dgp_screenshot_name";
+    /**
+     * Pictures/ subfolder the caller keeps its screenshots in (retrople: "retrople"). Optional -
+     * absent means ScreenshotSaver.DEFAULT_FOLDER, which is dsam3's. Forwarded unchanged; the saver
+     * validates it.
+     */
+    public static final String EXTRA_SCREENSHOT_FOLDER = "screenshot_folder";
     public static final String EXTRA_CONTENT_URI = "content_uri";
     public static final String EXTRA_EXE = "exe";
     public static final String EXTRA_EXE_ARGS = "exe_args";
@@ -305,6 +313,11 @@ public class GameLaunchActivity extends AppCompatActivity {
         // XServerDisplayActivity.exit() is where a session ends, so that is where saves are
         // exported. It needs the sanitized id (not DGPlayer's file name) to find the state file.
         intent.putExtra(SaveSync.EXTRA_GAME_ID, gameId);
+        // The caller's own game_id, before sanitizeGameId: gallery screenshots are named after it,
+        // matching the name DGPlayer gives screenshots of its other consoles (the file name without
+        // extension) instead of the executable (parasite_in_city-1.03.exe).
+        intent.putExtra(EXTRA_SCREENSHOT_NAME, getIntent().getStringExtra(EXTRA_GAME_ID));
+        intent.putExtra(EXTRA_SCREENSHOT_FOLDER, getIntent().getStringExtra(EXTRA_SCREENSHOT_FOLDER));
         if (saveUri != null) intent.putExtra(EXTRA_SAVE_URI, saveUri);
         if (controlsProfileId > 0) {
             intent.putExtra("controls_profile", controlsProfileId);
