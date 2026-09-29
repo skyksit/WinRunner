@@ -52,7 +52,9 @@ android {
         //     rebuild, and keeps other games' saves out of an archive (flushPendingSessions).
         // 46: 📷 screenshots are named after the caller's game_id (not the .exe) and saved in the
         //     Pictures/ folder the caller names through screenshot_folder (default dosgameplayer).
-        versionCode 46
+        // 47: args with a DOS switch (args=/M) no longer break the launch — the bridge sends them
+        //     in exec_args instead of gluing them onto exec_path, which gets path-converted.
+        versionCode 47
         versionName "11.6"
     }
 
