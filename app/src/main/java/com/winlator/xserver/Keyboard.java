@@ -108,7 +108,12 @@ public class Keyboard {
             if (action == KeyEvent.ACTION_DOWN) {
                 boolean shiftPressed = event.isShiftPressed() || keyCode == KeyEvent.KEYCODE_AT || keyCode == KeyEvent.KEYCODE_STAR || keyCode == KeyEvent.KEYCODE_POUND || keyCode == KeyEvent.KEYCODE_PLUS;
                 if (shiftPressed) xServer.injectKeyPress(XKeycode.KEY_SHIFT_L);
-                xServer.injectKeyPress(xKeycode, xKeycode != XKeycode.KEY_ENTER ? event.getUnicodeChar() : 0);
+                // Control characters (Tab=9, Enter=13, Esc=27, ...) are not keysyms. Passing one makes
+                // InputDeviceManager rewrite the key's keysym (XK_Tab → 9), and Wine then no longer
+                // sees the key at all — Tab did nothing in Diablo II.
+                int unicodeChar = event.getUnicodeChar();
+                if (unicodeChar < 0x20 || unicodeChar == 0x7F) unicodeChar = 0;
+                xServer.injectKeyPress(xKeycode, unicodeChar);
             }
             else if (action == KeyEvent.ACTION_UP) {
                 xServer.injectKeyRelease(XKeycode.KEY_SHIFT_L);

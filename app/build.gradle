@@ -54,7 +54,10 @@ android {
         //     Pictures/ folder the caller names through screenshot_folder (default dosgameplayer).
         // 47: args with a DOS switch (args=/M) no longer break the launch — the bridge sends them
         //     in exec_args instead of gluing them onto exec_path, which gets path-converted.
-        versionCode 47
+        // 48: BT mouse + keyboard play — pointer capture holds (status bar no longer drops at the
+        //     top edge), BT keyboards with a JOYSTICK source are no longer taken for gamepads,
+        //     and Tab reaches Wine (control chars no longer overwrite the keysym).
+        versionCode 48
         versionName "11.6"
     }
 

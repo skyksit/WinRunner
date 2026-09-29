@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -350,8 +351,11 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
+        Log.i("DGPointer", "onWindowFocusChanged: hasFocus=" + hasFocus + ", captureSetting=" + capturePointerOnExternalMouse);
         if (hasFocus) {
-            if (capturePointerOnExternalMouse) touchpadView.requestPointerCapture();
+            // Returning from the notification shade or a dialog can leave the bars shown.
+            AppUtils.hideSystemUI(this);
+            if (capturePointerOnExternalMouse && touchpadView != null) touchpadView.ensurePointerCapture();
 
             if (winHandler != null && clipboardManager != null && clipboardManager.hasPrimaryClip()) {
                 ClipData primaryClip = clipboardManager.getPrimaryClip();
@@ -830,6 +834,18 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             if (!drawerLayout.isDrawerOpen(GravityCompat.START)) drawerLayout.openDrawer(GravityCompat.START);
         });
         rootView.addView(touchpadView);
+        // The side menu needs a free Android cursor; capture comes back once it closes.
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                touchpadView.setPointerCaptureSuspended(true);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                touchpadView.setPointerCaptureSuspended(false);
+            }
+        });
 
         inputControlsView = new InputControlsView(this);
         inputControlsView.setOverlayOpacity(preferences.getFloat("overlay_opacity", InputControlsView.DEFAULT_OVERLAY_OPACITY));

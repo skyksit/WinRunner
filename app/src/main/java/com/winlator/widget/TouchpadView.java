@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,6 +47,11 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     private final XServer xServer;
     private Runnable fourFingersTapCallback;
     private final float[] xform = XForm.getInstance();
+    private static final String POINTER_TAG = "DGPointer";
+    private static final long RECAPTURE_THROTTLE_MS = 200;
+    private final boolean capturePointerOnExternalMouse;
+    private long lastRecaptureAttempt = 0;
+    private boolean captureSuspended = false;
 
     public TouchpadView(Context context, XServer xServer, boolean capturePointerOnExternalMouse) {
         super(context);
@@ -56,10 +63,47 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
         setFocusableInTouchMode(false);
         updateXform(AppUtils.getScreenWidth(), AppUtils.getScreenHeight(), xServer.screenInfo.width, xServer.screenInfo.height);
 
+        this.capturePointerOnExternalMouse = capturePointerOnExternalMouse;
         if (capturePointerOnExternalMouse) {
+            // Captured events are delivered along the focus chain only. onTouchEvent never calls
+            // super, so allowing focus in touch mode does not steal the first tap.
+            setFocusableInTouchMode(true);
             setOnCapturedPointerListener(this);
-            setOnClickListener(view -> requestPointerCapture());
+            setOnClickListener(view -> ensurePointerCapture());
         }
+    }
+
+    /**
+     * Pointer capture is the only way to keep the Android cursor off the screen edges: without it
+     * the system pointer reaching the top edge reveals the transient status bar, and no public API
+     * turns that off. Safe to call repeatedly.
+     */
+    public void ensurePointerCapture() {
+        if (!capturePointerOnExternalMouse || captureSuspended || !isEnabled() || hasPointerCapture()) return;
+        if (!hasWindowFocus()) {
+            Log.i(POINTER_TAG, "ensurePointerCapture: skipped, window has no focus");
+            return;
+        }
+        if (!hasFocus()) requestFocus();
+        Log.i(POINTER_TAG, "ensurePointerCapture: request (focused=" + hasFocus() + ", touchMode=" + isInTouchMode() + ")");
+        requestPointerCapture();
+    }
+
+    /** While suspended (e.g. the side menu is open) the Android cursor is left free to use the UI. */
+    public void setPointerCaptureSuspended(boolean suspended) {
+        captureSuspended = suspended;
+        if (suspended) {
+            if (hasPointerCapture()) releasePointerCapture();
+        }
+        else ensurePointerCapture();
+    }
+
+    @Override
+    public void onPointerCaptureChange(boolean hasCapture) {
+        super.onPointerCaptureChange(hasCapture);
+        Log.i(POINTER_TAG, "onPointerCaptureChange: hasCapture=" + hasCapture);
+        // No immediate re-request: capture is usually lost with window focus, and asking again
+        // then would loop. The next uncaptured mouse event or focus gain takes it back.
     }
 
     private static StateListDrawable createTransparentBackground() {
@@ -369,6 +413,16 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     public boolean onExternalMouseEvent(MotionEvent event) {
         boolean handled = false;
         if (isEnabled() && event.isFromSource(InputDevice.SOURCE_MOUSE)) {
+            // An absolute (uncaptured) mouse event means capture was lost — take it back on the
+            // first movement, before the system cursor can reach the top edge.
+            if (capturePointerOnExternalMouse && !captureSuspended && !hasPointerCapture()) {
+                long now = SystemClock.uptimeMillis();
+                if (now - lastRecaptureAttempt >= RECAPTURE_THROTTLE_MS) {
+                    lastRecaptureAttempt = now;
+                    Log.i(POINTER_TAG, "uncaptured mouse event action=" + event.getAction() + ", recapturing");
+                    ensurePointerCapture();
+                }
+            }
             int actionButton = event.getActionButton();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_BUTTON_PRESS:

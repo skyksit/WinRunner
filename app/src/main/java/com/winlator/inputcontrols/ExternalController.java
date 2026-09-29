@@ -278,7 +278,12 @@ public class ExternalController implements GamepadSlot {
             }
         }
         int sources = device.getSources();
-        return !device.isVirtual() && ((sources & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD ||
+        boolean gamepad = (sources & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD;
+        // Many BT keyboards expose a JOYSTICK source too (media/consumer HID usages). Treating them
+        // as controllers makes Keyboard.onKeyEvent drop every key, so a full keyboard only counts
+        // when it also reports a gamepad.
+        if (!gamepad && device.getKeyboardType() == InputDevice.KEYBOARD_TYPE_ALPHABETIC) return false;
+        return !device.isVirtual() && (gamepad ||
                (sources & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK);
     }
 
