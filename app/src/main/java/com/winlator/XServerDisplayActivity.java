@@ -1335,9 +1335,13 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             Intent intent = getIntent();
             if (intent.hasExtra("exec_path")) {
                 execPath = WineUtils.unixToDOSPath(intent.getStringExtra("exec_path"), container);
+                // The DGPlayer bridge sends arguments separately so they skip the path conversion
+                // above - a "/M" switch would otherwise become "\M" and split the path apart.
+                String bridgeArgs = intent.getStringExtra(GameLaunchActivity.EXTRA_EXEC_ARGS);
+                if (bridgeArgs != null && !bridgeArgs.trim().isEmpty()) execArgs = " "+bridgeArgs.trim();
 
                 if (execPath.endsWith(".lnk")) {
-                    cmdArgs = "\""+execPath+"\"";
+                    cmdArgs = "\""+execPath+"\""+execArgs;
                     execPath = null;
                 }
             }
@@ -1347,8 +1351,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             String execDir = FileUtils.getDirname(execPath);
             String filename = FileUtils.getName(execPath);
             int dotIndex, spaceIndex;
+            // Legacy form "Game.exe args" in a single path (the file manager still sends that).
             if ((dotIndex = filename.lastIndexOf(".")) != -1 && (spaceIndex = filename.indexOf(" ", dotIndex)) != -1) {
-                execArgs = filename.substring(spaceIndex+1)+execArgs;
+                execArgs = " "+filename.substring(spaceIndex+1).trim()+execArgs;
                 filename = filename.substring(0, spaceIndex);
             }
             cmdArgs = "/dir "+StringUtils.escapeDOSPath(execDir)+" \""+filename+"\""+execArgs;

@@ -93,6 +93,12 @@ public class GameLaunchActivity extends AppCompatActivity {
      */
     public static final String EXTRA_SESSION_KEY = "session_key";
     /**
+     * The game's command-line arguments, verbatim, for {@code XServerDisplayActivity}. Kept out of
+     * {@code exec_path} because that one is converted as a path - see where it is set. Not part of
+     * the caller's contract (callers send {@link #EXTRA_EXE_ARGS} or {@code args=}).
+     */
+    public static final String EXTRA_EXEC_ARGS = "exec_args";
+    /**
      * Content URI of DGPlayer's per-game save archive, granted read + write. Optional: without it
      * the game still runs, it just keeps its in-game saves to itself. See {@link SaveSync}.
      */
@@ -286,11 +292,15 @@ public class GameLaunchActivity extends AppCompatActivity {
         int controlsProfileId = importControlsProfile(manifest, gameDir);
         String[][] cdDiscs = prepareCdDiscs(manifest, gameDir);
 
-        // XServerDisplayActivity splits arguments off the executable name when the file name contains
-        // a space after its extension (see getWineStartCommand), so appending them here is enough.
+        // Arguments travel in their own extra, never glued onto exec_path: XServerDisplayActivity runs
+        // exec_path through unixToDOSPath (every '/' becomes '\') and then splits it on the last
+        // separator, so a DOS-style switch such as "/M" turned the path into "...\Marie.exe " + "M"
+        // and Wine answered "file not found". exec_path must stay a plain path for its other readers
+        // too (startup workarounds, the restart path, the screenshot name).
         String execPath = exeFile.getAbsolutePath();
         String execArgs = resolve(EXTRA_EXE_ARGS, manifest.get("args"));
-        if (execArgs != null) execPath += " "+execArgs;
+        if (execArgs != null) execArgs = execArgs.trim();
+        boolean hasArgs = execArgs != null && !execArgs.isEmpty();
 
         boolean forceFullscreen = getIntent().hasExtra(EXTRA_FORCE_FULLSCREEN)
                 ? getIntent().getBooleanExtra(EXTRA_FORCE_FULLSCREEN, false)
@@ -302,10 +312,12 @@ public class GameLaunchActivity extends AppCompatActivity {
         Intent intent = new Intent(this, XServerDisplayActivity.class);
         intent.putExtra("container_id", container.id);
         intent.putExtra("exec_path", execPath);
+        if (hasArgs) intent.putExtra(EXTRA_EXEC_ARGS, execArgs);
         // Identifies the session this launch would produce. The manifest text is in here because
         // the container knobs it sets (screen size, graphics driver, box64 preset, env vars...)
         // are applied to the shared container above and are invisible in the intent itself.
-        intent.putExtra(EXTRA_SESSION_KEY, sessionKey(gameId, execPath,
+        // Path and arguments joined the way they used to be sent, so existing keys keep matching.
+        intent.putExtra(EXTRA_SESSION_KEY, sessionKey(gameId, hasArgs ? execPath+" "+execArgs : execPath,
                 GameManifest.rawText(gameDir), String.valueOf(controlsProfileId),
                 String.valueOf(forceFullscreen), Arrays.deepToString(cdDiscs)));
         // Tells XServerDisplayActivity.exit() to finish instead of restarting into MainActivity.
