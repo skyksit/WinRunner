@@ -57,7 +57,10 @@ android {
         // 48: BT mouse + keyboard play — pointer capture holds (status bar no longer drops at the
         //     top edge), BT keyboards with a JOYSTICK source are no longer taken for gamepads,
         //     and Tab reaches Wine (control chars no longer overwrite the keysym).
-        versionCode 48
+        // 49: Cheat Search in the drawer (value search + freeze over /proc/<pid>/mem), shown only
+        //     when the caller sends cheat_search=true (DGPlayer: premium). KEY_DGP_CHEAT opens it from
+        //     a controls layout (DGPlayer VPAD "Cheat").
+        versionCode 49
         versionName "11.6"
     }
 

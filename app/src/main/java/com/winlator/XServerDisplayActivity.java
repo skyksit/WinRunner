@@ -40,6 +40,8 @@ import com.winlator.alsaserver.ALSAClient;
 import com.winlator.bridge.ControlsReturn;
 import com.winlator.bridge.GameLaunchActivity;
 import com.winlator.bridge.SaveSync;
+import com.winlator.cheat.CheatSearchDialog;
+import com.winlator.cheat.CheatSession;
 import com.winlator.container.AudioDrivers;
 import com.winlator.container.Container;
 import com.winlator.container.ContainerManager;
@@ -176,6 +178,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private String[] cdLabels;
     private int currentCdIndex = 0;
     private SpeedController speedController;
+    /** Created on first use; only when the bridge caller allowed it (CheatSession.EXTRA_CHEAT_SEARCH). */
+    private CheatSession cheatSession;
     private TextView speedIndicator;
     private TextView mouseModeIndicator;
     private final Runnable hideMouseModeIndicator = () -> mouseModeIndicator.setVisibility(View.GONE);
@@ -208,6 +212,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         cdLabels = getIntent().getStringArrayExtra("cd_labels");
         // Swapping only means anything with two or more discs; single-CD games stay menu-free.
         menu.findItem(R.id.menu_item_change_disc).setVisible(cdPaths != null && cdPaths.length > 1);
+        // The caller decides (DGPlayer: premium). Launches from our own UI never show it.
+        menu.findItem(R.id.menu_item_cheat_search).setVisible(getIntent().getBooleanExtra(CheatSession.EXTRA_CHEAT_SEARCH, false));
         navigationView.setNavigationItemSelectedListener(this);
 
         rootFS = RootFS.find(this);
@@ -430,6 +436,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
     @Override
     protected void onDestroy() {
+        if (cheatSession != null) cheatSession.close();
         winHandler.stop();
         if (environment != null) environment.stopEnvironmentComponents();
         // Back to 1x first: the audio and Present scales are static, and a relaunched session that
@@ -477,6 +484,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 break;
             case R.id.menu_item_game_speed:
                 (new GameSpeedDialog(this)).show();
+                drawerLayout.closeDrawers();
+                break;
+            case R.id.menu_item_cheat_search:
+                showCheatSearchDialog();
                 drawerLayout.closeDrawers();
                 break;
             case R.id.menu_item_magnifier:
@@ -559,6 +570,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         else if (binding == Binding.KEY_DGP_SCREENSHOT) {
             takeGalleryScreenshot();
         }
+        else if (binding == Binding.KEY_DGP_CHEAT) {
+            showCheatSearchDialog();
+        }
         else if (binding == Binding.KEY_DGP_EDIT_CONTROLS) {
             ControlsProfile profile = inputControlsView.getProfile();
             if (profile != null) {
@@ -567,6 +581,19 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 startActivityForResult(intent, EDIT_CONTROLS_PROFILE_REQUEST_CODE);
             }
         }
+    }
+
+    /**
+     * Drawer entry and DGPlayer VPAD "Cheat" button. The same gate for both: a layout can carry the
+     * button for a player who may not use it (layouts are shared between games, and premium can lapse).
+     */
+    private void showCheatSearchDialog() {
+        if (!getIntent().getBooleanExtra(CheatSession.EXTRA_CHEAT_SEARCH, false)) {
+            AppUtils.showToast(this, R.string.cheat_not_available);
+            return;
+        }
+        if (cheatSession == null) cheatSession = new CheatSession(getIntent().getStringExtra("exec_path"));
+        (new CheatSearchDialog(this, cheatSession)).show();
     }
 
     /** DGPlayer VPAD camera button: the game image (letterbox cropped) goes to the phone's gallery. */

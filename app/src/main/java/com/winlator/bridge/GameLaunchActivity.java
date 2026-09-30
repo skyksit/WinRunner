@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.winlator.MainActivity;
 import com.winlator.R;
+import com.winlator.cheat.CheatSession;
 import com.winlator.XServerDisplayActivity;
 import com.winlator.box64.Box64Preset;
 import com.winlator.container.AudioDrivers;
@@ -338,6 +339,8 @@ public class GameLaunchActivity extends AppCompatActivity {
             if (controlsReturnUri != null) intent.putExtra(ControlsReturn.EXTRA_CONTROLS_RETURN_URI, controlsReturnUri);
         }
         intent.putExtra("force_fullscreen", forceFullscreen);
+        // Premium gate lives in the caller; absent means no cheat menu (CheatSession.EXTRA_CHEAT_SEARCH).
+        intent.putExtra(CheatSession.EXTRA_CHEAT_SEARCH, getIntent().getBooleanExtra(CheatSession.EXTRA_CHEAT_SEARCH, false));
         if (cdDiscs != null) {
             intent.putExtra("cd_paths", cdDiscs[0]);
             intent.putExtra("cd_labels", cdDiscs[1]);

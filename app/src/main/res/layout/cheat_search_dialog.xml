@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!-- Fixed width: this opens over a running game in landscape, and the rows are added at run
+         time, so wrap_content would make the dialog jump as results come and go. -->
+    <LinearLayout
+        android:layout_width="420dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:text="@string/cheat_process" />
+
+            <Spinner
+                style="@style/ComboBox"
+                android:id="@+id/SProcess"
+                android:layout_width="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:text="@string/cheat_value_size" />
+
+            <Spinner
+                style="@style/ComboBox"
+                android:id="@+id/SValueSize"
+                android:layout_width="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <EditText
+                style="@style/EditText"
+                android:id="@+id/ETValue"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginRight="8dp"
+                android:hint="@string/cheat_value_hint"
+                android:inputType="numberSigned"
+                android:imeOptions="actionDone" />
+
+            <Button
+                style="@style/ButtonPositive"
+                android:id="@+id/BTNewSearch"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:text="@string/cheat_new_search" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <Button
+                style="@style/ButtonNeutral"
+                android:id="@+id/BTExact"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginRight="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="@string/cheat_compare_exact" />
+
+            <Button
+                style="@style/ButtonNeutral"
+                android:id="@+id/BTIncreased"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginRight="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="@string/cheat_compare_increased" />
+
+            <Button
+                style="@style/ButtonNeutral"
+                android:id="@+id/BTDecreased"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="@string/cheat_compare_decreased" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <Button
+                style="@style/ButtonNeutral"
+                android:id="@+id/BTUnchanged"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginRight="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="@string/cheat_compare_unchanged" />
+
+            <Button
+                style="@style/ButtonNeutral"
+                android:id="@+id/BTChanged"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="@string/cheat_compare_changed" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/TVStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/LLResults"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/TVCheatsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:text="@string/cheat_held_values" />
+
+        <LinearLayout
+            android:id="@+id/LLCheats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="12sp"
+            android:alpha="0.7"
+            android:text="@string/cheat_search_help" />
+    </LinearLayout>
+</ScrollView>

@@ -383,4 +383,34 @@
     <string name="normal_speed">Normal Speed</string>
     <string name="show_speed_notification">Show a notification when the speed changes</string>
     <string name="game_speed_help">Scales the clock the game reads. Fast forward is limited by how much spare performance the device has; games that keep their own time with rdtsc are not affected.</string>
+
+    <!-- Cheat search -->
+    <string name="cheat_search">Cheat Search</string>
+    <string name="cheat_not_available">Cheat Search is not available for this launch (DGPlayer premium).</string>
+    <string name="cheat_process">Process</string>
+    <string name="cheat_value_size">Value size</string>
+    <string name="cheat_size_4">4 bytes (most numbers)</string>
+    <string name="cheat_size_2">2 bytes</string>
+    <string name="cheat_size_1">1 byte</string>
+    <string name="cheat_value_hint">Current value</string>
+    <string name="cheat_new_search">New search</string>
+    <string name="cheat_compare_exact">= Value</string>
+    <string name="cheat_compare_increased">Increased</string>
+    <string name="cheat_compare_decreased">Decreased</string>
+    <string name="cheat_compare_unchanged">Unchanged</string>
+    <string name="cheat_compare_changed">Changed</string>
+    <string name="cheat_held_values">Changed values</string>
+    <string name="cheat_freeze">Freeze</string>
+    <string name="cheat_lost">(no longer writable)</string>
+    <string name="cheat_searching">Searching…</string>
+    <string name="cheat_candidates">%1$d candidates.</string>
+    <string name="cheat_truncated">Too many matches - only the first ones are kept.</string>
+    <string name="cheat_narrow_down">Change the value in the game, then search again to narrow them down.</string>
+    <string name="cheat_no_match">No matches. Start a new search.</string>
+    <string name="cheat_no_process">The game process was not found.</string>
+    <string name="cheat_start_hint">Enter the value shown in the game and press New search.</string>
+    <string name="cheat_enter_value">Enter a number.</string>
+    <string name="cheat_search_failed">Search failed: %1$s</string>
+    <string name="cheat_write_failed">Could not change the value: %1$s</string>
+    <string name="cheat_search_help">Search for the number the game shows, change it in the game (pick up gold, lose health) and search again until a few addresses remain, then tap one to change or freeze it. Changes last for this session only. Some games keep several copies of a value or move it, so a frozen value can stop working - search again.</string>
 </resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        style="@style/EditText"
+        android:id="@+id/ETCheatValue"
+        android:inputType="numberSigned"
+        android:imeOptions="actionDone" />
+
+    <CheckBox
+        android:id="@+id/CBFreeze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/cheat_freeze" />
+</LinearLayout>

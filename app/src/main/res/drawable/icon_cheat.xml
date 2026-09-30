@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A magnifier over a digit: the drawer tints its icons, so one white vector covers every density. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,3 A7,7 0 1,0 14.2,15.6 L19.3,20.7 L20.7,19.3 L15.6,14.2 A7,7 0 0,0 10,3 Z M10,5 A5,5 0 1,1 10,15 A5,5 0 1,1 10,5 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M9,7 L11,7 L11,13 L9,13 Z M8,8 L9,7 L9,9 L8,9 Z" />
+</vector>
