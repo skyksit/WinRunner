@@ -1,0 +1,1256 @@
+00010000-00016000 rwxp 00000000 00:00 0 
+00016000-00018000 ---p 00000000 00:00 0 
+000b0000-000c0000 rw-p 00000000 00:00 0 
+00110000-00112000 r-xp 00000000 fe:4b 338657                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/nls/l_intl.nls
+00112000-00120000 ---p 00000000 00:00 0 
+00120000-00122000 ---p 00000000 00:00 0 
+00122000-00220000 rwxp 00000000 00:00 0 
+00220000-00236000 r-xp 00000000 fe:4b 361567                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/apisetschema.dll
+00236000-00240000 ---p 00000000 00:00 0 
+00240000-0025a000 rwxp 00000000 00:00 0 
+0025a000-00260000 ---p 00000000 00:00 0 
+00260000-00370000 rwxp 00000000 00:00 0 
+00370000-00381000 r-xp 00000000 fe:4b 338761                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/nls/c_1252.nls
+00381000-00390000 ---p 00000000 00:00 0 
+00390000-003a1000 r-xp 00000000 fe:4b 338717                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/nls/c_437.nls
+003a1000-003b0000 ---p 00000000 00:00 0 
+003b0000-003c0000 rwxp 00000000 00:00 0 
+003c0000-003ce000 r-xp 00000000 fe:4b 522030                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/SmackW32.dll
+003ce000-003d4000 r-xp 00000000 00:00 0 
+003d4000-003d7000 rwxp 00000000 00:00 0 
+003d7000-003da000 r-xp 00000000 00:00 0 
+003da000-003e0000 ---p 00000000 00:00 0 
+003e0000-003ef000 r-xp 00000000 fe:4b 338926                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/nls/normnfc.nls
+003ef000-003f0000 ---p 00000000 00:00 0 
+003f0000-00400000 rwxp 00000000 00:00 0 
+00400000-0044b000 r-xp 00000000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+0044b000-0044d000 r-xp 0004b000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+0044d000-0044f000 r-xp 0004d000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+0044f000-00450000 r-xp 0004f000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00450000-00451000 r-xp 00050000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00451000-00452000 r-xp 00051000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00452000-00456000 r-xp 00052000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00456000-00457000 r-xp 00056000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00457000-00470000 r-xp 00057000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00470000-00472000 r-xp 00070000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00472000-00473000 r-xp 00072000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00473000-00474000 r-xp 00073000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00474000-0047d000 r-xp 00074000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+0047d000-00480000 r-xp 0007d000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00480000-00486000 r-xp 00080000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00486000-00487000 r-xp 00086000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00487000-00496000 r-xp 00087000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00496000-00497000 r-xp 00096000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00497000-00498000 r-xp 00097000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00498000-00499000 r-xp 00098000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00499000-004a6000 r-xp 00099000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+004a6000-004a8000 r-xp 000a6000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+004a8000-0065c000 r-xp 000a8000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+0065c000-0065d000 r-xp 0025c000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+0065d000-00660000 r-xp 0025d000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00660000-00661000 r-xp 00260000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00661000-006cc000 r-xp 00261000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+006cc000-006cd000 r-xp 002cc000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+006cd000-00705000 r-xp 002cd000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+00705000-0074d000 rwxp 00305000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+0074d000-00995000 rwxp 00000000 00:00 0 
+00995000-009ba000 r-xp 0034d000 fe:4b 522024                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/Game.exe
+009ba000-009c0000 ---p 00000000 00:00 0 
+009c0000-00a7d000 r-xp 00000000 fe:4b 338433                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/nls/locale.nls
+00a7d000-00a80000 ---p 00000000 00:00 0 
+00a80000-00a81000 r-xp 00000000 fe:4b 522026                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/ijl11.dll
+00a81000-00aa7000 r-xp 00001000 fe:4b 522026                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/ijl11.dll
+00aa7000-00aa9000 rwxp 00027000 fe:4b 522026                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/ijl11.dll
+00aa9000-00aab000 rwxp 00000000 00:00 0 
+00aab000-00aae000 r-xp 00029000 fe:4b 522026                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/ijl11.dll
+00aae000-00ab0000 ---p 00000000 00:00 0 
+00ab0000-00b30000 rwxp 00000000 00:00 0 
+00b30000-00e6a000 r-xp 00000000 fe:4b 338432                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/nls/sortdefault.nls
+00e6a000-00e70000 ---p 00000000 00:00 0 
+00e70000-00e76000 rwxp 00000000 00:00 0 
+00e76000-00e80000 ---p 00000000 00:00 0 
+00e80000-00e91000 r-xp 00000000 fe:4b 338416                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/nls/c_20127.nls
+00e91000-00ea0000 ---p 00000000 00:00 0 
+00ea0000-00fc7000 r-xp 00000000 fe:4b 536296                             /data/data/com.retrople/files/rootfs/tmp/.wine-10528/server-fe4b-7abad/tmpmap-c536e6d4 (deleted)
+00fc7000-00fd0000 ---p 00000000 00:00 0 
+00fd0000-01150000 rwxp 00000000 00:00 0 
+01150000-01161000 r-xp 00000000 fe:4b 338797                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/nls/c_10000.nls
+01161000-01170000 ---p 00000000 00:00 0 
+01170000-01180000 rwxp 00000000 00:00 0 
+01180000-01190000 ---p 00000000 00:00 0 
+01190000-01196000 rwxp 00000000 00:00 0 
+01196000-011a0000 ---p 00000000 00:00 0 
+011a0000-011b2000 rwxp 00000000 00:00 0 
+011b2000-011c0000 ---p 00000000 00:00 0 
+011c0000-011c6000 rwxp 00000000 00:00 0 
+011c6000-011d0000 ---p 00000000 00:00 0 
+011d0000-011e1000 rwxp 00000000 00:00 0 
+011e1000-011f0000 ---p 00000000 00:00 0 
+011f0000-011f1000 rwxp 00000000 00:00 0 
+011f1000-01200000 ---p 00000000 00:00 0 
+01200000-01201000 rwxp 00000000 00:00 0 
+01201000-01210000 ---p 00000000 00:00 0 
+01210000-01216000 rwxp 00000000 00:00 0 
+01216000-01220000 ---p 00000000 00:00 0 
+01220000-01221000 rwxp 00000000 00:00 0 
+01221000-01230000 ---p 00000000 00:00 0 
+01230000-01240000 rwxp 00000000 00:00 0 
+01240000-01241000 ---p 00000000 00:00 0 
+01241000-01250000 ---p 00000000 00:00 0 
+01250000-01258000 rwxp 00000000 00:00 0 
+01258000-01350000 ---p 00000000 00:00 0 
+01350000-01360000 rwxp 00000000 00:00 0 
+01360000-01361000 ---p 00000000 00:00 0 
+01361000-01370000 ---p 00000000 00:00 0 
+01370000-01376000 rwxp 00000000 00:00 0 
+01376000-01380000 ---p 00000000 00:00 0 
+01380000-01390000 rwxp 00000000 00:00 0 
+01390000-01391000 ---p 00000000 00:00 0 
+01391000-013a0000 ---p 00000000 00:00 0 
+013a0000-013a6000 rwxp 00000000 00:00 0 
+013a6000-013b0000 ---p 00000000 00:00 0 
+013b0000-013b8000 rwxp 00000000 00:00 0 
+013b8000-014b0000 ---p 00000000 00:00 0 
+014b0000-014c1000 rwxp 00000000 00:00 0 
+014c1000-014d0000 ---p 00000000 00:00 0 
+014d0000-014d6000 rwxp 00000000 00:00 0 
+014d6000-014e0000 ---p 00000000 00:00 0 
+014e0000-014e1000 rwxp 00000000 00:00 0 
+014e1000-014f0000 ---p 00000000 00:00 0 
+014f0000-014f1000 rwxp 00000000 00:00 0 
+014f1000-01500000 ---p 00000000 00:00 0 
+01500000-01501000 rwxp 00000000 00:00 0 
+01501000-01510000 ---p 00000000 00:00 0 
+01510000-01512000 ---p 00000000 00:00 0 
+01512000-01610000 rwxp 00000000 00:00 0 
+01610000-01612000 ---p 00000000 00:00 0 
+01612000-01711000 rwxp 00000000 00:00 0 
+01711000-01720000 ---p 00000000 00:00 0 
+01720000-01731000 rwxp 00000000 00:00 0 
+01731000-01740000 ---p 00000000 00:00 0 
+01740000-01741000 rwxp 00000000 00:00 0 
+01741000-01750000 ---p 00000000 00:00 0 
+01750000-01751000 rwxp 00000000 00:00 0 
+01751000-01760000 ---p 00000000 00:00 0 
+01760000-01802000 rwxp 00000000 00:00 0 
+01802000-01810000 ---p 00000000 00:00 0 
+01810000-01812000 rwxp 00000000 00:00 0 
+01812000-01820000 ---p 00000000 00:00 0 
+01820000-01821000 rwxp 00000000 00:00 0 
+01821000-01830000 ---p 00000000 00:00 0 
+01830000-01837000 rwxp 00000000 00:00 0 
+01837000-01840000 ---p 00000000 00:00 0 
+01840000-0184c000 rwxp 00000000 00:00 0 
+0184c000-01850000 ---p 00000000 00:00 0 
+01850000-01951000 rwxp 00000000 00:00 0 
+01951000-01960000 ---p 00000000 00:00 0 
+01960000-0196a000 rwxp 00000000 00:00 0 
+0196a000-01970000 ---p 00000000 00:00 0 
+01970000-019e9000 rwxp 00000000 00:00 0 
+019e9000-019f0000 ---p 00000000 00:00 0 
+019f0000-019f2000 ---p 00000000 00:00 0 
+019f2000-01b11000 rwxp 00000000 00:00 0 
+01b11000-01b20000 ---p 00000000 00:00 0 
+01b20000-01b3a000 rwxp 00000000 00:00 0 
+01b3a000-01b40000 ---p 00000000 00:00 0 
+01b40000-01b61000 rwxp 00000000 00:00 0 
+01b61000-01b70000 ---p 00000000 00:00 0 
+01b70000-01b81000 rwxp 00000000 00:00 0 
+01b81000-01b90000 ---p 00000000 00:00 0 
+01b90000-01c91000 rwxp 00000000 00:00 0 
+01c91000-01ca0000 ---p 00000000 00:00 0 
+01ca0000-01d0e000 rwxp 00000000 00:00 0 
+01d0e000-01d10000 ---p 00000000 00:00 0 
+01d10000-01d51000 rwxp 00000000 00:00 0 
+01d51000-01d60000 ---p 00000000 00:00 0 
+01d60000-01dcc000 rwxp 00000000 00:00 0 
+01dcc000-01dd0000 ---p 00000000 00:00 0 
+01dd0000-01df1000 rwxp 00000000 00:00 0 
+01df1000-01e00000 ---p 00000000 00:00 0 
+01e00000-01e21000 rwxp 00000000 00:00 0 
+01e21000-01e30000 ---p 00000000 00:00 0 
+01e30000-01e51000 rwxp 00000000 00:00 0 
+01e51000-01e60000 ---p 00000000 00:00 0 
+01e60000-01e71000 rwxp 00000000 00:00 0 
+01e71000-01e80000 ---p 00000000 00:00 0 
+01e80000-01f11000 rwxp 00000000 00:00 0 
+01f11000-01f20000 ---p 00000000 00:00 0 
+01f20000-02020000 rwxp 00000000 00:00 0 
+02020000-02021000 rwxp 00000000 00:00 0 
+02021000-02030000 ---p 00000000 00:00 0 
+02030000-02035000 rwxp 00000000 00:00 0 
+02035000-02040000 ---p 00000000 00:00 0 
+02040000-02041000 rwxp 00000000 00:00 0 
+02041000-02050000 ---p 00000000 00:00 0 
+02050000-02059000 rwxp 00000000 00:00 0 
+02059000-02060000 ---p 00000000 00:00 0 
+02060000-02061000 rwxp 00000000 00:00 0 
+02061000-02070000 ---p 00000000 00:00 0 
+02070000-02071000 r-xp 00000000 fe:4b 521493                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/D2.LNG
+02071000-02080000 ---p 00000000 00:00 0 
+02080000-02086000 rwxp 00000000 00:00 0 
+02086000-02090000 ---p 00000000 00:00 0 
+02090000-020a1000 rwxp 00000000 00:00 0 
+020a1000-020b0000 ---p 00000000 00:00 0 
+020b0000-020b1000 rwxp 00000000 00:00 0 
+020b1000-020c0000 ---p 00000000 00:00 0 
+020c0000-020c1000 rwxp 00000000 00:00 0 
+020c1000-020d0000 ---p 00000000 00:00 0 
+020d0000-020d1000 rwxp 00000000 00:00 0 
+020d1000-020e0000 ---p 00000000 00:00 0 
+020e0000-020e1000 rwxp 00000000 00:00 0 
+020e1000-020f0000 ---p 00000000 00:00 0 
+020f0000-020f1000 rwxp 00000000 00:00 0 
+020f1000-02100000 ---p 00000000 00:00 0 
+02100000-02109000 rwxp 00000000 00:00 0 
+02109000-02110000 ---p 00000000 00:00 0 
+02110000-02111000 rwxp 00000000 00:00 0 
+02111000-02120000 ---p 00000000 00:00 0 
+02120000-04250000 rwxp 00000000 00:00 0 
+04250000-04252000 ---p 00000000 00:00 0 
+04252000-04351000 rwxp 00000000 00:00 0 
+04351000-04360000 ---p 00000000 00:00 0 
+04360000-043f5000 rwxp 00000000 00:00 0 
+043f5000-04400000 ---p 00000000 00:00 0 
+04400000-04409000 rwxp 00000000 00:00 0 
+04409000-04410000 ---p 00000000 00:00 0 
+04410000-0443b000 rwxp 00000000 00:00 0 
+0443b000-04440000 ---p 00000000 00:00 0 
+04440000-04441000 rwxp 00000000 00:00 0 
+04441000-04450000 ---p 00000000 00:00 0 
+04450000-04453000 rwxp 00000000 00:00 0 
+04453000-04460000 ---p 00000000 00:00 0 
+04460000-04470000 ---p 00000000 00:00 0 
+04470000-04510000 rwxp 00000000 00:00 0 
+04510000-04550000 ---p 00000000 00:00 0 
+04550000-04551000 rwxp 00000000 00:00 0 
+04551000-04560000 ---p 00000000 00:00 0 
+04560000-04630000 rwxp 00000000 00:00 0 
+04630000-04632000 rwxp 00000000 00:00 0 
+04632000-04640000 ---p 00000000 00:00 0 
+04640000-04751000 rwxp 00000000 00:00 0 
+04751000-04760000 ---p 00000000 00:00 0 
+04760000-04771000 r-xp 00000000 fe:4b 338761                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/nls/c_1252.nls
+04771000-04780000 ---p 00000000 00:00 0 
+04780000-04782000 ---p 00000000 00:00 0 
+04782000-04880000 rwxp 00000000 00:00 0 
+04880000-04882000 ---p 00000000 00:00 0 
+04882000-04980000 rwxp 00000000 00:00 0 
+04980000-04982000 ---p 00000000 00:00 0 
+04982000-04a80000 rwxp 00000000 00:00 0 
+04a80000-04a82000 ---p 00000000 00:00 0 
+04a82000-04b80000 rwxp 00000000 00:00 0 
+04b80000-05380000 rw-s 00000000 00:01 1018763                            /kgsl-3d0 (deleted)
+05380000-06380000 rw-s 00000000 00:01 1022291                            /kgsl-3d0 (deleted)
+06380000-07380000 rw-s 00000000 00:01 1022328                            /kgsl-3d0 (deleted)
+07380000-07382000 ---p 00000000 00:00 0 
+07382000-07480000 rwxp 00000000 00:00 0 
+07480000-07482000 ---p 00000000 00:00 0 
+07482000-07580000 rwxp 00000000 00:00 0 
+07580000-07582000 ---p 00000000 00:00 0 
+07582000-07680000 rwxp 00000000 00:00 0 
+07680000-07682000 ---p 00000000 00:00 0 
+07682000-07780000 rwxp 00000000 00:00 0 
+07780000-07782000 ---p 00000000 00:00 0 
+07782000-07880000 rwxp 00000000 00:00 0 
+07880000-07882000 ---p 00000000 00:00 0 
+07882000-07980000 rwxp 00000000 00:00 0 
+07980000-07982000 ---p 00000000 00:00 0 
+07982000-07af0000 rwxp 00000000 00:00 0 
+07af0000-07e80000 ---p 00000000 00:00 0 
+07e80000-07e82000 ---p 00000000 00:00 0 
+07e82000-07f80000 rwxp 00000000 00:00 0 
+07f80000-0bf80000 rw-s 00000000 00:01 1022331                            /kgsl-3d0 (deleted)
+0bf80000-0c001000 rwxp 00000000 00:00 0 
+0c001000-0c010000 ---p 00000000 00:00 0 
+0c010000-0c110000 rwxp 00000000 00:00 0 
+0c110000-0c112000 ---p 00000000 00:00 0 
+0c112000-0c210000 rwxp 00000000 00:00 0 
+0c210000-0c212000 ---p 00000000 00:00 0 
+0c212000-0c310000 rwxp 00000000 00:00 0 
+0c310000-0c312000 ---p 00000000 00:00 0 
+0c312000-0c413000 rwxp 00000000 00:00 0 
+0c413000-0c430000 ---p 00000000 00:00 0 
+0c430000-0c4b0000 rwxp 00000000 00:00 0 
+0c4b0000-0c4d0000 ---p 00000000 00:00 0 
+0c4d0000-0c510000 rwxp 00000000 00:00 0 
+0c510000-0c512000 ---p 00000000 00:00 0 
+0c512000-0c700000 rwxp 00000000 00:00 0 
+0c700000-0c710000 ---p 00000000 00:00 0 
+0c710000-0c711000 rwxp 00000000 00:00 0 
+0c711000-0c720000 ---p 00000000 00:00 0 
+0c720000-0c980000 rwxp 00000000 00:00 0 
+0c980000-0c981000 rwxp 00000000 00:00 0 
+0c981000-0c990000 ---p 00000000 00:00 0 
+0c990000-0ca90000 rwxp 00000000 00:00 0 
+0ca90000-0cb30000 rwxp 00000000 00:00 0 
+0cb30000-0cb50000 ---p 00000000 00:00 0 
+0cb50000-0cb54000 rwxp 00000000 00:00 0 
+0cb54000-0cb60000 ---p 00000000 00:00 0 
+0cb60000-0cd70000 rwxp 00000000 00:00 0 
+0cd70000-0cfe0000 rwxp 00000000 00:00 0 
+0cfe0000-0d1f0000 ---p 00000000 00:00 0 
+0d1f0000-0d300000 rwxp 00000000 00:00 0 
+0d300000-0d780000 rwxp 00000000 00:00 0 
+0d780000-0d7b0000 ---p 00000000 00:00 0 
+0d7b0000-0d7b2000 rwxp 00000000 00:00 0 
+0d7b2000-0d7c0000 ---p 00000000 00:00 0 
+0d7c0000-0e030000 rwxp 00000000 00:00 0 
+0e030000-0e040000 ---p 00000000 00:00 0 
+0e040000-0e640000 rwxp 00000000 00:00 0 
+0e640000-0e680000 ---p 00000000 00:00 0 
+0e680000-0e682000 ---p 00000000 00:00 0 
+0e682000-0e780000 rwxp 00000000 00:00 0 
+0e780000-0e782000 ---p 00000000 00:00 0 
+0e782000-0ef20000 rwxp 00000000 00:00 0 
+0ef20000-0f0e0000 ---p 00000000 00:00 0 
+0f0e0000-0f260000 rwxp 00000000 00:00 0 
+0f260000-10000000 ---p 00000000 00:00 0 
+10000000-10001000 r-xp 00000000 fe:4b 521490                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/binkw32.dll
+10001000-1002a000 r-xp 00000000 00:00 0 
+1002a000-1002f000 rwxp 00000000 00:00 0 
+1002f000-1003d000 rwxp 00000000 00:00 0 
+1003d000-1003e000 r-xp 00000000 00:00 0 
+1003e000-10041000 r-xp 0002e000 fe:4b 521490                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/binkw32.dll
+10041000-10050000 ---p 00000000 00:00 0 
+10050000-14050000 rw-s 00000000 00:01 1021627                            /kgsl-3d0 (deleted)
+14050000-30110000 ---p 00000000 00:00 0 
+30110000-30111000 rwxp 00000000 00:00 0 
+30120000-30248000 r--s 00000000 fe:4b 325498                             /data/data/com.retrople/files/rootfs/var/cache/fontconfig/3336a65c52528c9c368e942d3dd307f8-le64.cache-9
+30250000-30480000 rw-s 00000000 00:01 1022286                            /dev/ashmem/sysvshm-1_20828_20918 (deleted)
+30480000-30681000 rw-s 00000000 fe:4b 325562                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.cache/mesa_shader_cache/index
+30690000-30715000 rw-s 00000000 00:01 1018753                            /kgsl-3d0 (deleted)
+30720000-30740000 rw-s 00000000 00:01 1018754                            /kgsl-3d0 (deleted)
+30740000-30741000 rw-s 00000000 00:01 1018755                            /kgsl-3d0 (deleted)
+30750000-30754000 rw-s 00000000 00:01 1023098                            /kgsl-3d0 (deleted)
+30760000-30764000 rw-s 00000000 00:01 1018757                            /kgsl-3d0 (deleted)
+30770000-30774000 rw-s 00000000 00:01 1018758                            /kgsl-3d0 (deleted)
+30780000-30784000 rw-s 00000000 00:01 1018760                            /kgsl-3d0 (deleted)
+30790000-30794000 rw-s 00000000 00:01 1018761                            /kgsl-3d0 (deleted)
+307a0000-307a4000 rw-s 00000000 00:01 1018762                            /kgsl-3d0 (deleted)
+307b0000-307dd000 rw-s 00000000 00:01 1020757                            /kgsl-3d0 (deleted)
+307e0000-307e4000 rw-s 00000000 00:01 1019761                            /kgsl-3d0 (deleted)
+307f0000-307f4000 rw-s 00000000 00:01 1020758                            /kgsl-3d0 (deleted)
+30800000-30804000 rw-s 00000000 00:01 1020759                            /kgsl-3d0 (deleted)
+30810000-30814000 rw-s 00000000 00:01 1020760                            /kgsl-3d0 (deleted)
+30820000-30824000 rw-s 00000000 00:01 1020761                            /kgsl-3d0 (deleted)
+30830000-30834000 rw-s 00000000 00:01 1019759                            /kgsl-3d0 (deleted)
+30840000-30844000 rw-s 00000000 00:01 1023101                            /kgsl-3d0 (deleted)
+30860000-3088d000 rw-s 00000000 00:01 1024069                            /kgsl-3d0 (deleted)
+30890000-30892000 rw-s 00000000 00:01 1024072                            /memfd:alsa-shm2 (deleted)
+308a0000-308c0000 rw-s 00000000 00:01 1020765                            /kgsl-3d0 (deleted)
+308c0000-308c8000 rw-s 00000000 00:01 1019756                            /kgsl-3d0 (deleted)
+308d0000-308d4000 rw-s 00000000 00:01 1023122                            /kgsl-3d0 (deleted)
+308e0000-308e4000 rw-s 00000000 00:01 1019758                            /kgsl-3d0 (deleted)
+308f0000-308f4000 rw-s 00000000 00:01 1019760                            /kgsl-3d0 (deleted)
+309b0000-30bb0000 rw-s 00000000 00:01 1022322                            /kgsl-3d0 (deleted)
+30bb0000-30bb4000 rw-s 00000000 00:01 1022332                            /kgsl-3d0 (deleted)
+30bc0000-30bc4000 rw-s 00000000 00:01 1022333                            /kgsl-3d0 (deleted)
+30bd0000-30bd4000 rw-s 00000000 00:01 1022334                            /kgsl-3d0 (deleted)
+30be0000-30be4000 rw-s 00000000 00:01 1024051                            /kgsl-3d0 (deleted)
+30bf0000-30bf4000 rw-s 00000000 00:01 1024052                            /kgsl-3d0 (deleted)
+30c00000-30c04000 rw-s 00000000 00:01 1024053                            /kgsl-3d0 (deleted)
+30c10000-30c14000 rw-s 00000000 00:01 1022335                            /kgsl-3d0 (deleted)
+30c30000-30c34000 rw-s 00000000 00:01 1024054                            /kgsl-3d0 (deleted)
+30c50000-30c7d000 rw-s 00000000 00:01 1022337                            /kgsl-3d0 (deleted)
+30c80000-314cc000 rw-s 00000000 00:01 1024056                            /kgsl-3d0 (deleted)
+314e0000-314e4000 rw-s 00000000 00:01 1019741                            /kgsl-3d0 (deleted)
+314f0000-314f4000 rw-s 00000000 00:01 1019742                            /kgsl-3d0 (deleted)
+31500000-31520000 rw-s 00000000 00:01 1021614                            /kgsl-3d0 (deleted)
+31520000-31d6c000 rw-s 00000000 00:01 1023100                            /kgsl-3d0 (deleted)
+31d70000-325bc000 rw-s 00000000 00:01 1023103                            /kgsl-3d0 (deleted)
+34800000-35e96000 r-xp 00000000 fe:4b 323788                             /data/user/0/com.retrople/files/rootfs/usr/local/bin/box64
+35eaf000-36020000 r--p 0169f000 fe:4b 323788                             /data/user/0/com.retrople/files/rootfs/usr/local/bin/box64
+36020000-36027000 rw-p 01810000 fe:4b 323788                             /data/user/0/com.retrople/files/rootfs/usr/local/bin/box64
+36027000-36ead000 rw-p 00000000 00:00 0 
+60000000-60003000 rwxp 00000000 00:00 0 
+60010000-60011000 rwxp 00000000 00:00 0 
+60020000-60022000 rwxp 00000000 00:00 0 
+60030000-60031000 rwxp 00000000 00:00 0 
+60040000-60041000 rwxp 00000000 00:00 0 
+60050000-60051000 rwxp 00000000 00:00 0 
+60060000-60061000 rwxp 00000000 00:00 0 
+60070000-60071000 rwxp 00000000 00:00 0 
+60080000-60081000 rwxp 00000000 00:00 0 
+60090000-60291000 rw-p 00000000 00:00 0 
+602a0000-605a0000 rw-p 00000000 00:00 0 
+605a0000-605a1000 rwxp 00000000 00:00 0 
+605b0000-605b1000 rwxp 00000000 00:00 0 
+605c0000-605c1000 rwxp 00000000 00:00 0 
+605d0000-605d1000 rwxp 00000000 00:00 0 
+605e0000-605e1000 rw-s 00000000 fe:4b 536243                             /data/data/com.retrople/files/rootfs/tmp/shm/wine-7abad-esync
+605f0000-605f1000 rwxp 00000000 00:00 0 
+60600000-60601000 rw-s 00001000 fe:4b 536243                             /data/data/com.retrople/files/rootfs/tmp/shm/wine-7abad-esync
+60610000-60611000 r--s 00000000 fe:4b 536212                             /data/user/0/com.retrople/files/rootfs/tmp/.winrunner_timescale
+60620000-60621000 rwxp 00000000 00:00 0 
+60630000-60632000 rwxp 00000000 00:00 0 
+60640000-60641000 rwxp 00000000 00:00 0 
+60650000-60651000 rwxp 00000000 00:00 0 
+60660000-60661000 rwxp 00000000 00:00 0 
+60670000-60671000 rwxp 00000000 00:00 0 
+60680000-60681000 rwxp 00000000 00:00 0 
+60690000-60691000 rwxp 00000000 00:00 0 
+606a0000-606a1000 rwxp 00000000 00:00 0 
+606b0000-606b1000 rwxp 00000000 00:00 0 
+606c0000-606c2000 r--p 00000000 fe:4b 337858                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/fonts/vgasys.fon
+606d0000-606e0000 rw-p 00000000 00:00 0 
+606e0000-606e1000 rw-s 00002000 fe:4b 536243                             /data/data/com.retrople/files/rootfs/tmp/shm/wine-7abad-esync
+606f0000-606f1000 r--s 00000000 fe:4b 536212                             /data/user/0/com.retrople/files/rootfs/tmp/.winrunner_timescale
+60700000-60724000 r--p 00000000 fe:4b 338357                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/fonts/tahoma.ttf
+60730000-60732000 r--p 00000000 fe:4b 338054                             /data/user/0/com.retrople/files/rootfs/opt/wine/share/wine/fonts/coure.fon
+60740000-60741000 rwxp 00000000 00:00 0 
+60750000-60751000 rwxp 00000000 00:00 0 
+6b6f0000-6b700000 r-xp 00000000 00:00 0 
+74a7a000-7505c000 rw-p 00000000 00:00 0                                  [heap]
+799d0000-799d3000 r-xp 00000000 fe:4b 342631                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/avrt.dll
+799d3000-799d5000 rwxp 00003000 fe:4b 342631                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/avrt.dll
+799d5000-799d7000 r-xp 00005000 fe:4b 342631                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/avrt.dll
+799d7000-799d8000 rwxp 00000000 00:00 0 
+799d8000-799d9000 r-xp 00007000 fe:4b 342631                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/avrt.dll
+799d9000-799da000 rwxp 00008000 fe:4b 342631                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/avrt.dll
+799da000-799db000 r-xp 00009000 fe:4b 342631                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/avrt.dll
+799f0000-799f2000 r-xp 00000000 fe:4b 340945                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winealsa.drv
+799f2000-799f3000 rwxp 00002000 fe:4b 340945                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winealsa.drv
+799f3000-799f5000 r-xp 00003000 fe:4b 340945                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winealsa.drv
+799f5000-799f6000 rwxp 00005000 fe:4b 340945                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winealsa.drv
+799f6000-799f7000 r-xp 00006000 fe:4b 340945                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winealsa.drv
+79a10000-79a28000 r-xp 00000000 fe:4b 341537                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/mmdevapi.dll
+79a28000-79a2a000 rwxp 00018000 fe:4b 341537                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/mmdevapi.dll
+79a2a000-79a38000 r-xp 0001a000 fe:4b 341537                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/mmdevapi.dll
+79a38000-79a39000 rwxp 00000000 00:00 0 
+79a39000-79a3a000 r-xp 00028000 fe:4b 341537                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/mmdevapi.dll
+79a3a000-79a3b000 rwxp 00029000 fe:4b 341537                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/mmdevapi.dll
+79a3b000-79a3e000 r-xp 0002a000 fe:4b 341537                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/mmdevapi.dll
+79a50000-79a8b000 r-xp 00000000 fe:4b 341748                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/setupapi.dll
+79a8b000-79a8f000 rwxp 0003b000 fe:4b 341748                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/setupapi.dll
+79a8f000-79aae000 r-xp 0003f000 fe:4b 341748                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/setupapi.dll
+79aae000-79aaf000 rwxp 00000000 00:00 0 
+79aaf000-79ab5000 r-xp 0005e000 fe:4b 341748                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/setupapi.dll
+79ab5000-79ab7000 rwxp 00064000 fe:4b 341748                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/setupapi.dll
+79ab7000-79ac7000 r-xp 00066000 fe:4b 341748                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/setupapi.dll
+79ae0000-79af5000 r-xp 00000000 fe:4b 347084                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winevulkan.dll
+79af5000-79af7000 rwxp 00015000 fe:4b 347084                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winevulkan.dll
+79af7000-79b08000 r-xp 00017000 fe:4b 347084                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winevulkan.dll
+79b08000-79b09000 rwxp 00000000 00:00 0 
+79b09000-79b0c000 r-xp 00028000 fe:4b 347084                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winevulkan.dll
+79b0c000-79b0d000 rwxp 0002b000 fe:4b 347084                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winevulkan.dll
+79b0d000-79b10000 r-xp 0002c000 fe:4b 347084                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winevulkan.dll
+79b20000-79b32000 r-xp 00000000 fe:4b 347124                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/concrt140.dll
+79b32000-79b36000 rwxp 00012000 fe:4b 347124                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/concrt140.dll
+79b36000-79b40000 r-xp 00016000 fe:4b 347124                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/concrt140.dll
+79b40000-79b41000 rwxp 00000000 00:00 0 
+79b41000-79b46000 r-xp 00020000 fe:4b 347124                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/concrt140.dll
+79b46000-79b47000 rwxp 00025000 fe:4b 347124                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/concrt140.dll
+79b47000-79b49000 r-xp 00026000 fe:4b 347124                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/concrt140.dll
+79b60000-79b62000 r-xp 00000000 fe:4b 344177                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/vcruntime140.dll
+79b62000-79b64000 rwxp 00002000 fe:4b 344177                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/vcruntime140.dll
+79b64000-79b66000 r-xp 00004000 fe:4b 344177                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/vcruntime140.dll
+79b66000-79b67000 rwxp 00000000 00:00 0 
+79b67000-79b68000 r-xp 00006000 fe:4b 344177                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/vcruntime140.dll
+79b68000-79b69000 rwxp 00007000 fe:4b 344177                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/vcruntime140.dll
+79b69000-79b6a000 r-xp 00008000 fe:4b 344177                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/vcruntime140.dll
+79b80000-79bf8000 r-xp 00000000 fe:4b 346092                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcp140.dll
+79bf8000-79c02000 rwxp 00078000 fe:4b 346092                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcp140.dll
+79c02000-79c37000 r-xp 00082000 fe:4b 346092                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcp140.dll
+79c37000-79c38000 rwxp 00000000 00:00 0 
+79c38000-79c55000 r-xp 000b7000 fe:4b 346092                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcp140.dll
+79c55000-79c57000 rwxp 000d4000 fe:4b 346092                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcp140.dll
+79c57000-79c61000 r-xp 000d6000 fe:4b 346092                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcp140.dll
+79c80000-79c81000 r-xp 00000000 fe:4b 522148                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/d2dx_sgd2freeres.dll
+79c81000-79cc3000 r-xp 00000000 00:00 0 
+79cc3000-79cc5000 rwxp 00000000 00:00 0 
+79cc5000-79cc8000 rwxp 00000000 00:00 0 
+79cc8000-79cd2000 r-xp 00000000 00:00 0 
+79cf0000-79cf3000 r-xp 00000000 fe:4b 342824                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netutils.dll
+79cf3000-79cf5000 rwxp 00003000 fe:4b 342824                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netutils.dll
+79cf5000-79cf7000 r-xp 00005000 fe:4b 342824                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netutils.dll
+79cf7000-79cf8000 rwxp 00000000 00:00 0 
+79cf8000-79cf9000 r-xp 00007000 fe:4b 342824                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netutils.dll
+79cf9000-79cfa000 rwxp 00008000 fe:4b 342824                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netutils.dll
+79cfa000-79cfb000 r-xp 00009000 fe:4b 342824                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netutils.dll
+79d10000-79d24000 r-xp 00000000 fe:4b 342052                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netapi32.dll
+79d24000-79d27000 rwxp 00014000 fe:4b 342052                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netapi32.dll
+79d27000-79d2e000 r-xp 00017000 fe:4b 342052                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netapi32.dll
+79d2e000-79d2f000 rwxp 00000000 00:00 0 
+79d2f000-79d32000 r-xp 0001e000 fe:4b 342052                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netapi32.dll
+79d32000-79d33000 rwxp 00021000 fe:4b 342052                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netapi32.dll
+79d33000-79d35000 r-xp 00022000 fe:4b 342052                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/netapi32.dll
+79d50000-7a052000 r-xp 00000000 fe:4b 420608                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/d3d11.dll
+7a052000-7a058000 rwxp 00302000 fe:4b 420608                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/d3d11.dll
+7a058000-7a185000 r-xp 00308000 fe:4b 420608                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/d3d11.dll
+7a185000-7a188000 rwxp 00000000 00:00 0 
+7a188000-7a189000 r-xp 00435000 fe:4b 420608                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/d3d11.dll
+7a189000-7a18e000 rwxp 00436000 fe:4b 420608                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/d3d11.dll
+7a18e000-7a1a2000 r-xp 0043b000 fe:4b 420608                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/d3d11.dll
+7a1c0000-7a3c3000 r-xp 00000000 fe:4b 483513                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/dxgi.dll
+7a3c3000-7a3c9000 rwxp 00203000 fe:4b 483513                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/dxgi.dll
+7a3c9000-7a485000 r-xp 00209000 fe:4b 483513                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/dxgi.dll
+7a485000-7a488000 rwxp 00000000 00:00 0 
+7a488000-7a489000 r-xp 002c5000 fe:4b 483513                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/dxgi.dll
+7a489000-7a48e000 rwxp 002c6000 fe:4b 483513                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/dxgi.dll
+7a48e000-7a49f000 r-xp 002cb000 fe:4b 483513                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/dxgi.dll
+7a4b0000-7a511000 r-xp 00000000 fe:4b 341348                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/oleaut32.dll
+7a511000-7a514000 rwxp 00061000 fe:4b 341348                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/oleaut32.dll
+7a514000-7a546000 r-xp 00064000 fe:4b 341348                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/oleaut32.dll
+7a546000-7a563000 rwxp 00000000 00:00 0 
+7a563000-7a566000 r-xp 00096000 fe:4b 341348                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/oleaut32.dll
+7a566000-7a568000 rwxp 00099000 fe:4b 341348                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/oleaut32.dll
+7a568000-7a574000 r-xp 0009b000 fe:4b 341348                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/oleaut32.dll
+7a590000-7a64e000 r-xp 00000000 fe:4b 345821                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/comctl32.dll
+7a64e000-7a650000 rwxp 000be000 fe:4b 345821                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/comctl32.dll
+7a650000-7a685000 r-xp 000c0000 fe:4b 345821                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/comctl32.dll
+7a685000-7a687000 rwxp 00000000 00:00 0 
+7a687000-7a689000 r-xp 000f5000 fe:4b 345821                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/comctl32.dll
+7a689000-7a68c000 rwxp 000f7000 fe:4b 345821                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/comctl32.dll
+7a68c000-7a6df000 r-xp 000fa000 fe:4b 345821                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/comctl32.dll
+7a6f0000-7a6f1000 r-xp 00000000 fe:4b 522139                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/DGPlayer/diablo2/glide3x.dll
+7a6f1000-7a737000 r-xp 00000000 00:00 0 
+7a737000-7a739000 rwxp 00000000 00:00 0 
+7a739000-7a73d000 rwxp 00000000 00:00 0 
+7a73d000-7a73f000 r-xp 00000000 00:00 0 
+7a73f000-7a740000 rwxp 00000000 00:00 0 
+7a740000-7a7f5000 r-xp 00000000 00:00 0 
+7a810000-7a86f000 r-xp 00000000 fe:4b 339536                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dbghelp.dll
+7a86f000-7a871000 rwxp 0005f000 fe:4b 339536                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dbghelp.dll
+7a871000-7a88b000 r-xp 00061000 fe:4b 339536                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dbghelp.dll
+7a88b000-7a892000 rwxp 00000000 00:00 0 
+7a892000-7a894000 r-xp 0007b000 fe:4b 339536                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dbghelp.dll
+7a894000-7a895000 rwxp 0007d000 fe:4b 339536                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dbghelp.dll
+7a895000-7a89c000 r-xp 0007e000 fe:4b 339536                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dbghelp.dll
+7a8b0000-7a8b4000 r-xp 00000000 fe:4b 340543                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/nsi.dll
+7a8b4000-7a8b6000 rwxp 00004000 fe:4b 340543                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/nsi.dll
+7a8b6000-7a8b8000 r-xp 00006000 fe:4b 340543                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/nsi.dll
+7a8b8000-7a8b9000 rwxp 00000000 00:00 0 
+7a8b9000-7a8ba000 r-xp 00008000 fe:4b 340543                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/nsi.dll
+7a8ba000-7a8bb000 rwxp 00009000 fe:4b 340543                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/nsi.dll
+7a8bb000-7a8bc000 r-xp 0000a000 fe:4b 340543                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/nsi.dll
+7a8d0000-7a8d9000 r-xp 00000000 fe:4b 341179                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dnsapi.dll
+7a8d9000-7a8db000 rwxp 00009000 fe:4b 341179                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dnsapi.dll
+7a8db000-7a8df000 r-xp 0000b000 fe:4b 341179                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dnsapi.dll
+7a8df000-7a8e0000 rwxp 00000000 00:00 0 
+7a8e0000-7a8e2000 r-xp 0000f000 fe:4b 341179                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dnsapi.dll
+7a8e2000-7a8e3000 rwxp 00011000 fe:4b 341179                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dnsapi.dll
+7a8e3000-7a8e5000 r-xp 00012000 fe:4b 341179                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/dnsapi.dll
+7a900000-7a910000 r-xp 00000000 fe:4b 340469                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/iphlpapi.dll
+7a910000-7a912000 rwxp 00010000 fe:4b 340469                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/iphlpapi.dll
+7a912000-7a924000 r-xp 00012000 fe:4b 340469                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/iphlpapi.dll
+7a924000-7a925000 rwxp 00000000 00:00 0 
+7a925000-7a927000 r-xp 00024000 fe:4b 340469                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/iphlpapi.dll
+7a927000-7a928000 rwxp 00026000 fe:4b 340469                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/iphlpapi.dll
+7a928000-7a92a000 r-xp 00027000 fe:4b 340469                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/iphlpapi.dll
+7a940000-7a942000 r-xp 00000000 fe:4b 341195                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winex11.drv
+7a942000-7a944000 rwxp 00002000 fe:4b 341195                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winex11.drv
+7a944000-7a946000 r-xp 00004000 fe:4b 341195                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winex11.drv
+7a946000-7a947000 rwxp 00000000 00:00 0 
+7a947000-7a948000 r-xp 00006000 fe:4b 341195                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winex11.drv
+7a948000-7a949000 rwxp 00007000 fe:4b 341195                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winex11.drv
+7a949000-7a94b000 r-xp 00008000 fe:4b 341195                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winex11.drv
+7a960000-7a96b000 r-xp 00000000 fe:4b 340400                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shcore.dll
+7a96b000-7a96e000 rwxp 0000b000 fe:4b 340400                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shcore.dll
+7a96e000-7a974000 r-xp 0000e000 fe:4b 340400                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shcore.dll
+7a974000-7a975000 rwxp 00000000 00:00 0 
+7a975000-7a976000 r-xp 00014000 fe:4b 340400                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shcore.dll
+7a976000-7a977000 rwxp 00015000 fe:4b 340400                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shcore.dll
+7a977000-7a978000 r-xp 00016000 fe:4b 340400                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shcore.dll
+7a990000-7a9ae000 r-xp 00000000 fe:4b 340862                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shlwapi.dll
+7a9ae000-7a9b1000 rwxp 0001e000 fe:4b 340862                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shlwapi.dll
+7a9b1000-7a9ca000 r-xp 00021000 fe:4b 340862                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shlwapi.dll
+7a9ca000-7a9cb000 rwxp 00000000 00:00 0 
+7a9cb000-7a9d0000 r-xp 0003a000 fe:4b 340862                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shlwapi.dll
+7a9d0000-7a9d4000 rwxp 0003f000 fe:4b 340862                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shlwapi.dll
+7a9d4000-7a9dc000 r-xp 00043000 fe:4b 340862                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shlwapi.dll
+7a9f0000-7aa80000 r-xp 00000000 fe:4b 341597                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shell32.dll
+7aa80000-7aa83000 rwxp 00090000 fe:4b 341597                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shell32.dll
+7aa83000-7aac9000 r-xp 00093000 fe:4b 341597                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shell32.dll
+7aac9000-7aaca000 rwxp 00000000 00:00 0 
+7aaca000-7aace000 r-xp 000d9000 fe:4b 341597                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shell32.dll
+7aace000-7aad2000 rwxp 000dd000 fe:4b 341597                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shell32.dll
+7aad2000-7ab98000 r-xp 000e1000 fe:4b 341597                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/shell32.dll
+7abb0000-7abb2000 r-xp 00000000 fe:4b 342009                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/psapi.dll
+7abb2000-7abb4000 rwxp 00002000 fe:4b 342009                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/psapi.dll
+7abb4000-7abb7000 r-xp 00004000 fe:4b 342009                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/psapi.dll
+7abb7000-7abb8000 rwxp 00007000 fe:4b 342009                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/psapi.dll
+7abb8000-7abba000 r-xp 00008000 fe:4b 342009                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/psapi.dll
+7abd0000-7ac89000 r-xp 00000000 fe:4b 339866                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/opengl32.dll
+7ac89000-7ac8d000 rwxp 000b9000 fe:4b 339866                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/opengl32.dll
+7ac8d000-7acf2000 r-xp 000bd000 fe:4b 339866                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/opengl32.dll
+7acf2000-7acf3000 rwxp 00000000 00:00 0 
+7acf3000-7acf6000 r-xp 00122000 fe:4b 339866                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/opengl32.dll
+7acf6000-7acf7000 rwxp 00125000 fe:4b 339866                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/opengl32.dll
+7acf7000-7ad0b000 r-xp 00126000 fe:4b 339866                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/opengl32.dll
+7ad20000-7af1a000 r-xp 00000000 fe:4b 342951                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wined3d.dll
+7af1a000-7af1c000 rwxp 001fa000 fe:4b 342951                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wined3d.dll
+7af1c000-7b006000 r-xp 001fc000 fe:4b 342951                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wined3d.dll
+7b006000-7b00f000 rwxp 00000000 00:00 0 
+7b00f000-7b013000 r-xp 002e6000 fe:4b 342951                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wined3d.dll
+7b013000-7b015000 rwxp 002ea000 fe:4b 342951                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wined3d.dll
+7b015000-7b035000 r-xp 002ec000 fe:4b 342951                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wined3d.dll
+7b050000-7b08c000 r-xp 00000000 fe:4b 339473                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ddraw.dll
+7b08c000-7b08e000 rwxp 0003c000 fe:4b 339473                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ddraw.dll
+7b08e000-7b0b8000 r-xp 0003e000 fe:4b 339473                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ddraw.dll
+7b0b8000-7b0b9000 rwxp 00000000 00:00 0 
+7b0b9000-7b0ba000 r-xp 00068000 fe:4b 339473                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ddraw.dll
+7b0ba000-7b0bd000 rwxp 00069000 fe:4b 339473                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ddraw.dll
+7b0bd000-7b0c3000 r-xp 0006c000 fe:4b 339473                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ddraw.dll
+7b0e0000-7b0e4000 r-xp 00000000 fe:4b 341835                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/powrprof.dll
+7b0e4000-7b0e6000 rwxp 00004000 fe:4b 341835                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/powrprof.dll
+7b0e6000-7b0e8000 r-xp 00006000 fe:4b 341835                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/powrprof.dll
+7b0e8000-7b0e9000 rwxp 00000000 00:00 0 
+7b0e9000-7b0ea000 r-xp 00008000 fe:4b 341835                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/powrprof.dll
+7b0ea000-7b0eb000 rwxp 00009000 fe:4b 341835                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/powrprof.dll
+7b0eb000-7b0ec000 r-xp 0000a000 fe:4b 341835                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/powrprof.dll
+7b100000-7b101000 r-xp 00000000 fe:4b 308559                             /data/user/0/com.retrople/files/rootfs/home/xuser-1/.wine/drive_c/windows/syswow64/dsound.dll
+7b101000-7b16a000 r-xp 00000000 00:00 0 
+7b16a000-7b16e000 rwxp 00000000 00:00 0 
+7b16e000-7b172000 r-xp 00000000 00:00 0 
+7b190000-7b193000 r-xp 00000000 fe:4b 348189                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/version.dll
+7b193000-7b195000 rwxp 00003000 fe:4b 348189                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/version.dll
+7b195000-7b197000 r-xp 00005000 fe:4b 348189                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/version.dll
+7b197000-7b198000 rwxp 00000000 00:00 0 
+7b198000-7b199000 r-xp 00007000 fe:4b 348189                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/version.dll
+7b199000-7b19a000 rwxp 00008000 fe:4b 348189                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/version.dll
+7b19a000-7b19c000 r-xp 00009000 fe:4b 348189                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/version.dll
+7b1b0000-7b1c5000 r-xp 00000000 fe:4b 347806                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ws2_32.dll
+7b1c5000-7b1c7000 rwxp 00015000 fe:4b 347806                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ws2_32.dll
+7b1c7000-7b1d1000 r-xp 00017000 fe:4b 347806                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ws2_32.dll
+7b1d1000-7b1d2000 rwxp 00000000 00:00 0 
+7b1d2000-7b1d4000 r-xp 00021000 fe:4b 347806                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ws2_32.dll
+7b1d4000-7b1d5000 rwxp 00023000 fe:4b 347806                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ws2_32.dll
+7b1d5000-7b1da000 r-xp 00024000 fe:4b 347806                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ws2_32.dll
+7b1f0000-7b1f4000 r-xp 00000000 fe:4b 347694                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/coml2.dll
+7b1f4000-7b1f6000 rwxp 00004000 fe:4b 347694                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/coml2.dll
+7b1f6000-7b204000 r-xp 00006000 fe:4b 347694                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/coml2.dll
+7b204000-7b205000 rwxp 00000000 00:00 0 
+7b205000-7b206000 r-xp 00014000 fe:4b 347694                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/coml2.dll
+7b206000-7b207000 rwxp 00015000 fe:4b 347694                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/coml2.dll
+7b207000-7b208000 r-xp 00016000 fe:4b 347694                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/coml2.dll
+7b220000-7b26f000 r-xp 00000000 fe:4b 342185                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/rpcrt4.dll
+7b26f000-7b272000 rwxp 0004f000 fe:4b 342185                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/rpcrt4.dll
+7b272000-7b29a000 r-xp 00052000 fe:4b 342185                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/rpcrt4.dll
+7b29a000-7b29b000 rwxp 00000000 00:00 0 
+7b29b000-7b2a0000 r-xp 0007a000 fe:4b 342185                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/rpcrt4.dll
+7b2a0000-7b2a1000 rwxp 0007f000 fe:4b 342185                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/rpcrt4.dll
+7b2a1000-7b2a8000 r-xp 00080000 fe:4b 342185                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/rpcrt4.dll
+7b2c0000-7b2e9000 r-xp 00000000 fe:4b 347041                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/combase.dll
+7b2e9000-7b2ec000 rwxp 00029000 fe:4b 347041                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/combase.dll
+7b2ec000-7b308000 r-xp 0002c000 fe:4b 347041                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/combase.dll
+7b308000-7b309000 rwxp 00000000 00:00 0 
+7b309000-7b30c000 r-xp 00048000 fe:4b 347041                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/combase.dll
+7b30c000-7b30e000 rwxp 0004b000 fe:4b 347041                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/combase.dll
+7b30e000-7b311000 r-xp 0004d000 fe:4b 347041                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/combase.dll
+7b330000-7b387000 r-xp 00000000 fe:4b 346099                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ole32.dll
+7b387000-7b38a000 rwxp 00057000 fe:4b 346099                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ole32.dll
+7b38a000-7b3bb000 r-xp 0005a000 fe:4b 346099                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ole32.dll
+7b3bb000-7b3bc000 rwxp 00000000 00:00 0 
+7b3bc000-7b3c0000 r-xp 0008b000 fe:4b 346099                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ole32.dll
+7b3c0000-7b3c3000 rwxp 0008f000 fe:4b 346099                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ole32.dll
+7b3c3000-7b3ee000 r-xp 00092000 fe:4b 346099                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ole32.dll
+7b400000-7b412000 r-xp 00000000 fe:4b 339293                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msacm32.dll
+7b412000-7b414000 rwxp 00012000 fe:4b 339293                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msacm32.dll
+7b414000-7b41a000 r-xp 00014000 fe:4b 339293                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msacm32.dll
+7b41a000-7b41b000 rwxp 00000000 00:00 0 
+7b41b000-7b41c000 r-xp 0001a000 fe:4b 339293                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msacm32.dll
+7b41c000-7b41d000 rwxp 0001b000 fe:4b 339293                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msacm32.dll
+7b41d000-7b424000 r-xp 0001c000 fe:4b 339293                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msacm32.dll
+7b440000-7b464000 r-xp 00000000 fe:4b 340399                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winmm.dll
+7b464000-7b466000 rwxp 00024000 fe:4b 340399                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winmm.dll
+7b466000-7b475000 r-xp 00026000 fe:4b 340399                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winmm.dll
+7b475000-7b47f000 rwxp 00000000 00:00 0 
+7b47f000-7b481000 r-xp 00035000 fe:4b 340399                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winmm.dll
+7b481000-7b483000 rwxp 00037000 fe:4b 340399                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winmm.dll
+7b483000-7b504000 r-xp 00039000 fe:4b 340399                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/winmm.dll
+7b520000-7b523000 r-xp 00000000 fe:4b 341737                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/cryptbase.dll
+7b523000-7b525000 rwxp 00003000 fe:4b 341737                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/cryptbase.dll
+7b525000-7b527000 r-xp 00005000 fe:4b 341737                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/cryptbase.dll
+7b527000-7b529000 rwxp 00000000 00:00 0 
+7b529000-7b52a000 r-xp 00007000 fe:4b 341737                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/cryptbase.dll
+7b52a000-7b52b000 rwxp 00008000 fe:4b 341737                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/cryptbase.dll
+7b52b000-7b52c000 r-xp 00009000 fe:4b 341737                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/cryptbase.dll
+7b540000-7b550000 r-xp 00000000 fe:4b 344122                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/bcrypt.dll
+7b550000-7b552000 rwxp 00010000 fe:4b 344122                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/bcrypt.dll
+7b552000-7b557000 r-xp 00012000 fe:4b 344122                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/bcrypt.dll
+7b557000-7b558000 rwxp 00000000 00:00 0 
+7b558000-7b559000 r-xp 00017000 fe:4b 344122                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/bcrypt.dll
+7b559000-7b55a000 rwxp 00018000 fe:4b 344122                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/bcrypt.dll
+7b55a000-7b55c000 r-xp 00019000 fe:4b 344122                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/bcrypt.dll
+7b570000-7b5d5000 r-xp 00000000 fe:4b 340975                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/crypt32.dll
+7b5d5000-7b5d9000 rwxp 00065000 fe:4b 340975                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/crypt32.dll
+7b5d9000-7b5f7000 r-xp 00069000 fe:4b 340975                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/crypt32.dll
+7b5f7000-7b5fb000 rwxp 00000000 00:00 0 
+7b5fb000-7b5fe000 r-xp 00087000 fe:4b 340975                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/crypt32.dll
+7b5fe000-7b600000 rwxp 0008a000 fe:4b 340975                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/crypt32.dll
+7b600000-7b64a000 r-xp 0008c000 fe:4b 340975                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/crypt32.dll
+7b660000-7b677000 r-xp 00000000 fe:4b 344120                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wintrust.dll
+7b677000-7b679000 rwxp 00017000 fe:4b 344120                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wintrust.dll
+7b679000-7b681000 r-xp 00019000 fe:4b 344120                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wintrust.dll
+7b681000-7b682000 rwxp 00000000 00:00 0 
+7b682000-7b684000 r-xp 00021000 fe:4b 344120                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wintrust.dll
+7b684000-7b685000 rwxp 00023000 fe:4b 344120                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wintrust.dll
+7b685000-7b688000 r-xp 00024000 fe:4b 344120                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/wintrust.dll
+7b6a0000-7b6af000 r-xp 00000000 fe:4b 340556                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/win32u.dll
+7b6af000-7b6ba000 rwxp 0000f000 fe:4b 340556                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/win32u.dll
+7b6ba000-7b6c6000 r-xp 0001a000 fe:4b 340556                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/win32u.dll
+7b6c6000-7b6c7000 rwxp 00000000 00:00 0 
+7b6c7000-7b6d5000 r-xp 00026000 fe:4b 340556                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/win32u.dll
+7b6d5000-7b6d6000 rwxp 00034000 fe:4b 340556                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/win32u.dll
+7b6d6000-7b6d8000 r-xp 00035000 fe:4b 340556                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/win32u.dll
+7b6f0000-7b78f000 r-xp 00000000 fe:4b 342239                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/user32.dll
+7b78f000-7b793000 rwxp 0009f000 fe:4b 342239                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/user32.dll
+7b793000-7b7cb000 r-xp 000a3000 fe:4b 342239                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/user32.dll
+7b7cb000-7b7cc000 rwxp 00000000 00:00 0 
+7b7cc000-7b7ce000 r-xp 000db000 fe:4b 342239                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/user32.dll
+7b7ce000-7b7d3000 r-xp 000dd000 fe:4b 342239                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/user32.dll
+7b7d3000-7b7d8000 rwxp 000e2000 fe:4b 342239                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/user32.dll
+7b7d8000-7b89d000 r-xp 000e7000 fe:4b 342239                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/user32.dll
+7b8b0000-7b902000 r-xp 00000000 fe:4b 348262                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/gdi32.dll
+7b902000-7b904000 rwxp 00052000 fe:4b 348262                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/gdi32.dll
+7b904000-7b929000 r-xp 00054000 fe:4b 348262                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/gdi32.dll
+7b929000-7b92a000 rwxp 00000000 00:00 0 
+7b92a000-7b92e000 r-xp 00079000 fe:4b 348262                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/gdi32.dll
+7b92e000-7b931000 rwxp 0007d000 fe:4b 348262                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/gdi32.dll
+7b931000-7b93a000 r-xp 00080000 fe:4b 348262                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/gdi32.dll
+7b950000-7b960000 r-xp 00000000 fe:4b 339085                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/imm32.dll
+7b960000-7b962000 rwxp 00010000 fe:4b 339085                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/imm32.dll
+7b962000-7b968000 r-xp 00012000 fe:4b 339085                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/imm32.dll
+7b968000-7b969000 rwxp 00000000 00:00 0 
+7b969000-7b96b000 r-xp 00018000 fe:4b 339085                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/imm32.dll
+7b96b000-7b96c000 rwxp 0001a000 fe:4b 339085                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/imm32.dll
+7b96c000-7b96e000 r-xp 0001b000 fe:4b 339085                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/imm32.dll
+7b980000-7ba12000 r-xp 00000000 fe:4b 341481                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ucrtbase.dll
+7ba12000-7ba18000 rwxp 00092000 fe:4b 341481                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ucrtbase.dll
+7ba18000-7ba4d000 r-xp 00098000 fe:4b 341481                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ucrtbase.dll
+7ba4d000-7ba4f000 rwxp 00000000 00:00 0 
+7ba4f000-7ba5d000 r-xp 000cd000 fe:4b 341481                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ucrtbase.dll
+7ba5d000-7ba5f000 rwxp 000db000 fe:4b 341481                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ucrtbase.dll
+7ba5f000-7ba67000 r-xp 000dd000 fe:4b 341481                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ucrtbase.dll
+7ba80000-7ba8f000 r-xp 00000000 fe:4b 347849                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/sechost.dll
+7ba8f000-7ba91000 rwxp 0000f000 fe:4b 347849                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/sechost.dll
+7ba91000-7ba9a000 r-xp 00011000 fe:4b 347849                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/sechost.dll
+7ba9a000-7ba9b000 rwxp 00000000 00:00 0 
+7ba9b000-7ba9d000 r-xp 0001a000 fe:4b 347849                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/sechost.dll
+7ba9d000-7ba9e000 rwxp 0001c000 fe:4b 347849                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/sechost.dll
+7ba9e000-7ba9f000 r-xp 0001d000 fe:4b 347849                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/sechost.dll
+7bab0000-7bb28000 r-xp 00000000 fe:4b 347017                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcrt.dll
+7bb28000-7bb2c000 rwxp 00078000 fe:4b 347017                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcrt.dll
+7bb2c000-7bb53000 r-xp 0007c000 fe:4b 347017                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcrt.dll
+7bb53000-7bb55000 rwxp 00000000 00:00 0 
+7bb55000-7bb5c000 r-xp 000a3000 fe:4b 347017                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcrt.dll
+7bb5c000-7bb5e000 rwxp 000aa000 fe:4b 347017                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcrt.dll
+7bb5e000-7bb65000 r-xp 000ac000 fe:4b 347017                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/msvcrt.dll
+7bb80000-7bba2000 r-xp 00000000 fe:4b 339417                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/advapi32.dll
+7bba2000-7bba4000 rwxp 00022000 fe:4b 339417                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/advapi32.dll
+7bba4000-7bbb2000 r-xp 00024000 fe:4b 339417                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/advapi32.dll
+7bbb2000-7bbb3000 rwxp 00000000 00:00 0 
+7bbb3000-7bbb8000 r-xp 00032000 fe:4b 339417                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/advapi32.dll
+7bbb8000-7bbbb000 rwxp 00037000 fe:4b 339417                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/advapi32.dll
+7bbbb000-7bbbe000 r-xp 0003a000 fe:4b 339417                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/advapi32.dll
+7bbd0000-7bc57000 r-xp 00000000 fe:4b 341246                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernelbase.dll
+7bc57000-7bc5b000 rwxp 00087000 fe:4b 341246                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernelbase.dll
+7bc5b000-7bc8f000 r-xp 0008b000 fe:4b 341246                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernelbase.dll
+7bc8f000-7bc91000 rwxp 00000000 00:00 0 
+7bc91000-7bc9c000 r-xp 000bf000 fe:4b 341246                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernelbase.dll
+7bc9c000-7bca0000 rwxp 000ca000 fe:4b 341246                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernelbase.dll
+7bca0000-7be73000 r-xp 000ce000 fe:4b 341246                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernelbase.dll
+7be90000-7bebf000 r-xp 00000000 fe:4b 346233                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernel32.dll
+7bebf000-7bec3000 rwxp 0002f000 fe:4b 346233                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernel32.dll
+7bec3000-7bed5000 r-xp 00033000 fe:4b 346233                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernel32.dll
+7bed5000-7bed6000 rwxp 00000000 00:00 0 
+7bed6000-7bed7000 r-xp 00045000 fe:4b 346233                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernel32.dll
+7bed7000-7bee2000 r-xp 00046000 fe:4b 346233                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernel32.dll
+7bee2000-7beea000 rwxp 00051000 fe:4b 346233                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernel32.dll
+7beea000-7bef6000 r-xp 00059000 fe:4b 346233                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/kernel32.dll
+7bf10000-7bf12000 r-xp 00000000 fe:4b 358675                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64cpu.dll
+7bf12000-7bf14000 rwxp 00002000 fe:4b 358675                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64cpu.dll
+7bf14000-7bf17000 r-xp 00004000 fe:4b 358675                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64cpu.dll
+7bf17000-7bf18000 rwxp 00000000 00:00 0 
+7bf18000-7bf19000 r-xp 00000000 00:00 0 
+7bf19000-7bf1a000 r-xp 00007000 fe:4b 358675                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64cpu.dll
+7bf1a000-7bf1b000 rwxp 00008000 fe:4b 358675                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64cpu.dll
+7bf1b000-7bf1c000 r-xp 00009000 fe:4b 358675                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64cpu.dll
+7bf30000-7bfa1000 r-xp 00000000 fe:4b 341902                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ntdll.dll
+7bfa1000-7bfa5000 rwxp 00071000 fe:4b 341902                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ntdll.dll
+7bfa5000-7bfd3000 r-xp 00075000 fe:4b 341902                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ntdll.dll
+7bfd3000-7bfd6000 rwxp 00000000 00:00 0 
+7bfd6000-7bfe1000 r-xp 000a3000 fe:4b 341902                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ntdll.dll
+7bfe1000-7bfe2000 rwxp 000ae000 fe:4b 341902                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ntdll.dll
+7bfe2000-7bfe8000 r-xp 000af000 fe:4b 341902                             /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/i386-windows/ntdll.dll
+7f000000-7fde0000 ---p 00000000 00:00 0 
+7fde0000-7fe00000 ---p 00000000 00:00 0 
+7fe00000-7ffe0000 rwxp 00000000 00:00 0 
+7ffe0000-7ffe1000 r-xs 00000000 fe:4b 536307                             /data/data/com.retrople/files/rootfs/tmp/.wine-10528/server-fe4b-7abad/tmpmap-d8cf3a6d (deleted)
+7ffe1000-7ffe2000 rw-p 00000000 00:00 0 
+7ffe2000-82000000 ---p 00000000 00:00 0 
+ffff0000-100000000 ---p 00000000 00:00 0 
+100000000-100001000 r--p 00000000 fe:4b 348272                           /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/wine
+100001000-100002000 r-xp 00001000 fe:4b 348272                           /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/wine
+100002000-100003000 r--p 00002000 fe:4b 348272                           /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/wine
+100003000-100006000 rw-p 00000000 00:00 0 
+100010000-100110000 rwxp 00000000 00:00 0 
+100110000-100112000 ---p 00000000 00:00 0 
+100112000-100310000 rwxp 00000000 00:00 0 
+100310000-100312000 ---p 00000000 00:00 0 
+100312000-100510000 rwxp 00000000 00:00 0 
+100510000-100512000 ---p 00000000 00:00 0 
+100512000-100710000 rwxp 00000000 00:00 0 
+100710000-100712000 ---p 00000000 00:00 0 
+100712000-100810000 rwxp 00000000 00:00 0 
+100a10000-100b10000 rwxp 00000000 00:00 0 
+100b10000-100b12000 ---p 00000000 00:00 0 
+100b12000-100c10000 rwxp 00000000 00:00 0 
+101210000-101310000 rwxp 00000000 00:00 0 
+101310000-101312000 ---p 00000000 00:00 0 
+101312000-101510000 rwxp 00000000 00:00 0 
+101510000-101512000 ---p 00000000 00:00 0 
+101512000-101710000 rwxp 00000000 00:00 0 
+101710000-101712000 ---p 00000000 00:00 0 
+101712000-101910000 rwxp 00000000 00:00 0 
+101910000-101912000 ---p 00000000 00:00 0 
+101912000-101b10000 rwxp 00000000 00:00 0 
+101b10000-101b12000 ---p 00000000 00:00 0 
+101b12000-101d10000 rwxp 00000000 00:00 0 
+101d10000-101d12000 ---p 00000000 00:00 0 
+101d12000-101f10000 rwxp 00000000 00:00 0 
+101f10000-101f12000 ---p 00000000 00:00 0 
+101f12000-102110000 rwxp 00000000 00:00 0 
+102110000-102112000 ---p 00000000 00:00 0 
+102112000-102310000 rwxp 00000000 00:00 0 
+102310000-102312000 ---p 00000000 00:00 0 
+102312000-102510000 rwxp 00000000 00:00 0 
+102510000-102512000 ---p 00000000 00:00 0 
+102512000-102710000 rwxp 00000000 00:00 0 
+102710000-102712000 ---p 00000000 00:00 0 
+102712000-102910000 rwxp 00000000 00:00 0 
+102910000-102912000 ---p 00000000 00:00 0 
+102912000-102b10000 rwxp 00000000 00:00 0 
+102b10000-102b12000 ---p 00000000 00:00 0 
+102b12000-102d10000 rwxp 00000000 00:00 0 
+102d10000-102d12000 ---p 00000000 00:00 0 
+102d12000-102f10000 rwxp 00000000 00:00 0 
+102f10000-102f12000 ---p 00000000 00:00 0 
+102f12000-103110000 rwxp 00000000 00:00 0 
+103110000-103112000 ---p 00000000 00:00 0 
+103112000-103310000 rwxp 00000000 00:00 0 
+103310000-103312000 ---p 00000000 00:00 0 
+103312000-103410000 rwxp 00000000 00:00 0 
+103810000-103910000 rwxp 00000000 00:00 0 
+103910000-103912000 ---p 00000000 00:00 0 
+103912000-103a10000 rwxp 00000000 00:00 0 
+3f00000000-3f0000c000 r--p 00000000 fe:4b 348393                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/ntdll.so
+3f0000c000-3f0006e000 r-xp 0000c000 fe:4b 348393                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/ntdll.so
+3f0006e000-3f00091000 r--p 0006e000 fe:4b 348393                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/ntdll.so
+3f00091000-3f000db000 rw-p 00000000 00:00 0 
+3f01000000-3f01003000 r--p 00000000 fe:4b 502274                         /data/user/0/com.retrople/files/rootfs/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+3f01003000-3f0101e000 r-xp 00003000 fe:4b 502274                         /data/user/0/com.retrople/files/rootfs/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+3f0101e000-3f01022000 r--p 0001e000 fe:4b 502274                         /data/user/0/com.retrople/files/rootfs/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+3f01022000-3f01025000 rw-p 00000000 00:00 0 
+3f02000000-3f02021000 r--p 00000000 fe:4b 348297                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/win32u.so
+3f02021000-3f02117000 r-xp 00021000 fe:4b 348297                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/win32u.so
+3f02117000-3f0215e000 r--p 00117000 fe:4b 348297                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/win32u.so
+3f0215e000-3f021e0000 rw-p 00000000 00:00 0 
+3f03000000-3f03001000 r--p 00000000 fe:4b 348205                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/bcrypt.so
+3f03001000-3f03008000 r-xp 00001000 fe:4b 348205                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/bcrypt.so
+3f03008000-3f0300a000 r--p 00008000 fe:4b 348205                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/bcrypt.so
+3f0300a000-3f0300d000 rw-p 00000000 00:00 0 
+3f04000000-3f04001000 r--p 00000000 fe:4b 348392                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/crypt32.so
+3f04001000-3f04003000 r-xp 00001000 fe:4b 348392                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/crypt32.so
+3f04003000-3f04004000 r--p 00003000 fe:4b 348392                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/crypt32.so
+3f04004000-3f04007000 rw-p 00000000 00:00 0 
+3f05000000-3f05001000 r--p 00000000 fe:4b 348541                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/ws2_32.so
+3f05001000-3f05003000 r-xp 00001000 fe:4b 348541                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/ws2_32.so
+3f05003000-3f05004000 r--p 00003000 fe:4b 348541                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/ws2_32.so
+3f05004000-3f05007000 rw-p 00000000 00:00 0 
+3f06000000-3f06056000 r--p 00000000 fe:4b 348572                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/opengl32.so
+3f06056000-3f060e6000 r-xp 00056000 fe:4b 348572                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/opengl32.so
+3f060e6000-3f06165000 r--p 000e6000 fe:4b 348572                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/opengl32.so
+3f06165000-3f0618f000 rw-p 00000000 00:00 0 
+3f07000000-3f0700b000 r--p 00000000 fe:4b 348878                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/winex11.so
+3f0700b000-3f07050000 r-xp 0000b000 fe:4b 348878                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/winex11.so
+3f07050000-3f0706c000 r--p 00050000 fe:4b 348878                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/winex11.so
+3f0706c000-3f07077000 rw-p 00000000 00:00 0 
+3f08000000-3f08001000 r--p 00000000 fe:4b 348248                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/dnsapi.so
+3f08001000-3f08002000 r-xp 00001000 fe:4b 348248                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/dnsapi.so
+3f08002000-3f08003000 r--p 00002000 fe:4b 348248                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/dnsapi.so
+3f08003000-3f08006000 rw-p 00000000 00:00 0 
+3f09000000-3f09001000 r--p 00000000 fe:4b 348170                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/netapi32.so
+3f09001000-3f09002000 r-xp 00001000 fe:4b 348170                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/netapi32.so
+3f09002000-3f09003000 r--p 00002000 fe:4b 348170                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/netapi32.so
+3f09003000-3f09006000 rw-p 00000000 00:00 0 
+3f0b000000-3f0b00b000 r--p 00000000 fe:4b 348186                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/winevulkan.so
+3f0b00b000-3f0b0a8000 r-xp 0000b000 fe:4b 348186                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/winevulkan.so
+3f0b0a8000-3f0b0d5000 r--p 000a8000 fe:4b 348186                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/winevulkan.so
+3f0b0d5000-3f0b0db000 rw-p 00000000 00:00 0 
+3f0c000000-3f0c004000 r--p 00000000 fe:4b 348525                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/winealsa.so
+3f0c004000-3f0c00f000 r-xp 00004000 fe:4b 348525                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/winealsa.so
+3f0c00f000-3f0c014000 r--p 0000f000 fe:4b 348525                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-unix/winealsa.so
+3f0c014000-3f0c018000 rw-p 00000000 00:00 0 
+7d43500000-7d43580000 rw-p 00000000 00:00 0 
+7d43580000-7d43780000 rwxp 00000000 00:00 0 
+7d43780000-7d43c00000 rw-p 00000000 00:00 0 
+7d43c00000-7d43e00000 rwxp 00000000 00:00 0 
+7d43e00000-7d44021000 rw-p 00000000 00:00 0 
+7d44021000-7d48000000 ---p 00000000 00:00 0 
+7d48000000-7d48021000 rw-p 00000000 00:00 0 
+7d48021000-7d4c000000 ---p 00000000 00:00 0 
+7d4c000000-7d4c021000 rw-p 00000000 00:00 0 
+7d4c021000-7d50000000 ---p 00000000 00:00 0 
+7d50000000-7d50021000 rw-p 00000000 00:00 0 
+7d50021000-7d54000000 ---p 00000000 00:00 0 
+7d54000000-7d54021000 rw-p 00000000 00:00 0 
+7d54021000-7d58000000 ---p 00000000 00:00 0 
+7d58000000-7d58021000 rw-p 00000000 00:00 0 
+7d58021000-7d5c000000 ---p 00000000 00:00 0 
+7d5c000000-7d5c021000 rw-p 00000000 00:00 0 
+7d5c021000-7d60000000 ---p 00000000 00:00 0 
+7d60000000-7d60021000 rw-p 00000000 00:00 0 
+7d60021000-7d64000000 ---p 00000000 00:00 0 
+7d64000000-7d64021000 rw-p 00000000 00:00 0 
+7d64021000-7d68000000 ---p 00000000 00:00 0 
+7d68000000-7d68021000 rw-p 00000000 00:00 0 
+7d68021000-7d6c000000 ---p 00000000 00:00 0 
+7d6c000000-7d6c021000 rw-p 00000000 00:00 0 
+7d6c021000-7d70000000 ---p 00000000 00:00 0 
+7d70000000-7d70021000 rw-p 00000000 00:00 0 
+7d70021000-7d74000000 ---p 00000000 00:00 0 
+7d74000000-7d74021000 rw-p 00000000 00:00 0 
+7d74021000-7d78000000 ---p 00000000 00:00 0 
+7d78000000-7d78021000 rw-p 00000000 00:00 0 
+7d78021000-7d7c000000 ---p 00000000 00:00 0 
+7d7c000000-7d7c021000 rw-p 00000000 00:00 0 
+7d7c021000-7d80000000 ---p 00000000 00:00 0 
+7d80000000-7d80026000 rw-p 00000000 00:00 0 
+7d80026000-7d84000000 ---p 00000000 00:00 0 
+7d84000000-7d84021000 rw-p 00000000 00:00 0 
+7d84021000-7d88000000 ---p 00000000 00:00 0 
+7d88000000-7d88021000 rw-p 00000000 00:00 0 
+7d88021000-7d8c000000 ---p 00000000 00:00 0 
+7d8c04e000-7d8c3ce000 rw-p 00000000 00:00 0 
+7d8c3ce000-7d8c3ee000 rwxp 00000000 00:00 0 
+7d8c3ee000-7d8c68e000 rw-p 00000000 00:00 0 
+7d8c68e000-7d8c88e000 rwxp 00000000 00:00 0 
+7d8c88e000-7d8d670000 rw-p 00000000 00:00 0 
+7d8d670000-7d8d870000 rwxp 00000000 00:00 0 
+7d8d870000-7d8d8f0000 rw-p 00000000 00:00 0 
+7d8d8f0000-7d8d8f3000 r-xp 00000000 fe:4b 316584                         /data/user/0/com.retrople/files/rootfs/usr/lib/alsa-lib/libasound_module_pcm_android_aserver.so
+7d8d8f3000-7d8d90f000 ---p 00003000 fe:4b 316584                         /data/user/0/com.retrople/files/rootfs/usr/lib/alsa-lib/libasound_module_pcm_android_aserver.so
+7d8d90f000-7d8d910000 r--p 0000f000 fe:4b 316584                         /data/user/0/com.retrople/files/rootfs/usr/lib/alsa-lib/libasound_module_pcm_android_aserver.so
+7d8d910000-7d8d911000 rw-p 00010000 fe:4b 316584                         /data/user/0/com.retrople/files/rootfs/usr/lib/alsa-lib/libasound_module_pcm_android_aserver.so
+7d8d920000-7d8d9a0000 rw-p 00000000 00:00 0 
+7d8d9a0000-7d8d9c0000 rwxp 00000000 00:00 0 
+7d8d9c0000-7d8dacd000 r-xp 00000000 fe:4b 502268                         /data/user/0/com.retrople/files/rootfs/usr/lib/libasound.so.2.0.0
+7d8dacd000-7d8dada000 ---p 0010d000 fe:4b 502268                         /data/user/0/com.retrople/files/rootfs/usr/lib/libasound.so.2.0.0
+7d8dada000-7d8dae0000 r--p 0011a000 fe:4b 502268                         /data/user/0/com.retrople/files/rootfs/usr/lib/libasound.so.2.0.0
+7d8dae0000-7d8dae2000 rw-p 00120000 fe:4b 502268                         /data/user/0/com.retrople/files/rootfs/usr/lib/libasound.so.2.0.0
+7d8daef000-7d8db2f000 rwxp 00000000 00:00 0 
+7d8db2f000-7d8ea60000 rw-p 00000000 00:00 0 
+7d8ea60000-7d8ec60000 rwxp 00000000 00:00 0 
+7d8ec60000-7d8eee0000 rw-p 00000000 00:00 0 
+7d8eee0000-7d8eef0000 ---p 00000000 00:00 0 
+7d8eef0000-7d8f6f0000 rw-p 00000000 00:00 0 
+7d8f6f0000-7d8f700000 ---p 00000000 00:00 0 
+7d8f700000-7d90021000 rw-p 00000000 00:00 0 
+7d90021000-7d94000000 ---p 00000000 00:00 0 
+7d94000000-7d9407b000 rw-p 00000000 00:00 0 
+7d9407b000-7d98000000 ---p 00000000 00:00 0 
+7d98000000-7d98021000 rw-p 00000000 00:00 0 
+7d98021000-7d9c000000 ---p 00000000 00:00 0 
+7d9c000000-7d9c043000 rw-p 00000000 00:00 0 
+7d9c043000-7da0000000 ---p 00000000 00:00 0 
+7da0000000-7da0021000 rw-p 00000000 00:00 0 
+7da0021000-7da4000000 ---p 00000000 00:00 0 
+7da4000000-7da4021000 rw-p 00000000 00:00 0 
+7da4021000-7da8000000 ---p 00000000 00:00 0 
+7da8000000-7da8021000 rw-p 00000000 00:00 0 
+7da8021000-7dac000000 ---p 00000000 00:00 0 
+7dac000000-7dac021000 rw-p 00000000 00:00 0 
+7dac021000-7db0000000 ---p 00000000 00:00 0 
+7db0000000-7db0021000 rw-p 00000000 00:00 0 
+7db0021000-7db4000000 ---p 00000000 00:00 0 
+7db4000000-7db4021000 rw-p 00000000 00:00 0 
+7db4021000-7db8000000 ---p 00000000 00:00 0 
+7db8000000-7db8680000 rw-p 00000000 00:00 0 
+7db8680000-7db8690000 ---p 00000000 00:00 0 
+7db8690000-7db9090000 rw-p 00000000 00:00 0 
+7db9090000-7db9092000 r-xp 00000000 fe:4b 501660                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-shm.so.0.0.0
+7db9092000-7db90af000 ---p 00002000 fe:4b 501660                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-shm.so.0.0.0
+7db90af000-7db90b0000 r--p 0000f000 fe:4b 501660                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-shm.so.0.0.0
+7db90b0000-7db90b1000 rw-p 00010000 fe:4b 501660                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-shm.so.0.0.0
+7db90c0000-7db90cf000 r-xp 00000000 fe:4b 501658                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-randr.so.0.1.0
+7db90cf000-7db90df000 ---p 0000f000 fe:4b 501658                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-randr.so.0.1.0
+7db90df000-7db90e0000 r--p 0000f000 fe:4b 501658                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-randr.so.0.1.0
+7db90e0000-7db90e1000 rw-p 00010000 fe:4b 501658                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-randr.so.0.1.0
+7db90f0000-7db90f2000 r-xp 00000000 fe:4b 502282                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-present.so.0.0.0
+7db90f2000-7db910f000 ---p 00002000 fe:4b 502282                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-present.so.0.0.0
+7db910f000-7db9110000 r--p 0000f000 fe:4b 502282                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-present.so.0.0.0
+7db9110000-7db9111000 rw-p 00010000 fe:4b 502282                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-present.so.0.0.0
+7db9120000-7db91a0000 rw-p 00000000 00:00 0 
+7db91a0000-7db93a0000 rwxp 00000000 00:00 0 
+7db93a0000-7db9420000 rw-p 00000000 00:00 0 
+7db9420000-7db9430000 ---p 00000000 00:00 0 
+7db9430000-7db9c30000 rw-p 00000000 00:00 0 
+7db9c30000-7db9c47000 r-xp 00000000 fe:4b 501566                         /data/user/0/com.retrople/files/rootfs/usr/lib/libgcc_s.so.1
+7db9c47000-7db9c5f000 ---p 00017000 fe:4b 501566                         /data/user/0/com.retrople/files/rootfs/usr/lib/libgcc_s.so.1
+7db9c5f000-7db9c60000 r--p 0001f000 fe:4b 501566                         /data/user/0/com.retrople/files/rootfs/usr/lib/libgcc_s.so.1
+7db9c60000-7db9c61000 rw-p 00020000 fe:4b 501566                         /data/user/0/com.retrople/files/rootfs/usr/lib/libgcc_s.so.1
+7db9c70000-7db9e9d000 r-xp 00000000 fe:4b 501605                         /data/user/0/com.retrople/files/rootfs/usr/lib/libstdc++.so.6.0.32
+7db9e9d000-7db9ea5000 ---p 0022d000 fe:4b 501605                         /data/user/0/com.retrople/files/rootfs/usr/lib/libstdc++.so.6.0.32
+7db9ea5000-7db9eb0000 r--p 00235000 fe:4b 501605                         /data/user/0/com.retrople/files/rootfs/usr/lib/libstdc++.so.6.0.32
+7db9eb0000-7db9eb3000 rw-p 00240000 fe:4b 501605                         /data/user/0/com.retrople/files/rootfs/usr/lib/libstdc++.so.6.0.32
+7db9eb3000-7db9eb7000 rw-p 00000000 00:00 0 
+7db9ed0000-7db9ed1000 r-xp 00000000 fe:4b 501654                         /data/user/0/com.retrople/files/rootfs/usr/lib/libX11-xcb.so.1.0.0
+7db9ed1000-7db9eef000 ---p 00001000 fe:4b 501654                         /data/user/0/com.retrople/files/rootfs/usr/lib/libX11-xcb.so.1.0.0
+7db9eef000-7db9ef0000 r--p 0000f000 fe:4b 501654                         /data/user/0/com.retrople/files/rootfs/usr/lib/libX11-xcb.so.1.0.0
+7db9ef0000-7db9ef1000 rw-p 00010000 fe:4b 501654                         /data/user/0/com.retrople/files/rootfs/usr/lib/libX11-xcb.so.1.0.0
+7db9f00000-7db9f03000 r-xp 00000000 fe:4b 501574                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-dri3.so.0.1.0
+7db9f03000-7db9f1f000 ---p 00003000 fe:4b 501574                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-dri3.so.0.1.0
+7db9f1f000-7db9f20000 r--p 0000f000 fe:4b 501574                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-dri3.so.0.1.0
+7db9f20000-7db9f21000 rw-p 00010000 fe:4b 501574                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb-dri3.so.0.1.0
+7db9f30000-7db9f45000 r-xp 00000000 fe:4b 501485                         /data/user/0/com.retrople/files/rootfs/usr/lib/libdrm.so.2.123.0
+7db9f45000-7db9f5f000 ---p 00015000 fe:4b 501485                         /data/user/0/com.retrople/files/rootfs/usr/lib/libdrm.so.2.123.0
+7db9f5f000-7db9f60000 r--p 0001f000 fe:4b 501485                         /data/user/0/com.retrople/files/rootfs/usr/lib/libdrm.so.2.123.0
+7db9f60000-7db9f61000 rw-p 00020000 fe:4b 501485                         /data/user/0/com.retrople/files/rootfs/usr/lib/libdrm.so.2.123.0
+7db9f70000-7dbadc0000 r-xp 00000000 fe:4b 484012                         /data/data/com.retrople/files/rootfs/usr/lib/libvulkan_freedreno.so
+7dbadc0000-7dbadc1000 ---p 00e50000 fe:4b 484012                         /data/data/com.retrople/files/rootfs/usr/lib/libvulkan_freedreno.so
+7dbadc1000-7dbae50000 r--p 00e51000 fe:4b 484012                         /data/data/com.retrople/files/rootfs/usr/lib/libvulkan_freedreno.so
+7dbae50000-7dbae54000 rw-p 00ee0000 fe:4b 484012                         /data/data/com.retrople/files/rootfs/usr/lib/libvulkan_freedreno.so
+7dbae54000-7dbae69000 rw-p 00000000 00:00 0 
+7dbae70000-7dbaf70000 rw-p 00000000 00:00 0 
+7dbaf70000-7dbaff1000 r-xp 00000000 fe:4b 501427                         /data/user/0/com.retrople/files/rootfs/usr/lib/libvulkan.so.1.3.301
+7dbaff1000-7dbb00d000 ---p 00081000 fe:4b 501427                         /data/user/0/com.retrople/files/rootfs/usr/lib/libvulkan.so.1.3.301
+7dbb00d000-7dbb010000 r--p 0008d000 fe:4b 501427                         /data/user/0/com.retrople/files/rootfs/usr/lib/libvulkan.so.1.3.301
+7dbb010000-7dbb011000 rw-p 00090000 fe:4b 501427                         /data/user/0/com.retrople/files/rootfs/usr/lib/libvulkan.so.1.3.301
+7dbb020000-7dbb040000 rwxp 00000000 00:00 0 
+7dbb040000-7dbb0c0000 rw-p 00000000 00:00 0 
+7dbb0c0000-7dbb100000 rwxp 00000000 00:00 0 
+7dbb100000-7dbb680000 rw-p 00000000 00:00 0 
+7dbb680000-7dbb880000 rwxp 00000000 00:00 0 
+7dbb880000-7dbb900000 rw-p 00000000 00:00 0 
+7dbb900000-7dbb920000 rwxp 00000000 00:00 0 
+7dbb920000-7dbb9a0000 rw-p 00000000 00:00 0 
+7dbb9a0000-7dbbc00000 rwxp 00000000 00:00 0 
+7dbbc00000-7dbc021000 rw-p 00000000 00:00 0 
+7dbc021000-7dc0000000 ---p 00000000 00:00 0 
+7dc0000000-7dc0021000 rw-p 00000000 00:00 0 
+7dc0021000-7dc4000000 ---p 00000000 00:00 0 
+7dc4000000-7dc4021000 rw-p 00000000 00:00 0 
+7dc4021000-7dc8000000 ---p 00000000 00:00 0 
+7dc8010000-7dc8210000 rw-p 00000000 00:00 0 
+7dc8210000-7dc8610000 rwxp 00000000 00:00 0 
+7dc8610000-7dc8690000 rw-p 00000000 00:00 0 
+7dc8690000-7dc8710000 rwxp 00000000 00:00 0 
+7dc8710000-7dc8790000 rw-p 00000000 00:00 0 
+7dc8790000-7dc8990000 rwxp 00000000 00:00 0 
+7dc8990000-7dc8a90000 rw-p 00000000 00:00 0 
+7dc8a90000-7dc8ab0000 rwxp 00000000 00:00 0 
+7dc8ab0000-7dc8b30000 rw-p 00000000 00:00 0 
+7dc8b30000-7dc8d30000 rwxp 00000000 00:00 0 
+7dc8d30000-7dc8e30000 rw-p 00000000 00:00 0 
+7dc8e30000-7dc8e50000 rwxp 00000000 00:00 0 
+7dc8e50000-7dc8ed0000 rw-p 00000000 00:00 0 
+7dc8ed0000-7dc8f10000 rwxp 00000000 00:00 0 
+7dc8f10000-7dc9190000 rw-p 00000000 00:00 0 
+7dc9190000-7dc9230000 rwxp 00000000 00:00 0 
+7dc9230000-7dc95b0000 rw-p 00000000 00:00 0 
+7dc95b0000-7dc97b0000 rwxp 00000000 00:00 0 
+7dc97b0000-7dc98b0000 rw-p 00000000 00:00 0 
+7dc98b0000-7dc9ab0000 rwxp 00000000 00:00 0 
+7dc9ab0000-7dc9b30000 rw-p 00000000 00:00 0 
+7dc9b30000-7dc9b50000 rwxp 00000000 00:00 0 
+7dc9b50000-7dc9bf0000 rw-p 00000000 00:00 0 
+7dc9bf0000-7dc9cb0000 rwxp 00000000 00:00 0 
+7dc9cb0000-7dc9d30000 rw-p 00000000 00:00 0 
+7dc9d30000-7dc9d70000 rwxp 00000000 00:00 0 
+7dc9d70000-7dc9f70000 rw-p 00000000 00:00 0 
+7dc9f70000-7dca170000 rwxp 00000000 00:00 0 
+7dca170000-7dca175000 r-xp 00000000 fe:4b 501421                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXfixes.so.3.1.0
+7dca175000-7dca18f000 ---p 00005000 fe:4b 501421                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXfixes.so.3.1.0
+7dca18f000-7dca190000 r--p 0000f000 fe:4b 501421                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXfixes.so.3.1.0
+7dca190000-7dca191000 rw-p 00010000 fe:4b 501421                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXfixes.so.3.1.0
+7dca1a0000-7dca1aa000 r-xp 00000000 fe:4b 502233                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXcursor.so.1.0.2
+7dca1aa000-7dca1bf000 ---p 0000a000 fe:4b 502233                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXcursor.so.1.0.2
+7dca1bf000-7dca1c0000 r--p 0000f000 fe:4b 502233                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXcursor.so.1.0.2
+7dca1c0000-7dca1c1000 rw-p 00010000 fe:4b 502233                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXcursor.so.1.0.2
+7dca1d0000-7dca1d9000 r-xp 00000000 fe:4b 501713                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXrender.so.1.3.0
+7dca1d9000-7dca1ef000 ---p 00009000 fe:4b 501713                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXrender.so.1.3.0
+7dca1ef000-7dca1f0000 r--p 0000f000 fe:4b 501713                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXrender.so.1.3.0
+7dca1f0000-7dca1f1000 rw-p 00010000 fe:4b 501713                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXrender.so.1.3.0
+7dca1fb000-7dca450000 rw-p 00000000 00:00 0 
+7dca450000-7dca460000 r-xp 00000000 fe:4b 501604                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXi.so.6.1.0
+7dca460000-7dca46f000 ---p 00010000 fe:4b 501604                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXi.so.6.1.0
+7dca46f000-7dca470000 r--p 0000f000 fe:4b 501604                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXi.so.6.1.0
+7dca470000-7dca471000 rw-p 00010000 fe:4b 501604                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXi.so.6.1.0
+7dca480000-7dca482000 r-xp 00000000 fe:4b 502285                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXcomposite.so.1.0.0
+7dca482000-7dca49f000 ---p 00002000 fe:4b 502285                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXcomposite.so.1.0.0
+7dca49f000-7dca4a0000 r--p 0000f000 fe:4b 502285                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXcomposite.so.1.0.0
+7dca4a0000-7dca4a1000 rw-p 00010000 fe:4b 502285                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXcomposite.so.1.0.0
+7dca4b0000-7dca530000 rw-p 00000000 00:00 0 
+7dca530000-7dca550000 rwxp 00000000 00:00 0 
+7dca550000-7dca555000 r-xp 00000000 fe:4b 501803                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXdmcp.so.6.0.0
+7dca555000-7dca56f000 ---p 00005000 fe:4b 501803                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXdmcp.so.6.0.0
+7dca56f000-7dca570000 r--p 0000f000 fe:4b 501803                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXdmcp.so.6.0.0
+7dca570000-7dca571000 rw-p 00010000 fe:4b 501803                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXdmcp.so.6.0.0
+7dca580000-7dca583000 r-xp 00000000 fe:4b 502165                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXau.so.6.0.0
+7dca583000-7dca59f000 ---p 00003000 fe:4b 502165                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXau.so.6.0.0
+7dca59f000-7dca5a0000 r--p 0000f000 fe:4b 502165                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXau.so.6.0.0
+7dca5a0000-7dca5a1000 rw-p 00010000 fe:4b 502165                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXau.so.6.0.0
+7dca5b0000-7dca5d8000 r-xp 00000000 fe:4b 502517                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb.so.1.1.0
+7dca5d8000-7dca5ef000 ---p 00028000 fe:4b 502517                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb.so.1.1.0
+7dca5ef000-7dca5f0000 r--p 0002f000 fe:4b 502517                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb.so.1.1.0
+7dca5f0000-7dca5f1000 rw-p 00030000 fe:4b 502517                         /data/user/0/com.retrople/files/rootfs/usr/lib/libxcb.so.1.1.0
+7dca600000-7dca73d000 r-xp 00000000 fe:4b 501846                         /data/user/0/com.retrople/files/rootfs/usr/lib/libX11.so.6.4.0
+7dca73d000-7dca74f000 ---p 0013d000 fe:4b 501846                         /data/user/0/com.retrople/files/rootfs/usr/lib/libX11.so.6.4.0
+7dca74f000-7dca750000 r--p 0013f000 fe:4b 501846                         /data/user/0/com.retrople/files/rootfs/usr/lib/libX11.so.6.4.0
+7dca750000-7dca755000 rw-p 00140000 fe:4b 501846                         /data/user/0/com.retrople/files/rootfs/usr/lib/libX11.so.6.4.0
+7dca760000-7dca772000 r-xp 00000000 fe:4b 502105                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXext.so.6.4.0
+7dca772000-7dca78f000 ---p 00012000 fe:4b 502105                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXext.so.6.4.0
+7dca78f000-7dca790000 r--p 0001f000 fe:4b 502105                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXext.so.6.4.0
+7dca790000-7dca791000 rw-p 00020000 fe:4b 502105                         /data/user/0/com.retrople/files/rootfs/usr/lib/libXext.so.6.4.0
+7dca7a0000-7dca7c0000 rwxp 00000000 00:00 0 
+7dca7c0000-7dca8c0000 rw-p 00000000 00:00 0 
+7dca8c0000-7dcab20000 rwxp 00000000 00:00 0 
+7dcab20000-7dcaba0000 rw-p 00000000 00:00 0 
+7dcaba0000-7dcace0000 rwxp 00000000 00:00 0 
+7dcace0000-7dcad60000 rw-p 00000000 00:00 0 
+7dcad60000-7dcaf60000 rwxp 00000000 00:00 0 
+7dcaf60000-7dcafe0000 rw-p 00000000 00:00 0 
+7dcafe0000-7dcb060000 rwxp 00000000 00:00 0 
+7dcb060000-7dcb0b4000 r-xp 00000000 fe:4b 501674                         /data/user/0/com.retrople/files/rootfs/usr/lib/libhogweed.so.6.9
+7dcb0b4000-7dcb0cf000 ---p 00054000 fe:4b 501674                         /data/user/0/com.retrople/files/rootfs/usr/lib/libhogweed.so.6.9
+7dcb0cf000-7dcb0d0000 r--p 0005f000 fe:4b 501674                         /data/user/0/com.retrople/files/rootfs/usr/lib/libhogweed.so.6.9
+7dcb0d0000-7dcb0d1000 rw-p 00060000 fe:4b 501674                         /data/user/0/com.retrople/files/rootfs/usr/lib/libhogweed.so.6.9
+7dcb0e0000-7dcb12d000 r-xp 00000000 fe:4b 501891                         /data/user/0/com.retrople/files/rootfs/usr/lib/libnettle.so.8.9
+7dcb12d000-7dcb13e000 ---p 0004d000 fe:4b 501891                         /data/user/0/com.retrople/files/rootfs/usr/lib/libnettle.so.8.9
+7dcb13e000-7dcb140000 r--p 0004e000 fe:4b 501891                         /data/user/0/com.retrople/files/rootfs/usr/lib/libnettle.so.8.9
+7dcb140000-7dcb141000 rw-p 00050000 fe:4b 501891                         /data/user/0/com.retrople/files/rootfs/usr/lib/libnettle.so.8.9
+7dcb150000-7dcb38c000 r-xp 00000000 fe:4b 501662                         /data/user/0/com.retrople/files/rootfs/usr/lib/libgnutls.so.30.39.0
+7dcb38c000-7dcb390000 ---p 0023c000 fe:4b 501662                         /data/user/0/com.retrople/files/rootfs/usr/lib/libgnutls.so.30.39.0
+7dcb390000-7dcb3a0000 r--p 00240000 fe:4b 501662                         /data/user/0/com.retrople/files/rootfs/usr/lib/libgnutls.so.30.39.0
+7dcb3a0000-7dcb3a4000 rw-p 00250000 fe:4b 501662                         /data/user/0/com.retrople/files/rootfs/usr/lib/libgnutls.so.30.39.0
+7dcb3a4000-7dcb3a7000 rw-p 00000000 00:00 0 
+7dcb3b0000-7dcb3f0000 rwxp 00000000 00:00 0 
+7dcb3f0000-7dcb470000 rw-p 00000000 00:00 0 
+7dcb470000-7dcb4d0000 rwxp 00000000 00:00 0 
+7dcb4d0000-7dcb550000 rw-p 00000000 00:00 0 
+7dcb550000-7dcb750000 rwxp 00000000 00:00 0 
+7dcb750000-7dcb772000 r-xp 00000000 fe:4b 501619                         /data/user/0/com.retrople/files/rootfs/usr/lib/libexpat.so.1.6.8
+7dcb772000-7dcb78e000 ---p 00022000 fe:4b 501619                         /data/user/0/com.retrople/files/rootfs/usr/lib/libexpat.so.1.6.8
+7dcb78e000-7dcb790000 r--p 0002e000 fe:4b 501619                         /data/user/0/com.retrople/files/rootfs/usr/lib/libexpat.so.1.6.8
+7dcb790000-7dcb791000 rw-p 00030000 fe:4b 501619                         /data/user/0/com.retrople/files/rootfs/usr/lib/libexpat.so.1.6.8
+7dcb7a0000-7dcb7eb000 r-xp 00000000 fe:4b 502052                         /data/user/0/com.retrople/files/rootfs/usr/lib/libfontconfig.so.1.14.0
+7dcb7eb000-7dcb7fe000 ---p 0004b000 fe:4b 502052                         /data/user/0/com.retrople/files/rootfs/usr/lib/libfontconfig.so.1.14.0
+7dcb7fe000-7dcb800000 r--p 0004e000 fe:4b 502052                         /data/user/0/com.retrople/files/rootfs/usr/lib/libfontconfig.so.1.14.0
+7dcb800000-7dcb801000 rw-p 00050000 fe:4b 502052                         /data/user/0/com.retrople/files/rootfs/usr/lib/libfontconfig.so.1.14.0
+7dcb810000-7dcb830000 r-xp 00000000 fe:4b 502533                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbrotlicommon.so.1.1.0
+7dcb830000-7dcb83f000 ---p 00020000 fe:4b 502533                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbrotlicommon.so.1.1.0
+7dcb83f000-7dcb840000 r--p 0002f000 fe:4b 502533                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbrotlicommon.so.1.1.0
+7dcb840000-7dcb841000 rw-p 00030000 fe:4b 502533                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbrotlicommon.so.1.1.0
+7dcb850000-7dcb85a000 r-xp 00000000 fe:4b 501864                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbrotlidec.so.1.1.0
+7dcb85a000-7dcb86f000 ---p 0000a000 fe:4b 501864                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbrotlidec.so.1.1.0
+7dcb86f000-7dcb870000 r--p 0000f000 fe:4b 501864                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbrotlidec.so.1.1.0
+7dcb870000-7dcb871000 rw-p 00010000 fe:4b 501864                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbrotlidec.so.1.1.0
+7dcb880000-7dcb8b3000 r-xp 00000000 fe:4b 501738                         /data/user/0/com.retrople/files/rootfs/usr/lib/libpng16.so.16.44.0
+7dcb8b3000-7dcb8cf000 ---p 00033000 fe:4b 501738                         /data/user/0/com.retrople/files/rootfs/usr/lib/libpng16.so.16.44.0
+7dcb8cf000-7dcb8d0000 r--p 0003f000 fe:4b 501738                         /data/user/0/com.retrople/files/rootfs/usr/lib/libpng16.so.16.44.0
+7dcb8d0000-7dcb8d1000 rw-p 00040000 fe:4b 501738                         /data/user/0/com.retrople/files/rootfs/usr/lib/libpng16.so.16.44.0
+7dcb8e0000-7dcb8f0000 r-xp 00000000 fe:4b 502315                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbz2.so.1.0.8
+7dcb8f0000-7dcb8ff000 ---p 00010000 fe:4b 502315                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbz2.so.1.0.8
+7dcb8ff000-7dcb900000 r--p 0000f000 fe:4b 502315                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbz2.so.1.0.8
+7dcb900000-7dcb901000 rw-p 00010000 fe:4b 502315                         /data/user/0/com.retrople/files/rootfs/usr/lib/libbz2.so.1.0.8
+7dcb910000-7dcb926000 r-xp 00000000 fe:4b 502007                         /data/user/0/com.retrople/files/rootfs/usr/lib/libz.so.1.3.1
+7dcb926000-7dcb93f000 ---p 00016000 fe:4b 502007                         /data/user/0/com.retrople/files/rootfs/usr/lib/libz.so.1.3.1
+7dcb93f000-7dcb940000 r--p 0001f000 fe:4b 502007                         /data/user/0/com.retrople/files/rootfs/usr/lib/libz.so.1.3.1
+7dcb940000-7dcb941000 rw-p 00020000 fe:4b 502007                         /data/user/0/com.retrople/files/rootfs/usr/lib/libz.so.1.3.1
+7dcb950000-7dcb9f8000 r-xp 00000000 fe:4b 502005                         /data/user/0/com.retrople/files/rootfs/usr/lib/libfreetype.so.6.20.2
+7dcb9f8000-7dcba09000 ---p 000a8000 fe:4b 502005                         /data/user/0/com.retrople/files/rootfs/usr/lib/libfreetype.so.6.20.2
+7dcba09000-7dcba10000 r--p 000a9000 fe:4b 502005                         /data/user/0/com.retrople/files/rootfs/usr/lib/libfreetype.so.6.20.2
+7dcba10000-7dcba11000 rw-p 000b0000 fe:4b 502005                         /data/user/0/com.retrople/files/rootfs/usr/lib/libfreetype.so.6.20.2
+7dcba1f000-7dcba9f000 rw-p 00000000 00:00 0 
+7dcba9f000-7dcbb1f000 rwxp 00000000 00:00 0 
+7dcbb1f000-7dcbc1f000 rw-p 00000000 00:00 0 
+7dcbc1f000-7dcbc3f000 rwxp 00000000 00:00 0 
+7dcbc3f000-7dcbcbf000 rw-p 00000000 00:00 0 
+7dcbcbf000-7dcbebf000 rwxp 00000000 00:00 0 
+7dcbebf000-7dcbf3f000 rw-p 00000000 00:00 0 
+7dcbf3f000-7dcbf7f000 rwxp 00000000 00:00 0 
+7dcbf7f000-7dcc07f000 rw-p 00000000 00:00 0 
+7dcc07f000-7dcc09f000 rwxp 00000000 00:00 0 
+7dcc09f000-7dcc19f000 rw-p 00000000 00:00 0 
+7dcc19f000-7dcc39f000 rwxp 00000000 00:00 0 
+7dcc39f000-7dcc49f000 rw-p 00000000 00:00 0 
+7dcc49f000-7dcc4df000 rwxp 00000000 00:00 0 
+7dcc4df000-7dcc55f000 rw-p 00000000 00:00 0 
+7dcc55f000-7dcc5df000 rwxp 00000000 00:00 0 
+7dcc5df000-7dcc65f000 rw-p 00000000 00:00 0 
+7dcc65f000-7dcc85f000 rwxp 00000000 00:00 0 
+7dcc85f000-7dcc95f000 rw-p 00000000 00:00 0 
+7dcc95f000-7dcc97f000 rwxp 00000000 00:00 0 
+7dcc97f000-7dcca7f000 rw-p 00000000 00:00 0 
+7dcca7f000-7dccc7f000 rwxp 00000000 00:00 0 
+7dccc7f000-7dcccff000 rw-p 00000000 00:00 0 
+7dcccff000-7dccf77000 r--p 00000000 fe:4b 501585                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_COLLATE
+7dccf77000-7dccfd0000 r--p 00000000 fe:4b 501638                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_CTYPE
+7dccfd0000-7dccff0000 rwxp 00000000 00:00 0 
+7dccff0000-7dcd070000 rw-p 00000000 00:00 0 
+7dcd070000-7dcd0d0000 rwxp 00000000 00:00 0 
+7dcd0d0000-7dcd0d1000 r-xp 00000000 fe:4b 502302                         /data/user/0/com.retrople/files/rootfs/usr/lib/libpthread.so.0
+7dcd0d1000-7dcd0ef000 ---p 00001000 fe:4b 502302                         /data/user/0/com.retrople/files/rootfs/usr/lib/libpthread.so.0
+7dcd0ef000-7dcd0f0000 r--p 0000f000 fe:4b 502302                         /data/user/0/com.retrople/files/rootfs/usr/lib/libpthread.so.0
+7dcd0f0000-7dcd0f1000 rw-p 00010000 fe:4b 502302                         /data/user/0/com.retrople/files/rootfs/usr/lib/libpthread.so.0
+7dcd200000-7dcda00000 rw-p 00000000 00:00 0 
+7dcda00000-7dcdac0000 rw-p 00000000 00:00 0 
+7dcdac0000-7dcdacd000 r-xp 00000000 fe:4b 415648                         /data/user/0/com.retrople/files/rootfs/usr/lib/libresolv.so.2
+7dcdacd000-7dcdadf000 ---p 0000d000 fe:4b 415648                         /data/user/0/com.retrople/files/rootfs/usr/lib/libresolv.so.2
+7dcdadf000-7dcdae0000 r--p 0000f000 fe:4b 415648                         /data/user/0/com.retrople/files/rootfs/usr/lib/libresolv.so.2
+7dcdae0000-7dcdae1000 rw-p 00010000 fe:4b 415648                         /data/user/0/com.retrople/files/rootfs/usr/lib/libresolv.so.2
+7dcdae1000-7dcdae3000 rw-p 00000000 00:00 0 
+7dcdaf0000-7dcdb73000 r-xp 00000000 fe:4b 502308                         /data/user/0/com.retrople/files/rootfs/usr/lib/libm.so.6
+7dcdb73000-7dcdb8f000 ---p 00083000 fe:4b 502308                         /data/user/0/com.retrople/files/rootfs/usr/lib/libm.so.6
+7dcdb8f000-7dcdb90000 r--p 0008f000 fe:4b 502308                         /data/user/0/com.retrople/files/rootfs/usr/lib/libm.so.6
+7dcdb90000-7dcdb91000 rw-p 00090000 fe:4b 502308                         /data/user/0/com.retrople/files/rootfs/usr/lib/libm.so.6
+7dcdba0000-7dcdd2b000 r-xp 00000000 fe:4b 501683                         /data/user/0/com.retrople/files/rootfs/usr/lib/libc.so.6
+7dcdd2b000-7dcdd3d000 ---p 0018b000 fe:4b 501683                         /data/user/0/com.retrople/files/rootfs/usr/lib/libc.so.6
+7dcdd3d000-7dcdd40000 r--p 0018d000 fe:4b 501683                         /data/user/0/com.retrople/files/rootfs/usr/lib/libc.so.6
+7dcdd40000-7dcdd42000 rw-p 00190000 fe:4b 501683                         /data/user/0/com.retrople/files/rootfs/usr/lib/libc.so.6
+7dcdd42000-7dcdd49000 rw-p 00000000 00:00 0 
+7dcdd55000-7dcdd7c000 r-xp 00000000 fe:4b 502294                         /data/data/com.retrople/files/rootfs/usr/lib/ld-linux-aarch64.so.1
+7dcdd80000-7dcdd81000 r--p 00000000 fe:4b 501520                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_NUMERIC
+7dcdd81000-7dcdd82000 r--p 00000000 fe:4b 501710                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_TIME
+7dcdd82000-7dcdd83000 r--p 00000000 fe:4b 501632                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_MONETARY
+7dcdd83000-7dcdd84000 r--p 00000000 fe:4b 501473                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_MESSAGES/SYS_LC_MESSAGES
+7dcdd84000-7dcdd85000 r--p 00000000 fe:4b 501712                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_PAPER
+7dcdd85000-7dcdd86000 r--p 00000000 fe:4b 501631                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_NAME
+7dcdd86000-7dcdd87000 r--p 00000000 fe:4b 501625                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_ADDRESS
+7dcdd87000-7dcdd88000 r--p 00000000 fe:4b 501509                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_TELEPHONE
+7dcdd88000-7dcdd89000 r--p 00000000 fe:4b 501636                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_MEASUREMENT
+7dcdd89000-7dcdd8a000 r--p 00000000 fe:4b 501425                         /data/data/com.retrople/files/rootfs/usr/lib/locale/en_US.utf8/LC_IDENTIFICATION
+7dcdd8a000-7dcdd90000 rw-p 00000000 00:00 0 
+7dcdd90000-7dcdd92000 r--p 00000000 00:00 0                              [vvar]
+7dcdd92000-7dcdd93000 r-xp 00000000 00:00 0                              [vdso]
+7dcdd93000-7dcdd95000 r--p 0002e000 fe:4b 502294                         /data/data/com.retrople/files/rootfs/usr/lib/ld-linux-aarch64.so.1
+7dcdd95000-7dcdd97000 rw-p 00030000 fe:4b 502294                         /data/data/com.retrople/files/rootfs/usr/lib/ld-linux-aarch64.so.1
+7fec862000-7fec885000 rw-p 00000000 00:00 0                              [stack]
+7fffeb0000-7fffec0000 r-xp 00000000 fe:4b 350154                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/win32u.dll
+7fffec0000-7fffecb000 rwxp 00010000 fe:4b 350154                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/win32u.dll
+7fffecb000-7fffedc000 r-xp 0001b000 fe:4b 350154                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/win32u.dll
+7fffedc000-7fffedd000 rwxp 00000000 00:00 0 
+7fffedd000-7fffeeb000 r-xp 0002c000 fe:4b 350154                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/win32u.dll
+7fffeeb000-7fffeec000 rwxp 0003a000 fe:4b 350154                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/win32u.dll
+7fffeec000-7fffeed000 r-xp 0003b000 fe:4b 350154                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/win32u.dll
+7fffef0000-7fffefd000 r-xp 00000000 fe:4b 358641                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64win.dll
+7fffefd000-7fffeff000 rwxp 0000d000 fe:4b 358641                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64win.dll
+7fffeff000-7ffff05000 r-xp 0000f000 fe:4b 358641                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64win.dll
+7ffff05000-7ffff0b000 rwxp 00015000 fe:4b 358641                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64win.dll
+7ffff0b000-7ffff0c000 r-xp 0001b000 fe:4b 358641                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64win.dll
+7ffff10000-7ffff26000 r-xp 00000000 fe:4b 362274                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64.dll
+7ffff26000-7ffff28000 rwxp 00016000 fe:4b 362274                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64.dll
+7ffff28000-7ffff2d000 r-xp 00018000 fe:4b 362274                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64.dll
+7ffff2d000-7ffff2e000 rwxp 00000000 00:00 0 
+7ffff2e000-7ffff2f000 r-xp 0001d000 fe:4b 362274                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64.dll
+7ffff2f000-7ffff32000 rwxp 0001e000 fe:4b 362274                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64.dll
+7ffff32000-7ffff33000 r-xp 00021000 fe:4b 362274                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/wow64.dll
+7ffff40000-7ffffb1000 r-xp 00000000 fe:4b 356425                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/ntdll.dll
+7ffffb1000-7ffffb5000 rwxp 00071000 fe:4b 356425                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/ntdll.dll
+7ffffb5000-7ffffda000 r-xp 00075000 fe:4b 356425                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/ntdll.dll
+7ffffda000-7ffffde000 rwxp 00000000 00:00 0 
+7ffffde000-7ffffe9000 r-xp 0009a000 fe:4b 356425                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/ntdll.dll
+7ffffe9000-7ffffea000 rwxp 000a5000 fe:4b 356425                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/ntdll.dll
+7ffffea000-7ffffec000 r-xp 000a6000 fe:4b 356425                         /data/user/0/com.retrople/files/rootfs/opt/wine/lib/wine/x86_64-windows/ntdll.dll

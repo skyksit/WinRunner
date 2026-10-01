@@ -42,6 +42,7 @@ import com.winlator.bridge.GameLaunchActivity;
 import com.winlator.bridge.SaveSync;
 import com.winlator.cheat.CheatSearchDialog;
 import com.winlator.cheat.CheatSession;
+import com.winlator.cheat.CheatStore;
 import com.winlator.container.AudioDrivers;
 import com.winlator.container.Container;
 import com.winlator.container.ContainerManager;
@@ -214,6 +215,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         menu.findItem(R.id.menu_item_change_disc).setVisible(cdPaths != null && cdPaths.length > 1);
         // The caller decides (DGPlayer: premium). Launches from our own UI never show it.
         menu.findItem(R.id.menu_item_cheat_search).setVisible(getIntent().getBooleanExtra(CheatSession.EXTRA_CHEAT_SEARCH, false));
+        // Saved cheats apply from the start of the game, without the dialog ever being opened.
+        if (getIntent().getBooleanExtra(CheatSession.EXTRA_CHEAT_SEARCH, false) && getIntent().hasExtra(CheatStore.EXTRA_CHEATS_URI)) {
+            getCheatSession();
+        }
         navigationView.setNavigationItemSelectedListener(this);
 
         rootFS = RootFS.find(this);
@@ -592,8 +597,15 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             AppUtils.showToast(this, R.string.cheat_not_available);
             return;
         }
-        if (cheatSession == null) cheatSession = new CheatSession(getIntent().getStringExtra("exec_path"));
-        (new CheatSearchDialog(this, cheatSession)).show();
+        (new CheatSearchDialog(this, getCheatSession())).show();
+    }
+
+    private CheatSession getCheatSession() {
+        if (cheatSession == null) {
+            cheatSession = new CheatSession(getIntent().getStringExtra("exec_path"),
+                    CheatStore.from(this, getIntent().getParcelableExtra(CheatStore.EXTRA_CHEATS_URI)));
+        }
+        return cheatSession;
     }
 
     /** DGPlayer VPAD camera button: the game image (letterbox cropped) goes to the phone's gallery. */

@@ -35,6 +35,9 @@ public class CheatSearchDialog extends ContentDialog {
     private final LinearLayout llResults;
     private final LinearLayout llCheats;
     private final TextView tvCheatsTitle;
+    private final LinearLayout llSaved;
+    private final TextView tvSavedTitle;
+    private final android.widget.Button btSaveAll;
     private final View btStartSearch;
     private final View btExact;
     private final View llCompare;
@@ -57,6 +60,9 @@ public class CheatSearchDialog extends ContentDialog {
         llResults = findViewById(R.id.LLResults);
         llCheats = findViewById(R.id.LLCheats);
         tvCheatsTitle = findViewById(R.id.TVCheatsTitle);
+        llSaved = findViewById(R.id.LLSaved);
+        tvSavedTitle = findViewById(R.id.TVSavedTitle);
+        btSaveAll = findViewById(R.id.BTSaveAll);
 
         sValueSize.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, new String[]{
             context.getString(R.string.cheat_size_4),
@@ -88,6 +94,10 @@ public class CheatSearchDialog extends ContentDialog {
         loadProcesses();
         restoreState();
         refreshCheats();
+        refreshSaved();
+        // Saved cheats change status on their own (found once the game is loaded).
+        session.setSavedListener(this::refreshSaved);
+        setOnDismissListener(dialog -> session.setSavedListener(null));
     }
 
     private void loadProcesses() {
@@ -178,6 +188,7 @@ public class CheatSearchDialog extends ContentDialog {
 
     private void showResults() {
         llResults.removeAllViews();
+        btSaveAll.setVisibility(View.GONE);
         MemoryScanner scanner = session.getScanner();
         if (scanner == null) return;
 
@@ -203,8 +214,13 @@ public class CheatSearchDialog extends ContentDialog {
                 String text = String.format(Locale.ROOT, "0x%08X  =  %s", address,
                         ok[i] ? MemoryScanner.format(size, value) : "?");
                 TextView row = createRow(text);
-                row.setOnClickListener(v -> editValue(pid, address, size, value, false));
+                row.setOnClickListener(v -> editValue(pid, new long[]{address}, size, value, false));
                 llResults.addView(row);
+            }
+            if (session.canSave() && addresses.length >= 2 && addresses.length <= CheatSession.MAX_SAVED_TARGETS) {
+                btSaveAll.setText(getContext().getString(R.string.cheat_save_all, addresses.length));
+                btSaveAll.setVisibility(View.VISIBLE);
+                btSaveAll.setOnClickListener(v -> editValue(pid, addresses, size, values[0], false));
             }
         });
     }
@@ -219,9 +235,10 @@ public class CheatSearchDialog extends ContentDialog {
 
             String text = String.format(Locale.ROOT, "0x%08X  =  %s", cheat.address, MemoryScanner.format(cheat.size, cheat.value));
             if (cheat.failed) text += "  " + getContext().getString(R.string.cheat_lost);
+            else if (cheat.displaced) text += "  " + getContext().getString(R.string.cheat_displaced);
             TextView label = createRow(text);
             label.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-            label.setOnClickListener(v -> editValue(cheat.pid, cheat.address, cheat.size, cheat.value, cheat.frozen));
+            label.setOnClickListener(v -> editValue(cheat.pid, new long[]{cheat.address}, cheat.size, cheat.value, cheat.frozen));
             row.addView(label);
 
             CheckBox freeze = new CheckBox(getContext());
@@ -241,30 +258,158 @@ public class CheatSearchDialog extends ContentDialog {
         }
     }
 
-    private void editValue(int pid, long address, int size, long current, boolean frozen) {
+    /**
+     * Sets the value at {@code addresses} (all of them together: some games keep a value in
+     * several copies), optionally saving it to the game.
+     */
+    private void editValue(int pid, long[] addresses, int size, long current, boolean frozen) {
         ContentDialog dialog = new ContentDialog(getContext(), R.layout.cheat_value_dialog);
-        dialog.setTitle(String.format(Locale.ROOT, "0x%08X", address));
+        dialog.setTitle(addresses.length == 1 ? String.format(Locale.ROOT, "0x%08X", addresses[0])
+                : getContext().getString(R.string.cheat_save_all, addresses.length));
         EditText etCheatValue = dialog.findViewById(R.id.ETCheatValue);
         CheckBox cbFreeze = dialog.findViewById(R.id.CBFreeze);
+        CheckBox cbSave = dialog.findViewById(R.id.CBSaveToGame);
+        EditText etName = dialog.findViewById(R.id.ETCheatName);
         etCheatValue.setText(MemoryScanner.format(size, current));
         cbFreeze.setChecked(frozen);
+        if (session.canSave()) {
+            cbSave.setVisibility(View.VISIBLE);
+            // Change-all-together is there to be saved.
+            cbSave.setChecked(addresses.length > 1);
+            etName.setVisibility(cbSave.isChecked() ? View.VISIBLE : View.GONE);
+            cbSave.setOnCheckedChangeListener((button, checked) -> etName.setVisibility(checked ? View.VISIBLE : View.GONE));
+        }
 
         dialog.setOnConfirmCallback(() -> {
-            long value;
-            try {
-                value = Long.parseLong(etCheatValue.getText().toString().trim());
-            }
-            catch (NumberFormatException e) {
-                AppUtils.showToast(getContext(), R.string.cheat_enter_value);
+            Long value = parseNumber(etCheatValue);
+            if (value == null) return;
+            if (cbSave.getVisibility() == View.VISIBLE && cbSave.isChecked()) {
+                String name = etName.getText().toString().trim();
+                if (name.isEmpty()) name = String.format(Locale.ROOT, "0x%08X", addresses[0]);
+                saveCheat(name, pid, addresses, size, value, cbFreeze.isChecked());
                 return;
             }
-            session.setValue(pid, address, size, value, cbFreeze.isChecked(), error -> {
-                if (error != null) AppUtils.showToast(getContext(), getContext().getString(R.string.cheat_write_failed, error));
-                refreshCheats();
-                showResults();
-            });
+            final int[] left = {addresses.length};
+            for (long address : addresses) {
+                session.setValue(pid, address, size, value, cbFreeze.isChecked(), error -> {
+                    if (error != null) AppUtils.showToast(getContext(), getContext().getString(R.string.cheat_write_failed, error));
+                    if (--left[0] > 0) return;
+                    refreshCheats();
+                    showResults();
+                });
+            }
         });
         dialog.show();
+    }
+
+    private Long parseNumber(EditText editText) {
+        try {
+            return Long.parseLong(editText.getText().toString().trim());
+        }
+        catch (NumberFormatException e) {
+            AppUtils.showToast(getContext(), R.string.cheat_enter_value);
+            return null;
+        }
+    }
+
+    /** Runs the pointer scan behind a progress dialog that can cancel it. */
+    private void saveCheat(String name, int pid, long[] addresses, int size, long value, boolean freeze) {
+        ContentDialog progressDialog = new ContentDialog(getContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle(R.string.cheat_saved_title);
+        progressDialog.setMessage(getContext().getString(R.string.cheat_saving, 0, new PointerScanner.Options().maxDepth));
+        progressDialog.findViewById(R.id.BTConfirm).setVisibility(View.GONE);
+        final boolean[] cancelled = {false};
+        progressDialog.setOnCancelCallback(() -> cancelled[0] = true);
+        progressDialog.show();
+
+        PointerScanner.Progress progress = new PointerScanner.Progress() {
+            @Override
+            public void update(int done, int total) {
+                tvStatus.post(() -> progressDialog.setMessage(getContext().getString(R.string.cheat_saving, done, total)));
+            }
+
+            @Override
+            public boolean isCancelled() {
+                return cancelled[0];
+            }
+        };
+        session.saveCheat(name, pid, addresses, size, value, freeze, progress, (saved, sessionOnly, error) -> {
+            if (progressDialog.isShowing()) progressDialog.dismiss();
+            if (cancelled[0]) return;
+            if (error != null) AppUtils.showToast(getContext(), getContext().getString(R.string.cheat_save_failed, error));
+            else if (saved == 0) AppUtils.showToast(getContext(), R.string.cheat_saved_none);
+            else if (sessionOnly > 0) AppUtils.showToast(getContext(), getContext().getString(R.string.cheat_saved_partial, saved, sessionOnly));
+            else AppUtils.showToast(getContext(), R.string.cheat_saved_result);
+            refreshCheats();
+            showResults();
+            refreshSaved();
+        });
+    }
+
+    private void refreshSaved() {
+        llSaved.removeAllViews();
+        List<SavedCheats.Cheat> saved = session.getSaved();
+        tvSavedTitle.setVisibility(saved.isEmpty() ? View.GONE : View.VISIBLE);
+        for (SavedCheats.Cheat cheat : saved) {
+            LinearLayout row = new LinearLayout(getContext());
+            row.setOrientation(LinearLayout.HORIZONTAL);
+
+            String text = cheat.name + "  =  " + MemoryScanner.format(cheat.size, cheat.value)
+                    + "  (" + getContext().getString(statusText(session.statusOf(cheat))) + ")";
+            TextView label = createRow(text);
+            label.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            label.setOnClickListener(v -> editSaved(cheat));
+            row.addView(label);
+
+            CheckBox enabled = new CheckBox(getContext());
+            enabled.setText(R.string.cheat_enabled);
+            enabled.setChecked(cheat.enabled);
+            enabled.setOnCheckedChangeListener((button, checked) -> session.updateSaved(cheat, cheat.name, cheat.value, cheat.freeze, checked));
+            row.addView(enabled);
+
+            CheckBox freeze = new CheckBox(getContext());
+            freeze.setText(R.string.cheat_freeze);
+            freeze.setChecked(cheat.freeze);
+            freeze.setOnCheckedChangeListener((button, checked) -> session.updateSaved(cheat, cheat.name, cheat.value, checked, cheat.enabled));
+            row.addView(freeze);
+
+            TextView remove = createRow("✕");
+            remove.setOnClickListener(v -> ContentDialog.confirm(getContext(), R.string.cheat_delete_saved, () -> session.deleteSaved(cheat)));
+            row.addView(remove);
+
+            llSaved.addView(row);
+        }
+    }
+
+    private void editSaved(SavedCheats.Cheat cheat) {
+        ContentDialog dialog = new ContentDialog(getContext(), R.layout.cheat_value_dialog);
+        dialog.setTitle(cheat.name);
+        EditText etCheatValue = dialog.findViewById(R.id.ETCheatValue);
+        CheckBox cbFreeze = dialog.findViewById(R.id.CBFreeze);
+        EditText etName = dialog.findViewById(R.id.ETCheatName);
+        etCheatValue.setText(MemoryScanner.format(cheat.size, cheat.value));
+        cbFreeze.setChecked(cheat.freeze);
+        etName.setVisibility(View.VISIBLE);
+        etName.setText(cheat.name);
+
+        dialog.setOnConfirmCallback(() -> {
+            Long value = parseNumber(etCheatValue);
+            if (value == null) return;
+            String name = etName.getText().toString().trim();
+            session.updateSaved(cheat, name.isEmpty() ? cheat.name : name, value, cbFreeze.isChecked(), true);
+        });
+        dialog.show();
+    }
+
+    private static int statusText(CheatSession.Status status) {
+        switch (status) {
+            case OFF: return R.string.cheat_status_off;
+            case ACTIVE: return R.string.cheat_status_active;
+            case NOT_FOUND: return R.string.cheat_status_not_found;
+            case OTHER_VERSION: return R.string.cheat_status_other_version;
+            default: return R.string.cheat_status_waiting;
+        }
     }
 
     private TextView createRow(String text) {

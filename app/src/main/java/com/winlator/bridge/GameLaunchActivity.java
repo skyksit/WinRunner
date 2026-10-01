@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.winlator.MainActivity;
 import com.winlator.R;
 import com.winlator.cheat.CheatSession;
+import com.winlator.cheat.CheatStore;
 import com.winlator.XServerDisplayActivity;
 import com.winlator.box64.Box64Preset;
 import com.winlator.container.AudioDrivers;
@@ -341,6 +342,9 @@ public class GameLaunchActivity extends AppCompatActivity {
         intent.putExtra("force_fullscreen", forceFullscreen);
         // Premium gate lives in the caller; absent means no cheat menu (CheatSession.EXTRA_CHEAT_SEARCH).
         intent.putExtra(CheatSession.EXTRA_CHEAT_SEARCH, getIntent().getBooleanExtra(CheatSession.EXTRA_CHEAT_SEARCH, false));
+        // Saved cheats; DGPlayer only sends it with the gate above open (CheatStore.EXTRA_CHEATS_URI).
+        Uri cheatsUri = getIntent().getParcelableExtra(CheatStore.EXTRA_CHEATS_URI);
+        if (cheatsUri != null) intent.putExtra(CheatStore.EXTRA_CHEATS_URI, cheatsUri);
         if (cdDiscs != null) {
             intent.putExtra("cd_paths", cdDiscs[0]);
             intent.putExtra("cd_labels", cdDiscs[1]);

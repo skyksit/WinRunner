@@ -158,8 +158,31 @@
             android:layout_marginTop="8dp"
             android:textStyle="bold" />
 
+        <!-- A value kept in several copies (Diablo II's gold) only changes when all of them do. -->
+        <Button
+            style="@style/ButtonNeutral"
+            android:id="@+id/BTSaveAll"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/LLResults"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/TVSavedTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:text="@string/cheat_saved_title" />
+
+        <LinearLayout
+            android:id="@+id/LLSaved"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />

@@ -16,4 +16,23 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/cheat_freeze" />
+
+    <!-- Shown only when the launch can save cheats (DGPlayer sent its cheats file). -->
+    <CheckBox
+        android:id="@+id/CBSaveToGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        android:text="@string/cheat_save_to_game" />
+
+    <EditText
+        style="@style/EditText"
+        android:id="@+id/ETCheatName"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        android:hint="@string/cheat_name_hint"
+        android:inputType="text"
+        android:maxLength="40"
+        android:imeOptions="actionDone" />
 </LinearLayout>

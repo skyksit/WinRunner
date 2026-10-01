@@ -60,7 +60,9 @@ android {
         // 49: Cheat Search in the drawer (value search + freeze over /proc/<pid>/mem), shown only
         //     when the caller sends cheat_search=true (DGPlayer: premium). KEY_DGP_CHEAT opens it from
         //     a controls layout (DGPlayer VPAD "Cheat").
-        versionCode 49
+        // 50: Saved cheats - pointer chains from the game's image + a tag check, kept in the file
+        //     DGPlayer sends as cheats_uri and applied again on the next run.
+        versionCode 50
         versionName "11.6"
     }
 
@@ -187,4 +189,7 @@ dependencies {
     implementation 'org.tukaani:xz:1.7'
     implementation 'org.apache.commons:commons-compress:1.20'
     implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
+    testImplementation 'junit:junit:4.13.2'
+    // android.jar's org.json is a stub on the JVM; SavedCheatsTest needs the real one.
+    testImplementation 'org.json:json:20231013'
 }

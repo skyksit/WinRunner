@@ -1,10 +1,7 @@
 package com.winlator.cheat;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +26,6 @@ import java.util.List;
 public final class MemoryScanner {
     public enum Compare {EXACT, INCREASED, DECREASED, UNCHANGED, CHANGED}
 
-    private static final long LIMIT_4G = 0x1_0000_0000L;
     private static final int CHUNK = 1 << 20;
     /** Reads for a later pass are grouped into windows this big, so dense candidates cost one read. */
     private static final int WINDOW = 64 * 1024;
@@ -78,20 +74,7 @@ public final class MemoryScanner {
 
     /** Every writable mapping below 4 GB, as {start, end} pairs in ascending order. */
     private List<long[]> writableRegions() throws IOException {
-        List<long[]> regions = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("/proc/"+pid+"/maps"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] fields = line.split("\\s+", 6);
-                if (fields.length < 2 || fields[1].length() < 2 || fields[1].charAt(0) != 'r' || fields[1].charAt(1) != 'w') continue;
-                String[] range = fields[0].split("-");
-                long start = Long.parseUnsignedLong(range[0], 16);
-                long end = Long.parseUnsignedLong(range[1], 16);
-                if (start >= LIMIT_4G) continue;
-                regions.add(new long[]{start, Math.min(end, LIMIT_4G)});
-            }
-        }
-        return regions;
+        return ProcessMaps.writableBelow4G(ProcessMaps.read(pid));
     }
 
     /** Starts a new search: every aligned location of {@code size} bytes that holds {@code value}. */
