@@ -394,6 +394,7 @@
     <string name="cheat_size_1">1 byte</string>
     <string name="cheat_value_hint">Current value</string>
     <string name="cheat_new_search">New search</string>
+    <string name="cheat_start_search">Start search with this value</string>
     <string name="cheat_compare_exact">= Value</string>
     <string name="cheat_compare_increased">Increased</string>
     <string name="cheat_compare_decreased">Decreased</string>
@@ -406,9 +407,9 @@
     <string name="cheat_candidates">%1$d candidates.</string>
     <string name="cheat_truncated">Too many matches - only the first ones are kept.</string>
     <string name="cheat_narrow_down">Change the value in the game, then search again to narrow them down.</string>
-    <string name="cheat_no_match">No matches. Start a new search.</string>
+    <string name="cheat_no_match">No matches. Press New search to start over.</string>
     <string name="cheat_no_process">The game process was not found.</string>
-    <string name="cheat_start_hint">Enter the value shown in the game and press New search.</string>
+    <string name="cheat_start_hint">Enter the value shown in the game and press Start search.</string>
     <string name="cheat_enter_value">Enter a number.</string>
     <string name="cheat_search_failed">Search failed: %1$s</string>
     <string name="cheat_write_failed">Could not change the value: %1$s</string>

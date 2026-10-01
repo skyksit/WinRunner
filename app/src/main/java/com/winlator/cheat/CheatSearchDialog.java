@@ -35,6 +35,10 @@ public class CheatSearchDialog extends ContentDialog {
     private final LinearLayout llResults;
     private final LinearLayout llCheats;
     private final TextView tvCheatsTitle;
+    private final View btStartSearch;
+    private final View btExact;
+    private final View llCompare;
+    private final View btNewSearch;
     private final View[] searchButtons;
     private List<ProcessHelper.PStat> processes;
     private boolean busy;
@@ -60,15 +64,18 @@ public class CheatSearchDialog extends ContentDialog {
             context.getString(R.string.cheat_size_1)
         }));
 
-        View btNewSearch = findViewById(R.id.BTNewSearch);
-        View btExact = findViewById(R.id.BTExact);
+        btStartSearch = findViewById(R.id.BTStartSearch);
+        btExact = findViewById(R.id.BTExact);
+        llCompare = findViewById(R.id.LLCompare);
+        btNewSearch = findViewById(R.id.BTNewSearch);
         View btIncreased = findViewById(R.id.BTIncreased);
         View btDecreased = findViewById(R.id.BTDecreased);
         View btUnchanged = findViewById(R.id.BTUnchanged);
         View btChanged = findViewById(R.id.BTChanged);
-        searchButtons = new View[]{btNewSearch, btExact, btIncreased, btDecreased, btUnchanged, btChanged};
+        searchButtons = new View[]{btStartSearch, btExact, btIncreased, btDecreased, btUnchanged, btChanged, btNewSearch};
 
-        btNewSearch.setOnClickListener(v -> newSearch());
+        btStartSearch.setOnClickListener(v -> startSearch());
+        btNewSearch.setOnClickListener(v -> resetSearch());
         btExact.setOnClickListener(v -> {
             Long value = parseValue();
             if (value != null) nextSearch(MemoryScanner.Compare.EXACT, value);
@@ -102,13 +109,14 @@ public class CheatSearchDialog extends ContentDialog {
         MemoryScanner scanner = session.getScanner();
         if (scanner == null) {
             setStatus(getContext().getString(processes.isEmpty() ? R.string.cheat_no_process : R.string.cheat_start_hint));
-            updateButtons();
+            applyMode();
             return;
         }
         for (int i = 0; i < VALUE_SIZES.length; i++) {
             if (VALUE_SIZES[i] == scanner.getValueSize()) sValueSize.setSelection(i);
         }
         showResults();
+        applyMode();
     }
 
     private Long parseValue() {
@@ -122,7 +130,7 @@ public class CheatSearchDialog extends ContentDialog {
         }
     }
 
-    private void newSearch() {
+    private void startSearch() {
         Long value = parseValue();
         if (value == null) return;
         int position = sProcess.getSelectedItemPosition();
@@ -139,6 +147,19 @@ public class CheatSearchDialog extends ContentDialog {
             setBusy(false);
             if (error != null) setStatus(getContext().getString(R.string.cheat_search_failed, error));
             else showResults();
+            applyMode();
+        });
+    }
+
+    /** Drops the candidates and goes back to the start screen. Held values are kept. */
+    private void resetSearch() {
+        setBusy(true);
+        session.resetSearch(error -> {
+            setBusy(false);
+            llResults.removeAllViews();
+            setStatus(getContext().getString(R.string.cheat_start_hint));
+            applyMode();
+            etValue.requestFocus();
         });
     }
 
@@ -270,12 +291,26 @@ public class CheatSearchDialog extends ContentDialog {
         updateButtons();
     }
 
-    private void updateButtons() {
+    /**
+     * Before a search only the start button is shown; once it runs, "= Value" takes its place
+     * beside the input (the button pressed over and over) and starting over moves below the
+     * narrowing buttons. Same split as DGPlayer's in-game memory search.
+     */
+    private void applyMode() {
         boolean started = session.getScanner() != null;
-        for (int i = 0; i < searchButtons.length; i++) {
-            // The new search button is always usable; the narrowing ones need a search to narrow.
-            searchButtons[i].setEnabled(!busy && (i == 0 || started));
-            searchButtons[i].setAlpha(searchButtons[i].isEnabled() ? 1.0f : 0.5f);
+        btStartSearch.setVisibility(started ? View.GONE : View.VISIBLE);
+        btExact.setVisibility(started ? View.VISIBLE : View.GONE);
+        llCompare.setVisibility(started ? View.VISIBLE : View.GONE);
+        // The process and value size belong to the search in progress.
+        sProcess.setEnabled(!started);
+        sValueSize.setEnabled(!started);
+        updateButtons();
+    }
+
+    private void updateButtons() {
+        for (View button : searchButtons) {
+            button.setEnabled(!busy);
+            button.setAlpha(busy ? 0.5f : 1.0f);
         }
     }
 }

@@ -129,8 +129,8 @@ public final class CheatSession {
         }, result);
     }
 
-    public void resetSearch() {
-        submit(() -> scanner = null, null);
+    public void resetSearch(Result result) {
+        submit(() -> scanner = null, result);
     }
 
     /** Reads the listed candidates' current values off the UI thread. */

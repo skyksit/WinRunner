@@ -66,29 +66,35 @@
                 android:inputType="numberSigned"
                 android:imeOptions="actionDone" />
 
+            <!-- Shown once a search is running: this is the button pressed over and over to narrow
+                 the candidates, so it is the one that stands out. -->
             <Button
                 style="@style/ButtonPositive"
-                android:id="@+id/BTNewSearch"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:text="@string/cheat_new_search" />
+                android:id="@+id/BTExact"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/cheat_compare_exact" />
         </LinearLayout>
+
+        <!-- Shown before a search: the only way to begin. -->
+        <Button
+            style="@style/ButtonPositive"
+            android:id="@+id/BTStartSearch"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:text="@string/cheat_start_search" />
+
+        <LinearLayout
+            android:id="@+id/LLCompare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="8dp">
-
-            <Button
-                style="@style/ButtonNeutral"
-                android:id="@+id/BTExact"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_marginRight="4dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:text="@string/cheat_compare_exact" />
 
             <Button
                 style="@style/ButtonNeutral"
@@ -134,6 +140,15 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:text="@string/cheat_compare_changed" />
+        </LinearLayout>
+
+        <!-- Starting over is rare, so it sits apart from the narrowing buttons. -->
+        <Button
+            style="@style/ButtonNeutral"
+            android:id="@+id/BTNewSearch"
+            android:layout_width="match_parent"
+            android:layout_marginTop="12dp"
+            android:text="@string/cheat_new_search" />
         </LinearLayout>
 
         <TextView
