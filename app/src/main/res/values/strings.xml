@@ -406,10 +406,10 @@
     <string name="cheat_displaced">(another value moved in - paused)</string>
     <string name="cheat_saved_title">Saved cheats</string>
     <string name="cheat_save_to_game">Save to this game (applied again next time)</string>
-    <string name="cheat_name_hint">Name (e.g. Gold)</string>
+    <string name="cheat_name_hint">Name (e.g. Gold - Amazon)</string>
     <string name="cheat_save_all">Change all %1$d together and save</string>
     <string name="cheat_saving">Looking for paths to the value… (%1$d/%2$d)</string>
-    <string name="cheat_saved_result">Saved. It is found again the next time you play.</string>
+    <string name="cheat_saved_result">Saved. It is found again the next time you play. Some games keep the value somewhere else for another character or save - save it again there.</string>
     <string name="cheat_saved_partial">Saved %1$d of them. %2$d are only held for this session (no path to them was found).</string>
     <string name="cheat_saved_none">No path to this value was found, so it cannot be saved. It stays changed for this session.</string>
     <string name="cheat_save_failed">Could not save: %1$s</string>
@@ -417,7 +417,7 @@
     <string name="cheat_status_off">off</string>
     <string name="cheat_status_waiting">waiting for the game</string>
     <string name="cheat_status_active">active</string>
-    <string name="cheat_status_not_found">not found now</string>
+    <string name="cheat_status_not_found">not in this game right now</string>
     <string name="cheat_status_other_version">another version of the game</string>
     <string name="cheat_delete_saved">Delete this saved cheat?</string>
     <string name="cheat_searching">Searching…</string>
