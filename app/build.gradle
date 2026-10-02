@@ -62,7 +62,9 @@ android {
         //     a controls layout (DGPlayer VPAD "Cheat").
         // 50: Saved cheats - pointer chains from the game's image + a tag check, kept in the file
         //     DGPlayer sends as cheats_uri and applied again on the next run.
-        versionCode 50
+        // 51: 15 UI languages like dsam3 (de, es, fr, in, it, ja, ko, pl, pt, ru, th, tr, vi,
+        //     zh-CN, zh-TW); pt/ru gain the Cheat Search, DGP, speed and vibration strings.
+        versionCode 51
         versionName "11.6"
     }
 
