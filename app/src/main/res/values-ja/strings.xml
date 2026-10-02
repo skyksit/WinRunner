@@ -373,4 +373,16 @@
     <string name="cheat_search_failed">検索に失敗しました: %1$s</string>
     <string name="cheat_write_failed">値を変更できませんでした: %1$s</string>
     <string name="cheat_search_help">ゲームに表示されている数値を検索し、ゲーム内でその値を変化させて（ゴールドを拾う、体力を減らすなど）、アドレスが数件になるまで再検索します。その後アドレスをタップして値を変更または固定します。変更はこのセッション中のみ有効です。ゲームによっては値を複数コピーしたり移動したりするため、固定した値が効かなくなることがあります。その場合は再検索してください。ゲームの許容範囲を超える値（キャラクターが持てる以上のゴールドなど）は、表示だけが変わったり、ゲームが不正な状態になったりすることがあります。</string>
+    <string name="update_available">アップデートがあります</string>
+    <string name="update_now">アップデート</string>
+    <string name="later">後で</string>
+    <string name="skip_this_version">このバージョンは通知しない</string>
+    <string name="up_to_date">最新バージョンです。</string>
+    <string name="update_check_failed">アップデートを確認できませんでした。</string>
+    <string name="update_download_failed">ダウンロードに失敗しました。</string>
+    <string name="update_verify_failed">ダウンロードしたファイルが破損しています。もう一度お試しください。</string>
+    <string name="update_install_failed">インストーラーを起動できませんでした。</string>
+    <string name="allow_unknown_sources_hint">アップデートをインストールするには、次の画面でこのアプリに不明なアプリのインストールを許可してから戻ってください。</string>
+    <string name="check_for_updates">アップデートを確認</string>
+    <string name="auto_check_updates">自動でアップデートを確認</string>
 </resources>

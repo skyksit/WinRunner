@@ -373,4 +373,16 @@
     <string name="cheat_search_failed">Error en la búsqueda: %1$s</string>
     <string name="cheat_write_failed">No se pudo cambiar el valor: %1$s</string>
     <string name="cheat_search_help">Busca el número que muestra el juego, cámbialo en el juego (recoge oro, pierde salud) y vuelve a buscar hasta que queden pocas direcciones; luego toca una para cambiarla o congelarla. Los cambios solo duran esta sesión. Algunos juegos guardan varias copias de un valor o lo mueven, por lo que un valor congelado puede dejar de funcionar: vuelve a buscar. Un valor superior al que permite el juego (más oro del que puede llevar un personaje) puede cambiar solo la pantalla o dejar el juego en un estado erróneo.</string>
+    <string name="update_available">Actualización disponible</string>
+    <string name="update_now">Actualizar</string>
+    <string name="later">Más tarde</string>
+    <string name="skip_this_version">No recordar esta versión</string>
+    <string name="up_to_date">Tienes la última versión.</string>
+    <string name="update_check_failed">No se pudo buscar actualizaciones.</string>
+    <string name="update_download_failed">La descarga falló.</string>
+    <string name="update_verify_failed">El archivo descargado está dañado. Inténtalo de nuevo.</string>
+    <string name="update_install_failed">No se pudo iniciar el instalador.</string>
+    <string name="allow_unknown_sources_hint">Para instalar la actualización, permite que esta app instale apps desconocidas en la siguiente pantalla y vuelve.</string>
+    <string name="check_for_updates">Buscar actualizaciones</string>
+    <string name="auto_check_updates">Buscar actualizaciones automáticamente</string>
 </resources>

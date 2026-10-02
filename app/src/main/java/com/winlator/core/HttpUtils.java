@@ -14,9 +14,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class HttpUtils {
+    private static HttpURLConnection openConnection(String url) throws java.io.IOException {
+        HttpURLConnection connection = (HttpURLConnection)(new URL(url)).openConnection();
+        connection.setConnectTimeout(15000);
+        connection.setReadTimeout(30000);
+        return connection;
+    }
+
     private static void downloadAsync(String url, Callback<String> onDownloadComplete) {
         try {
-            HttpURLConnection connection = (HttpURLConnection)(new URL(url)).openConnection();
+            HttpURLConnection connection = openConnection(url);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 onDownloadComplete.call(null);
                 return;
@@ -40,24 +47,29 @@ public abstract class HttpUtils {
     private static void downloadAsync(String url, File destination, AtomicBoolean interruptRef, Callback<Integer> onPublishProgress, Callback<Boolean> onDownloadComplete) {
         try {
             interruptRef.set(false);
-            HttpURLConnection connection = (HttpURLConnection)(new URL(url)).openConnection();
+            HttpURLConnection connection = openConnection(url);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 onDownloadComplete.call(false);
                 return;
             }
 
-            int contentLength = connection.getContentLength();
+            long contentLength = connection.getContentLengthLong();
             try (InputStream inStream = new BufferedInputStream(connection.getInputStream(), StreamUtils.BUFFER_SIZE);
                  OutputStream outStream = new FileOutputStream(destination)) {
 
-                byte[] buffer = new byte[1024];
-                int totalSize = 0;
+                byte[] buffer = new byte[StreamUtils.BUFFER_SIZE];
+                long totalSize = 0;
                 int bytesRead;
+                int lastProgress = -1;
                 while ((bytesRead = inStream.read(buffer)) != -1 && !interruptRef.get()) {
                     totalSize += bytesRead;
-                    if (onPublishProgress != null) {
-                        int progress = (int)(((float)totalSize / contentLength) * 100);
-                        onPublishProgress.call(progress);
+                    if (onPublishProgress != null && contentLength > 0) {
+                        // Only on change: a 150 MB APK would otherwise post thousands of UI updates.
+                        int progress = (int)((totalSize * 100) / contentLength);
+                        if (progress != lastProgress) {
+                            lastProgress = progress;
+                            onPublishProgress.call(progress);
+                        }
                     }
                     outStream.write(buffer, 0, bytesRead);
                 }

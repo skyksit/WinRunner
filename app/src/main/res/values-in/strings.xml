@@ -368,4 +368,16 @@
     <string name="cheat_search_failed">Pencarian gagal: %1$s</string>
     <string name="cheat_write_failed">Tidak dapat mengubah nilai: %1$s</string>
     <string name="cheat_search_help">Cari angka yang ditampilkan game, ubah angkanya di dalam game (ambil gold, kurangi nyawa), lalu cari lagi sampai tersisa beberapa alamat, kemudian ketuk salah satunya untuk mengubah atau mem-freeze. Perubahan hanya berlaku untuk sesi ini. Beberapa game menyimpan beberapa salinan nilai atau memindahkannya, sehingga nilai yang di-freeze bisa berhenti bekerja - cari lagi. Nilai di luar batas yang diizinkan game (gold melebihi yang dapat dibawa karakter) mungkin hanya mengubah tampilan, atau membuat game rusak.</string>
+    <string name="update_available">Pembaruan tersedia</string>
+    <string name="update_now">Perbarui</string>
+    <string name="later">Nanti</string>
+    <string name="skip_this_version">Jangan ingatkan versi ini lagi</string>
+    <string name="up_to_date">Anda memakai versi terbaru.</string>
+    <string name="update_check_failed">Tidak dapat memeriksa pembaruan.</string>
+    <string name="update_download_failed">Unduhan gagal.</string>
+    <string name="update_verify_failed">File yang diunduh rusak. Coba lagi.</string>
+    <string name="update_install_failed">Tidak dapat memulai penginstal.</string>
+    <string name="allow_unknown_sources_hint">Untuk memasang pembaruan, izinkan aplikasi ini memasang aplikasi tak dikenal di layar berikutnya, lalu kembali.</string>
+    <string name="check_for_updates">Periksa pembaruan</string>
+    <string name="auto_check_updates">Periksa pembaruan secara otomatis</string>
 </resources>

@@ -373,4 +373,16 @@
     <string name="cheat_search_failed">搜索失败：%1$s</string>
     <string name="cheat_write_failed">无法修改数值：%1$s</string>
     <string name="cheat_search_help">搜索游戏中显示的数字，在游戏中让它发生变化（拾取金币、损失生命等）后再次搜索，直到只剩少数几个地址，然后点击其中一个进行修改或锁定。修改仅在本次会话中有效。有些游戏会保存数值的多个副本或移动其位置，因此锁定的数值可能会失效，此时请重新搜索。超出游戏允许范围的数值（例如超过角色上限的金币）可能只会改变显示，或使游戏进入异常状态。</string>
+    <string name="update_available">有可用更新</string>
+    <string name="update_now">更新</string>
+    <string name="later">稍后</string>
+    <string name="skip_this_version">不再提醒此版本</string>
+    <string name="up_to_date">已是最新版本。</string>
+    <string name="update_check_failed">无法检查更新。</string>
+    <string name="update_download_failed">下载失败。</string>
+    <string name="update_verify_failed">下载的文件已损坏，请重试。</string>
+    <string name="update_install_failed">无法启动安装程序。</string>
+    <string name="allow_unknown_sources_hint">要安装更新，请在下一个界面允许此应用安装未知应用，然后返回。</string>
+    <string name="check_for_updates">检查更新</string>
+    <string name="auto_check_updates">自动检查更新</string>
 </resources>

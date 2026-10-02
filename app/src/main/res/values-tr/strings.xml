@@ -368,4 +368,16 @@
     <string name="cheat_search_failed">Arama başarısız: %1$s</string>
     <string name="cheat_write_failed">Değer değiştirilemedi: %1$s</string>
     <string name="cheat_search_help">Oyunun gösterdiği sayıyı arayın, oyunda değiştirin (altın toplayın, can kaybedin) ve birkaç adres kalana kadar tekrar arayın; ardından değiştirmek veya dondurmak için birine dokunun. Değişiklikler yalnızca bu oturum için geçerlidir. Bazı oyunlar bir değerin birden fazla kopyasını tutar veya onu taşır, bu nedenle dondurulan bir değer çalışmayı bırakabilir - tekrar arayın. Oyunun izin verdiğinin ötesinde bir değer (bir karakterin taşıyabileceğinden fazla altın) yalnızca görüntüyü değiştirebilir veya oyunu bozuk bir duruma sokabilir.</string>
+    <string name="update_available">Güncelleme mevcut</string>
+    <string name="update_now">Güncelle</string>
+    <string name="later">Sonra</string>
+    <string name="skip_this_version">Bu sürümü bir daha hatırlatma</string>
+    <string name="up_to_date">En son sürümü kullanıyorsunuz.</string>
+    <string name="update_check_failed">Güncellemeler denetlenemedi.</string>
+    <string name="update_download_failed">İndirme başarısız oldu.</string>
+    <string name="update_verify_failed">İndirilen dosya bozuk. Lütfen tekrar deneyin.</string>
+    <string name="update_install_failed">Yükleyici başlatılamadı.</string>
+    <string name="allow_unknown_sources_hint">Güncellemeyi yüklemek için sonraki ekranda bu uygulamanın bilinmeyen uygulamaları yüklemesine izin verin, ardından geri dönün.</string>
+    <string name="check_for_updates">Güncellemeleri denetle</string>
+    <string name="auto_check_updates">Güncellemeleri otomatik denetle</string>
 </resources>

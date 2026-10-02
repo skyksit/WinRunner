@@ -373,4 +373,16 @@
     <string name="cheat_search_failed">Suche fehlgeschlagen: %1$s</string>
     <string name="cheat_write_failed">Wert konnte nicht geändert werden: %1$s</string>
     <string name="cheat_search_help">Suche nach der Zahl, die das Spiel anzeigt, ändere sie im Spiel (Gold aufsammeln, Gesundheit verlieren) und suche erneut, bis nur noch wenige Adressen übrig sind. Tippe dann auf eine, um sie zu ändern oder einzufrieren. Änderungen gelten nur für diese Sitzung. Manche Spiele halten mehrere Kopien eines Werts oder verschieben ihn, sodass ein eingefrorener Wert nicht mehr wirken kann - suche dann erneut. Ein Wert über dem im Spiel erlaubten Maximum (mehr Gold, als ein Charakter tragen kann) ändert eventuell nur die Anzeige oder bringt das Spiel in einen fehlerhaften Zustand.</string>
+    <string name="update_available">Update verfügbar</string>
+    <string name="update_now">Aktualisieren</string>
+    <string name="later">Später</string>
+    <string name="skip_this_version">Nicht mehr an diese Version erinnern</string>
+    <string name="up_to_date">Du hast die neueste Version.</string>
+    <string name="update_check_failed">Suche nach Updates fehlgeschlagen.</string>
+    <string name="update_download_failed">Download fehlgeschlagen.</string>
+    <string name="update_verify_failed">Die heruntergeladene Datei ist beschädigt. Bitte erneut versuchen.</string>
+    <string name="update_install_failed">Installationsprogramm konnte nicht gestartet werden.</string>
+    <string name="allow_unknown_sources_hint">Um das Update zu installieren, erlaube dieser App auf dem nächsten Bildschirm, unbekannte Apps zu installieren, und kehre dann zurück.</string>
+    <string name="check_for_updates">Nach Updates suchen</string>
+    <string name="auto_check_updates">Automatisch nach Updates suchen</string>
 </resources>

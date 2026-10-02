@@ -431,4 +431,16 @@
     <string name="cheat_search_failed">Search failed: %1$s</string>
     <string name="cheat_write_failed">Could not change the value: %1$s</string>
     <string name="cheat_search_help">Search for the number the game shows, change it in the game (pick up gold, lose health) and search again until a few addresses remain, then tap one to change or freeze it. Changes last for this session only. Some games keep several copies of a value or move it, so a frozen value can stop working - search again. A value beyond what the game allows (more gold than a character can carry) may only change the display, or leave the game in a broken state.</string>
+    <string name="update_available">Update available</string>
+    <string name="update_now">Update</string>
+    <string name="later">Later</string>
+    <string name="skip_this_version">Don\'t remind me about this version</string>
+    <string name="up_to_date">You have the latest version.</string>
+    <string name="update_check_failed">Could not check for updates.</string>
+    <string name="update_download_failed">Download failed.</string>
+    <string name="update_verify_failed">The downloaded file is damaged. Please try again.</string>
+    <string name="update_install_failed">Could not start the installer.</string>
+    <string name="allow_unknown_sources_hint">To install the update, allow this app to install unknown apps on the next screen, then come back.</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="auto_check_updates">Check for updates automatically</string>
 </resources>

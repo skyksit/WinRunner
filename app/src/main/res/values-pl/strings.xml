@@ -373,4 +373,16 @@
     <string name="cheat_search_failed">Wyszukiwanie nie powiodło się: %1$s</string>
     <string name="cheat_write_failed">Nie można zmienić wartości: %1$s</string>
     <string name="cheat_search_help">Wyszukaj liczbę wyświetlaną w grze, zmień ją w grze (zbierz złoto, strać zdrowie) i wyszukuj ponownie, aż zostanie kilka adresów, a potem stuknij jeden, aby go zmienić lub zamrozić. Zmiany obowiązują tylko w tej sesji. Niektóre gry przechowują kilka kopii wartości lub ją przenoszą, więc zamrożona wartość może przestać działać - wyszukaj ponownie. Wartość większa, niż pozwala gra (więcej złota, niż postać może unieść), może zmienić tylko wyświetlanie lub zepsuć stan gry.</string>
+    <string name="update_available">Dostępna aktualizacja</string>
+    <string name="update_now">Aktualizuj</string>
+    <string name="later">Później</string>
+    <string name="skip_this_version">Nie przypominaj o tej wersji</string>
+    <string name="up_to_date">Masz najnowszą wersję.</string>
+    <string name="update_check_failed">Nie udało się sprawdzić aktualizacji.</string>
+    <string name="update_download_failed">Pobieranie nie powiodło się.</string>
+    <string name="update_verify_failed">Pobrany plik jest uszkodzony. Spróbuj ponownie.</string>
+    <string name="update_install_failed">Nie udało się uruchomić instalatora.</string>
+    <string name="allow_unknown_sources_hint">Aby zainstalować aktualizację, na następnym ekranie zezwól tej aplikacji na instalowanie nieznanych aplikacji, a potem wróć.</string>
+    <string name="check_for_updates">Sprawdź aktualizacje</string>
+    <string name="auto_check_updates">Automatycznie sprawdzaj aktualizacje</string>
 </resources>

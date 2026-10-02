@@ -42,6 +42,14 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="?attr/colorSecondaryText" />
+
+                <Button
+                    android:id="@+id/BTCheckForUpdates"
+                    style="@style/ButtonNeutral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/check_for_updates" />
             </LinearLayout>
 
             <ImageView

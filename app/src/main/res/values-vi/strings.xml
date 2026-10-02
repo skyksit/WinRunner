@@ -368,4 +368,16 @@
     <string name="cheat_search_failed">Tìm kiếm thất bại: %1$s</string>
     <string name="cheat_write_failed">Không thể thay đổi giá trị: %1$s</string>
     <string name="cheat_search_help">Tìm con số game hiển thị, thay đổi nó trong game (nhặt vàng, mất máu) rồi tìm lại cho đến khi còn vài địa chỉ, sau đó chạm vào một địa chỉ để thay đổi hoặc cố định. Thay đổi chỉ có hiệu lực trong phiên này. Một số game lưu nhiều bản sao của một giá trị hoặc di chuyển nó, nên giá trị đã cố định có thể ngừng hoạt động - hãy tìm lại. Giá trị vượt quá mức game cho phép (nhiều vàng hơn nhân vật có thể mang) có thể chỉ thay đổi phần hiển thị, hoặc làm game bị lỗi.</string>
+    <string name="update_available">Có bản cập nhật</string>
+    <string name="update_now">Cập nhật</string>
+    <string name="later">Để sau</string>
+    <string name="skip_this_version">Không nhắc lại phiên bản này</string>
+    <string name="up_to_date">Bạn đang dùng phiên bản mới nhất.</string>
+    <string name="update_check_failed">Không thể kiểm tra cập nhật.</string>
+    <string name="update_download_failed">Tải xuống thất bại.</string>
+    <string name="update_verify_failed">Tệp đã tải bị hỏng. Vui lòng thử lại.</string>
+    <string name="update_install_failed">Không thể khởi động trình cài đặt.</string>
+    <string name="allow_unknown_sources_hint">Để cài bản cập nhật, hãy cho phép ứng dụng này cài ứng dụng không rõ nguồn gốc ở màn hình tiếp theo rồi quay lại.</string>
+    <string name="check_for_updates">Kiểm tra cập nhật</string>
+    <string name="auto_check_updates">Tự động kiểm tra cập nhật</string>
 </resources>

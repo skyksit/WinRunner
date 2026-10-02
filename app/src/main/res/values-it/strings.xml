@@ -373,4 +373,16 @@
     <string name="cheat_search_failed">Ricerca non riuscita: %1$s</string>
     <string name="cheat_write_failed">Impossibile modificare il valore: %1$s</string>
     <string name="cheat_search_help">Cerca il numero mostrato dal gioco, cambialo nel gioco (raccogli oro, perdi salute) e cerca di nuovo finché restano pochi indirizzi, poi toccane uno per modificarlo o bloccarlo. Le modifiche valgono solo per questa sessione. Alcuni giochi tengono più copie di un valore o lo spostano, quindi un valore bloccato può smettere di funzionare: cerca di nuovo. Un valore oltre il limite consentito dal gioco (più oro di quanto un personaggio possa portare) potrebbe cambiare solo la visualizzazione o lasciare il gioco in uno stato non valido.</string>
+    <string name="update_available">Aggiornamento disponibile</string>
+    <string name="update_now">Aggiorna</string>
+    <string name="later">Più tardi</string>
+    <string name="skip_this_version">Non ricordare più questa versione</string>
+    <string name="up_to_date">Hai l\'ultima versione.</string>
+    <string name="update_check_failed">Impossibile cercare aggiornamenti.</string>
+    <string name="update_download_failed">Download non riuscito.</string>
+    <string name="update_verify_failed">Il file scaricato è danneggiato. Riprova.</string>
+    <string name="update_install_failed">Impossibile avviare il programma di installazione.</string>
+    <string name="allow_unknown_sources_hint">Per installare l\'aggiornamento, consenti a questa app di installare app sconosciute nella schermata successiva, poi torna indietro.</string>
+    <string name="check_for_updates">Cerca aggiornamenti</string>
+    <string name="auto_check_updates">Cerca aggiornamenti automaticamente</string>
 </resources>

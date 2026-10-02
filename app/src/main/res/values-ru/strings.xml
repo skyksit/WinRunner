@@ -367,4 +367,16 @@
     <string name="cheat_search_failed">Ошибка поиска: %1$s</string>
     <string name="cheat_write_failed">Не удалось изменить значение: %1$s</string>
     <string name="cheat_search_help">Найдите число, которое показывает игра, измените его в игре (подберите золото, потеряйте здоровье) и ищите снова, пока не останется несколько адресов, затем нажмите на один из них, чтобы изменить или заморозить значение. Изменения действуют только в текущем сеансе. Некоторые игры хранят несколько копий значения или перемещают его, поэтому замороженное значение может перестать работать - повторите поиск. Значение больше допустимого игрой (больше золота, чем может нести персонаж) может изменить только отображение или привести игру в сломанное состояние.</string>
+    <string name="update_available">Доступно обновление</string>
+    <string name="update_now">Обновить</string>
+    <string name="later">Позже</string>
+    <string name="skip_this_version">Не напоминать об этой версии</string>
+    <string name="up_to_date">У вас последняя версия.</string>
+    <string name="update_check_failed">Не удалось проверить обновления.</string>
+    <string name="update_download_failed">Ошибка загрузки.</string>
+    <string name="update_verify_failed">Загруженный файл повреждён. Попробуйте ещё раз.</string>
+    <string name="update_install_failed">Не удалось запустить установщик.</string>
+    <string name="allow_unknown_sources_hint">Чтобы установить обновление, на следующем экране разрешите этому приложению устанавливать неизвестные приложения, затем вернитесь.</string>
+    <string name="check_for_updates">Проверить обновления</string>
+    <string name="auto_check_updates">Проверять обновления автоматически</string>
 </resources>

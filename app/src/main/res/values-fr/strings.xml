@@ -373,4 +373,16 @@
     <string name="cheat_search_failed">Échec de la recherche : %1$s</string>
     <string name="cheat_write_failed">Impossible de modifier la valeur : %1$s</string>
     <string name="cheat_search_help">Recherchez le nombre affiché par le jeu, modifiez-le dans le jeu (ramassez de l\'or, perdez de la santé) et relancez la recherche jusqu\'à ce qu\'il reste quelques adresses, puis touchez-en une pour la modifier ou la figer. Les modifications ne durent que pour cette session. Certains jeux conservent plusieurs copies d\'une valeur ou la déplacent, et une valeur figée peut alors cesser de fonctionner - relancez la recherche. Une valeur au-delà de ce que le jeu autorise (plus d\'or qu\'un personnage ne peut en porter) peut ne modifier que l\'affichage, ou mettre le jeu dans un état incohérent.</string>
+    <string name="update_available">Mise à jour disponible</string>
+    <string name="update_now">Mettre à jour</string>
+    <string name="later">Plus tard</string>
+    <string name="skip_this_version">Ne plus rappeler cette version</string>
+    <string name="up_to_date">Vous avez la dernière version.</string>
+    <string name="update_check_failed">Impossible de rechercher les mises à jour.</string>
+    <string name="update_download_failed">Échec du téléchargement.</string>
+    <string name="update_verify_failed">Le fichier téléchargé est endommagé. Réessayez.</string>
+    <string name="update_install_failed">Impossible de lancer le programme d\'installation.</string>
+    <string name="allow_unknown_sources_hint">Pour installer la mise à jour, autorisez cette appli à installer des applis inconnues sur l\'écran suivant, puis revenez.</string>
+    <string name="check_for_updates">Rechercher des mises à jour</string>
+    <string name="auto_check_updates">Rechercher automatiquement les mises à jour</string>
 </resources>

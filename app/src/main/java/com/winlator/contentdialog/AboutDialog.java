@@ -1,5 +1,6 @@
 package com.winlator.contentdialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.winlator.R;
+import com.winlator.core.UpdateChecker;
 
 public class AboutDialog extends ContentDialog {
     public AboutDialog(Context context) {
@@ -23,6 +25,15 @@ public class AboutDialog extends ContentDialog {
             tvWebpage.setMovementMethod(LinkMovementMethod.getInstance());
 
             ((TextView)findViewById(R.id.TVAppVersion)).setText(context.getString(R.string.version)+" "+pInfo.versionName);
+
+            View btCheckForUpdates = findViewById(R.id.BTCheckForUpdates);
+            if (context instanceof Activity) {
+                btCheckForUpdates.setOnClickListener((v) -> {
+                    dismiss();
+                    UpdateChecker.check((Activity)context, true);
+                });
+            }
+            else btCheckForUpdates.setVisibility(View.GONE);
 
             String creditsAndThirdPartyAppsHTML = String.join("<br />",
                 "Based on Winlator by <a href=\"https://github.com/brunodev85/winlator\">brunodev85</a> (<a href=\"https://www.winlator.org\">winlator.org</a>)",

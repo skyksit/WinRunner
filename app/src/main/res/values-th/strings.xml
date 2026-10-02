@@ -368,4 +368,16 @@
     <string name="cheat_search_failed">ค้นหาไม่สำเร็จ: %1$s</string>
     <string name="cheat_write_failed">เปลี่ยนค่าไม่ได้: %1$s</string>
     <string name="cheat_search_help">ค้นหาตัวเลขที่เกมแสดง เปลี่ยนค่านั้นในเกม (เก็บเงิน เสียพลังชีวิต) แล้วค้นหาอีกครั้งจนเหลือไม่กี่แอดเดรส จากนั้นแตะรายการเพื่อเปลี่ยนหรือตรึงค่า การเปลี่ยนแปลงมีผลเฉพาะเซสชันนี้ บางเกมเก็บค่าไว้หลายสำเนาหรือย้ายตำแหน่ง ทำให้ค่าที่ตรึงไว้อาจหยุดทำงาน - ให้ค้นหาอีกครั้ง ค่าที่เกินกว่าที่เกมอนุญาต (เงินมากกว่าที่ตัวละครถือได้) อาจเปลี่ยนแค่การแสดงผล หรือทำให้เกมเสียหาย</string>
+    <string name="update_available">มีอัปเดต</string>
+    <string name="update_now">อัปเดต</string>
+    <string name="later">ภายหลัง</string>
+    <string name="skip_this_version">ไม่ต้องเตือนเวอร์ชันนี้อีก</string>
+    <string name="up_to_date">คุณใช้เวอร์ชันล่าสุดแล้ว</string>
+    <string name="update_check_failed">ไม่สามารถตรวจสอบอัปเดตได้</string>
+    <string name="update_download_failed">ดาวน์โหลดล้มเหลว</string>
+    <string name="update_verify_failed">ไฟล์ที่ดาวน์โหลดเสียหาย โปรดลองอีกครั้ง</string>
+    <string name="update_install_failed">ไม่สามารถเริ่มตัวติดตั้งได้</string>
+    <string name="allow_unknown_sources_hint">หากต้องการติดตั้งอัปเดต ให้อนุญาตแอปนี้ติดตั้งแอปที่ไม่รู้จักในหน้าจอถัดไป แล้วกลับมา</string>
+    <string name="check_for_updates">ตรวจสอบอัปเดต</string>
+    <string name="auto_check_updates">ตรวจสอบอัปเดตอัตโนมัติ</string>
 </resources>
