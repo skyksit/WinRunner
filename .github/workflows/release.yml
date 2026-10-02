@@ -53,6 +53,7 @@ jobs:
             echo "::warning::DGW_KEYSTORE_BASE64 secret is not set. APK is signed with a throwaway CI key - add the DGW_KEYSTORE_* secrets for a stable release signature."
           fi
           echo "DGW_KEYSTORE_FILE=$KS" >> "$GITHUB_ENV"
+          if [ -n "$DGW_KEYSTORE_BASE64" ]; then echo "STABLE_SIGNATURE=1" >> "$GITHUB_ENV"; fi
 
       - name: Build release APK
         working-directory: app
@@ -71,16 +72,40 @@ jobs:
           cp "$APK" "$OUT"
           echo "APK_PATH=$OUT" >> "$GITHUB_ENV"
 
+      # The app reads releases/latest/download/update.json to find and verify the next APK.
+      # A throwaway-key APK cannot install over a release build, so it gets no update.json.
+      - name: Write update.json
+        if: env.STABLE_SIGNATURE == '1'
+        run: |
+          META=app/app/build/outputs/apk/release/output-metadata.json
+          jq -n \
+            --argjson versionCode "$(jq '.elements[0].versionCode' "$META")" \
+            --arg versionName "$(jq -r '.elements[0].versionName' "$META")" \
+            --arg tag "$GITHUB_REF_NAME" \
+            --arg apk "$APK_PATH" \
+            --arg url "https://github.com/$GITHUB_REPOSITORY/releases/download/$GITHUB_REF_NAME/$APK_PATH" \
+            --argjson size "$(stat -c%s "$APK_PATH")" \
+            --arg sha256 "$(sha256sum "$APK_PATH" | cut -d' ' -f1)" \
+            --arg notes "$(git -C app log -1 --format=%s)" \
+            '{versionCode: $versionCode, versionName: $versionName, tag: $tag, apk: $apk, url: $url, size: $size, sha256: $sha256, notes: $notes}' \
+            > update.json
+          cat update.json
+          echo "UPDATE_JSON=update.json" >> "$GITHUB_ENV"
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: winrunner-apk
-          path: ${{ env.APK_PATH }}
+          path: |
+            ${{ env.APK_PATH }}
+            ${{ env.UPDATE_JSON }}
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           name: WinRunner ${{ github.ref_name }}
-          files: ${{ env.APK_PATH }}
+          files: |
+            ${{ env.APK_PATH }}
+            ${{ env.UPDATE_JSON }}
           generate_release_notes: true
