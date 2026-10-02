@@ -66,7 +66,9 @@ android {
         //     zh-CN, zh-TW); pt/ru gain the Cheat Search, DGP, speed and vibration strings.
         // 52: in-app updates - checks update.json on the latest GitHub release once a day (and from
         //     About), downloads the APK, checks its sha256 and hands it to the system installer.
-        versionCode 52
+        // 53: "App Update" in the in-game drawer (between Touchpad Help and Exit). Games come straight
+        //     from dsam3/retrople, so a quiet daily check marks that item and toasts once per version.
+        versionCode 53
         versionName "11.6"
     }
 

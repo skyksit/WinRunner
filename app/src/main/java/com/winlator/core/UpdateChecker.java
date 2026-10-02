@@ -1,6 +1,7 @@
 package com.winlator.core;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -39,6 +40,8 @@ public abstract class UpdateChecker {
     private static final String PREF_LAST_CHECK = "update_last_check";
     private static final String PREF_SKIPPED_VERSION = "update_skipped_version_code";
     private static final String PREF_DOWNLOADED_VERSION = "update_downloaded_version_code";
+    private static final String PREF_LATEST_VERSION = "update_latest_version_code";
+    private static final String PREF_NOTIFIED_VERSION = "update_notified_version_code";
     private static File pendingInstall;
 
     private static class UpdateInfo {
@@ -52,7 +55,12 @@ public abstract class UpdateChecker {
         String notes;
     }
 
-    public static void check(final Activity activity, final boolean manual) {
+    public static void check(Activity activity, boolean manual) {
+        check(activity, manual, false);
+    }
+
+    /** inGame: the install replaces the running app, so the dialog warns that the game closes. */
+    public static void check(final Activity activity, final boolean manual, final boolean inGame) {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         removeInstalledDownload(activity, preferences);
 
@@ -62,22 +70,67 @@ public abstract class UpdateChecker {
             if (Math.abs(System.currentTimeMillis() - lastCheck) < AUTO_CHECK_INTERVAL) return;
         }
 
+        fetch(activity, preferences, (info) -> {
+            if (info == null) {
+                if (manual) AppUtils.showToast(activity, R.string.update_check_failed);
+                return;
+            }
+            if (info.versionCode <= BuildConfig.VERSION_CODE) {
+                if (manual) AppUtils.showToast(activity, R.string.up_to_date);
+                return;
+            }
+            if (!manual && preferences.getInt(PREF_SKIPPED_VERSION, 0) == info.versionCode) return;
+            showUpdateDialog(activity, preferences, info, inGame);
+        });
+    }
+
+    /**
+     * Quiet check for screens that must not pop a dialog (a running game): at most once a day it
+     * refreshes the latest known version, and onUpdateKnown runs (UI thread) whenever that version
+     * is newer than this build - also from the stored value between checks.
+     */
+    public static void checkInBackground(final Activity activity, final Runnable onUpdateKnown) {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        if (!preferences.getBoolean(PREF_AUTO_CHECK, true)) return;
+
+        long lastCheck = preferences.getLong(PREF_LAST_CHECK, 0);
+        if (Math.abs(System.currentTimeMillis() - lastCheck) < AUTO_CHECK_INTERVAL) {
+            if (hasKnownUpdate(activity)) onUpdateKnown.run();
+            return;
+        }
+
+        fetch(activity, preferences, (info) -> {
+            if (info != null && info.versionCode > BuildConfig.VERSION_CODE) onUpdateKnown.run();
+        });
+    }
+
+    public static boolean hasKnownUpdate(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getInt(PREF_LATEST_VERSION, 0) > BuildConfig.VERSION_CODE;
+    }
+
+    /** True once per new version, so the toast pointing at the menu is not shown on every launch. */
+    public static boolean shouldNotifyKnownUpdate(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int latest = preferences.getInt(PREF_LATEST_VERSION, 0);
+        if (latest <= BuildConfig.VERSION_CODE || preferences.getInt(PREF_NOTIFIED_VERSION, 0) == latest) return false;
+        preferences.edit().putInt(PREF_NOTIFIED_VERSION, latest).apply();
+        return true;
+    }
+
+    /** Downloads update.json; the callback runs on the UI thread, with null on failure. */
+    private static void fetch(final Activity activity, final SharedPreferences preferences, final Callback<UpdateInfo> callback) {
         HttpUtils.download(UPDATE_INFO_URL, (content) -> {
             final UpdateInfo info = parse(content);
             activity.runOnUiThread(() -> {
                 if (activity.isFinishing() || activity.isDestroyed()) return;
-                if (info == null) {
-                    if (manual) AppUtils.showToast(activity, R.string.update_check_failed);
-                    return;
+                if (info != null) {
+                    preferences.edit()
+                        .putLong(PREF_LAST_CHECK, System.currentTimeMillis())
+                        .putInt(PREF_LATEST_VERSION, info.versionCode)
+                        .apply();
                 }
-
-                preferences.edit().putLong(PREF_LAST_CHECK, System.currentTimeMillis()).apply();
-                if (info.versionCode <= BuildConfig.VERSION_CODE) {
-                    if (manual) AppUtils.showToast(activity, R.string.up_to_date);
-                    return;
-                }
-                if (!manual && preferences.getInt(PREF_SKIPPED_VERSION, 0) == info.versionCode) return;
-                showUpdateDialog(activity, preferences, info);
+                callback.call(info);
             });
         });
     }
@@ -113,7 +166,7 @@ public abstract class UpdateChecker {
         }
     }
 
-    private static void showUpdateDialog(final Activity activity, final SharedPreferences preferences, final UpdateInfo info) {
+    private static void showUpdateDialog(final Activity activity, final SharedPreferences preferences, final UpdateInfo info, boolean inGame) {
         ContentDialog dialog = new ContentDialog(activity, R.layout.update_dialog);
         dialog.setTitle(R.string.update_available);
 
@@ -124,6 +177,7 @@ public abstract class UpdateChecker {
         TextView tvNotes = dialog.findViewById(R.id.TVUpdateNotes);
         tvNotes.setText(info.notes);
         if (info.notes.isEmpty()) tvNotes.setVisibility(View.GONE);
+        dialog.findViewById(R.id.TVUpdateClosesGame).setVisibility(inGame ? View.VISIBLE : View.GONE);
 
         final CheckBox cbSkip = dialog.findViewById(R.id.CBSkipVersion);
         ((Button)dialog.findViewById(R.id.BTConfirm)).setText(R.string.update_now);

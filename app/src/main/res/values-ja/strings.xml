@@ -385,4 +385,8 @@
     <string name="allow_unknown_sources_hint">アップデートをインストールするには、次の画面でこのアプリに不明なアプリのインストールを許可してから戻ってください。</string>
     <string name="check_for_updates">アップデートを確認</string>
     <string name="auto_check_updates">自動でアップデートを確認</string>
+    <string name="app_update">アプリのアップデート</string>
+    <string name="app_update_new">アプリのアップデート (新バージョン)</string>
+    <string name="update_available_in_menu">新しいバージョンがあります - メニュー > アプリのアップデート</string>
+    <string name="update_closes_game">アップデートをインストールするとゲームが終了します。先に進行状況を保存してください。</string>
 </resources>

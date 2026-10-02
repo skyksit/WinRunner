@@ -380,4 +380,8 @@
     <string name="allow_unknown_sources_hint">Để cài bản cập nhật, hãy cho phép ứng dụng này cài ứng dụng không rõ nguồn gốc ở màn hình tiếp theo rồi quay lại.</string>
     <string name="check_for_updates">Kiểm tra cập nhật</string>
     <string name="auto_check_updates">Tự động kiểm tra cập nhật</string>
+    <string name="app_update">Cập nhật ứng dụng</string>
+    <string name="app_update_new">Cập nhật ứng dụng (mới)</string>
+    <string name="update_available_in_menu">Có phiên bản mới - Menu > Cập nhật ứng dụng</string>
+    <string name="update_closes_game">Cài bản cập nhật sẽ đóng trò chơi. Hãy lưu tiến trình trước.</string>
 </resources>

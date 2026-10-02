@@ -380,4 +380,8 @@
     <string name="allow_unknown_sources_hint">Güncellemeyi yüklemek için sonraki ekranda bu uygulamanın bilinmeyen uygulamaları yüklemesine izin verin, ardından geri dönün.</string>
     <string name="check_for_updates">Güncellemeleri denetle</string>
     <string name="auto_check_updates">Güncellemeleri otomatik denetle</string>
+    <string name="app_update">Uygulama Güncellemesi</string>
+    <string name="app_update_new">Uygulama Güncellemesi (yeni)</string>
+    <string name="update_available_in_menu">Yeni sürüm mevcut - Menü > Uygulama Güncellemesi</string>
+    <string name="update_closes_game">Güncellemeyi yüklemek oyunu kapatır. Önce ilerlemenizi kaydedin.</string>
 </resources>

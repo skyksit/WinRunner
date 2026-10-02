@@ -380,4 +380,8 @@
     <string name="allow_unknown_sources_hint">หากต้องการติดตั้งอัปเดต ให้อนุญาตแอปนี้ติดตั้งแอปที่ไม่รู้จักในหน้าจอถัดไป แล้วกลับมา</string>
     <string name="check_for_updates">ตรวจสอบอัปเดต</string>
     <string name="auto_check_updates">ตรวจสอบอัปเดตอัตโนมัติ</string>
+    <string name="app_update">อัปเดตแอป</string>
+    <string name="app_update_new">อัปเดตแอป (ใหม่)</string>
+    <string name="update_available_in_menu">มีเวอร์ชันใหม่ - เมนู > อัปเดตแอป</string>
+    <string name="update_closes_game">การติดตั้งอัปเดตจะปิดเกม โปรดบันทึกความคืบหน้าก่อน</string>
 </resources>

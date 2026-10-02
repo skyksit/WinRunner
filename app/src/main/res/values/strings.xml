@@ -443,4 +443,8 @@
     <string name="allow_unknown_sources_hint">To install the update, allow this app to install unknown apps on the next screen, then come back.</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="auto_check_updates">Check for updates automatically</string>
+    <string name="app_update">App Update</string>
+    <string name="app_update_new">App Update (new)</string>
+    <string name="update_available_in_menu">A new version is available - Menu > App Update</string>
+    <string name="update_closes_game">Installing the update closes the game. Save your progress first.</string>
 </resources>

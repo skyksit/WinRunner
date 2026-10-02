@@ -385,4 +385,8 @@
     <string name="allow_unknown_sources_hint">Um das Update zu installieren, erlaube dieser App auf dem nächsten Bildschirm, unbekannte Apps zu installieren, und kehre dann zurück.</string>
     <string name="check_for_updates">Nach Updates suchen</string>
     <string name="auto_check_updates">Automatisch nach Updates suchen</string>
+    <string name="app_update">App-Update</string>
+    <string name="app_update_new">App-Update (neu)</string>
+    <string name="update_available_in_menu">Neue Version verfügbar - Menü > App-Update</string>
+    <string name="update_closes_game">Die Installation des Updates beendet das Spiel. Speichere zuerst deinen Fortschritt.</string>
 </resources>

@@ -380,4 +380,8 @@
     <string name="allow_unknown_sources_hint">Untuk memasang pembaruan, izinkan aplikasi ini memasang aplikasi tak dikenal di layar berikutnya, lalu kembali.</string>
     <string name="check_for_updates">Periksa pembaruan</string>
     <string name="auto_check_updates">Periksa pembaruan secara otomatis</string>
+    <string name="app_update">Pembaruan Aplikasi</string>
+    <string name="app_update_new">Pembaruan Aplikasi (baru)</string>
+    <string name="update_available_in_menu">Versi baru tersedia - Menu > Pembaruan Aplikasi</string>
+    <string name="update_closes_game">Memasang pembaruan akan menutup game. Simpan progres Anda terlebih dahulu.</string>
 </resources>

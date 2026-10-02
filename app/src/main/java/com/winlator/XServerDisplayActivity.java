@@ -71,6 +71,7 @@ import com.winlator.core.PreloaderDialog;
 import com.winlator.core.ProcessHelper;
 import com.winlator.core.ScreenshotSaver;
 import com.winlator.core.StringUtils;
+import com.winlator.core.UpdateChecker;
 import com.winlator.core.TarCompressorUtils;
 import com.winlator.core.UnitUtils;
 import com.winlator.core.Win32AppWorkarounds;
@@ -219,6 +220,12 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         if (getIntent().getBooleanExtra(CheatSession.EXTRA_CHEAT_SEARCH, false) && getIntent().hasExtra(CheatStore.EXTRA_CHEATS_URI)) {
             getCheatSession();
         }
+        // Games are launched straight from dsam3/retrople, so this is where most users ever see an
+        // update: a quiet daily check marks the menu item instead of interrupting the game.
+        UpdateChecker.checkInBackground(this, () -> {
+            menu.findItem(R.id.menu_item_app_update).setTitle(R.string.app_update_new);
+            if (UpdateChecker.shouldNotifyKnownUpdate(this)) AppUtils.showToast(this, R.string.update_available_in_menu);
+        });
         navigationView.setNavigationItemSelectedListener(this);
 
         rootFS = RootFS.find(this);
@@ -385,6 +392,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             environment.onResume();
         }
         ForegroundService.onResumeSession(this);
+        UpdateChecker.onResume(this);
     }
 
     @Override
@@ -529,6 +537,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 break;
             case R.id.menu_item_touchpad_help:
                 showTouchpadHelpDialog();
+                break;
+            case R.id.menu_item_app_update:
+                UpdateChecker.check(this, true, true);
+                drawerLayout.closeDrawers();
                 break;
             case R.id.menu_item_change_disc:
                 showChangeDiscDialog();

@@ -385,4 +385,8 @@
     <string name="allow_unknown_sources_hint">若要安裝更新，請在下一個畫面允許此應用程式安裝不明應用程式，然後返回。</string>
     <string name="check_for_updates">檢查更新</string>
     <string name="auto_check_updates">自動檢查更新</string>
+    <string name="app_update">應用程式更新</string>
+    <string name="app_update_new">應用程式更新（新版本）</string>
+    <string name="update_available_in_menu">有新版本 - 選單 > 應用程式更新</string>
+    <string name="update_closes_game">安裝更新會關閉遊戲，請先儲存進度。</string>
 </resources>

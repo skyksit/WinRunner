@@ -385,4 +385,8 @@
     <string name="allow_unknown_sources_hint">업데이트를 설치하려면 다음 화면에서 이 앱의 \'출처를 알 수 없는 앱 설치\'를 허용한 뒤 돌아오세요.</string>
     <string name="check_for_updates">업데이트 확인</string>
     <string name="auto_check_updates">자동으로 업데이트 확인</string>
+    <string name="app_update">앱 업데이트</string>
+    <string name="app_update_new">앱 업데이트 (새 버전)</string>
+    <string name="update_available_in_menu">새 버전이 있습니다 - 메뉴 > 앱 업데이트</string>
+    <string name="update_closes_game">업데이트를 설치하면 게임이 종료됩니다. 먼저 진행 상황을 저장하세요.</string>
 </resources>

@@ -379,4 +379,8 @@
     <string name="allow_unknown_sources_hint">Чтобы установить обновление, на следующем экране разрешите этому приложению устанавливать неизвестные приложения, затем вернитесь.</string>
     <string name="check_for_updates">Проверить обновления</string>
     <string name="auto_check_updates">Проверять обновления автоматически</string>
+    <string name="app_update">Обновление приложения</string>
+    <string name="app_update_new">Обновление приложения (новое)</string>
+    <string name="update_available_in_menu">Доступна новая версия - Меню > Обновление приложения</string>
+    <string name="update_closes_game">Установка обновления закроет игру. Сначала сохраните прогресс.</string>
 </resources>

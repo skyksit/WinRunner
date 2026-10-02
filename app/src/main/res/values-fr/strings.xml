@@ -385,4 +385,8 @@
     <string name="allow_unknown_sources_hint">Pour installer la mise à jour, autorisez cette appli à installer des applis inconnues sur l\'écran suivant, puis revenez.</string>
     <string name="check_for_updates">Rechercher des mises à jour</string>
     <string name="auto_check_updates">Rechercher automatiquement les mises à jour</string>
+    <string name="app_update">Mise à jour de l\'appli</string>
+    <string name="app_update_new">Mise à jour de l\'appli (nouvelle)</string>
+    <string name="update_available_in_menu">Nouvelle version disponible - Menu > Mise à jour de l\'appli</string>
+    <string name="update_closes_game">L\'installation de la mise à jour ferme le jeu. Sauvegardez d\'abord votre progression.</string>
 </resources>

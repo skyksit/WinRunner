@@ -25,6 +25,17 @@
             android:textSize="14sp" />
     </ScrollView>
 
+    <TextView
+        android:id="@+id/TVUpdateClosesGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorAccent"
+        android:text="@string/update_closes_game"
+        android:visibility="gone" />
+
     <CheckBox
         android:id="@+id/CBSkipVersion"
         android:layout_width="wrap_content"

@@ -385,4 +385,8 @@
     <string name="allow_unknown_sources_hint">Aby zainstalować aktualizację, na następnym ekranie zezwól tej aplikacji na instalowanie nieznanych aplikacji, a potem wróć.</string>
     <string name="check_for_updates">Sprawdź aktualizacje</string>
     <string name="auto_check_updates">Automatycznie sprawdzaj aktualizacje</string>
+    <string name="app_update">Aktualizacja aplikacji</string>
+    <string name="app_update_new">Aktualizacja aplikacji (nowa)</string>
+    <string name="update_available_in_menu">Dostępna nowa wersja - Menu > Aktualizacja aplikacji</string>
+    <string name="update_closes_game">Instalacja aktualizacji zamknie grę. Najpierw zapisz postęp.</string>
 </resources>

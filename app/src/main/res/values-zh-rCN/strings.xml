@@ -385,4 +385,8 @@
     <string name="allow_unknown_sources_hint">要安装更新，请在下一个界面允许此应用安装未知应用，然后返回。</string>
     <string name="check_for_updates">检查更新</string>
     <string name="auto_check_updates">自动检查更新</string>
+    <string name="app_update">应用更新</string>
+    <string name="app_update_new">应用更新（新版本）</string>
+    <string name="update_available_in_menu">有新版本 - 菜单 > 应用更新</string>
+    <string name="update_closes_game">安装更新会关闭游戏，请先保存进度。</string>
 </resources>

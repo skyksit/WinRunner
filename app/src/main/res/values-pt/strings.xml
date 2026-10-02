@@ -379,4 +379,8 @@
     <string name="allow_unknown_sources_hint">Para instalar a atualização, permita que este app instale apps desconhecidos na próxima tela e depois volte.</string>
     <string name="check_for_updates">Verificar atualizações</string>
     <string name="auto_check_updates">Verificar atualizações automaticamente</string>
+    <string name="app_update">Atualizar app</string>
+    <string name="app_update_new">Atualizar app (nova)</string>
+    <string name="update_available_in_menu">Nova versão disponível - Menu > Atualizar app</string>
+    <string name="update_closes_game">Instalar a atualização fecha o jogo. Salve seu progresso primeiro.</string>
 </resources>
