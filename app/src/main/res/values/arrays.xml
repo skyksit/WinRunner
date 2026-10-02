@@ -22,9 +22,9 @@
         <item>PulseAudio</item>
     </string-array>
     <string-array name="binding_type_entries">
-        <item>Keyboard</item>
-        <item>Mouse</item>
-        <item>Gamepad</item>
+        <item>@string/keyboard</item>
+        <item>@string/mouse</item>
+        <item>@string/gamepad</item>
     </string-array>
     <string-array name="max_device_memory_entries">
         <item>@string/zero_no_limit</item>
