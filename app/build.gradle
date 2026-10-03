@@ -68,7 +68,10 @@ android {
         //     About), downloads the APK, checks its sha256 and hands it to the system installer.
         // 53: "App Update" in the in-game drawer (between Touchpad Help and Exit). Games come straight
         //     from dsam3/retrople, so a quiet daily check marks that item and toasts once per version.
-        versionCode 53
+        // 54: rootfs 27 - quartz.dll clamps a seek before the start of the stream (DGwine 0003).
+        //     창세기전 외전 템페스트 rewinds its intro to -0.16 s; GStreamer read that as the end of
+        //     the file and the 24 s intro played black.
+        versionCode 54
         versionName "11.6"
     }
 
