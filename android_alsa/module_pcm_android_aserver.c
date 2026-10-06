@@ -306,7 +306,12 @@ static int android_aserver_hw_params(snd_pcm_ioplug_t* io, snd_pcm_hw_params_t* 
     int frame_bytes = (snd_pcm_format_physical_width(format) * channels) / 8;
     
     snd_pcm_uframes_t buffer_size = min_buffer_size / frame_bytes;
-    snd_pcm_uframes_t period_size = buffer_size / frame_bytes;
+    // Four periods per buffer, whatever the format. Dividing by frame_bytes again made the period
+    // count equal frame_bytes, so 8-bit mono (1 byte per frame) asked for a single period, broke
+    // the PERIODS 2..64 constraint and failed hw_params with -EINVAL — silent waveOut for every
+    // game that plays U8 mono (MCI AVI intros, 11/22 kHz effects). The server rounds the buffer to
+    // the device's frames-per-buffer, so it divides evenly.
+    snd_pcm_uframes_t period_size = buffer_size / 4;
     
     snd_pcm_hw_params_t* refined_params;
     snd_pcm_hw_params_alloca(&refined_params);
