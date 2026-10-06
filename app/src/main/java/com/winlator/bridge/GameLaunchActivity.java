@@ -733,15 +733,16 @@ public class GameLaunchActivity extends AppCompatActivity {
 
     /**
      * {@code showFPS=0|1|2} maps onto {@link FrameRating.Mode} (disabled / simple / full);
-     * {@code true} is the simple HUD. Anything else = disabled.
+     * {@code true} is the simple HUD, {@code false} disables it. Missing or unknown = simple
+     * (the default — only an explicit 0/false hides the HUD).
      */
     private static byte parseShowFps(String value) {
-        if (value == null) return (byte)FrameRating.Mode.DISABLED.ordinal();
+        if (value == null) return (byte)FrameRating.Mode.SIMPLE.ordinal();
         String v = value.trim();
-        if (v.equals("1") || v.equalsIgnoreCase("true")) return (byte)FrameRating.Mode.SIMPLE.ordinal();
+        if (v.equals("0") || v.equalsIgnoreCase("false")) return (byte)FrameRating.Mode.DISABLED.ordinal();
         if (v.equals("2")) return (byte)FrameRating.Mode.FULL.ordinal();
-        if (!v.equals("0") && !v.equalsIgnoreCase("false")) Log.w(TAG, "ignoring unknown showFPS: "+value);
-        return (byte)FrameRating.Mode.DISABLED.ordinal();
+        if (!v.equals("1") && !v.equalsIgnoreCase("true")) Log.w(TAG, "ignoring unknown showFPS: "+value);
+        return (byte)FrameRating.Mode.SIMPLE.ordinal();
     }
 
     /**
