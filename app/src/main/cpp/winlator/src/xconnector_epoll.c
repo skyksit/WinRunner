@@ -38,8 +38,16 @@ typedef struct XConnectorEpoll {
     JMethods jmethods;
 } XConnectorEpoll;
 
+// pollThread ownership: exactly one side settles it, so the thread is joined or detached, never both
+// and never neither. A joinable thread that ends unjoined keeps its stack mapping forever — a client
+// that reconnects in a loop (an ALSA PCM opened per sound) exhausts max_map_count and aborts the app.
+#define POLL_THREAD_RUNNING 0
+#define POLL_THREAD_DETACHED 1
+#define POLL_THREAD_JOINING 2
+
 typedef struct ConnectedClient {
     pthread_t pollThread;
+    int pollThreadState;
     int fd;
     int shutdownFd;
     bool running;
@@ -164,7 +172,11 @@ static void XConnectorEpoll_killConnection(XConnectorEpoll* connector, Connected
     if (connector->multithreadedClients) {
         if (pthread_self() != client->pollThread) {
             requestShutdown(client->shutdownFd);
-            pthread_join(client->pollThread, NULL);
+            int expected = POLL_THREAD_RUNNING;
+            if (__atomic_compare_exchange_n(&client->pollThreadState, &expected, POLL_THREAD_JOINING,
+                                            false, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) {
+                pthread_join(client->pollThread, NULL);
+            }
             client->pollThread = 0;
         }
         else jmethods = &client->jmethods;
@@ -199,6 +211,13 @@ static void* pollThread(void* param) {
         client->tag = NULL;
     }
     (*jmethods->jvm)->DetachCurrentThread(jmethods->jvm);
+
+    // Ending on our own (client hung up, or poll failed): nobody will join us, so release the stack now.
+    int expected = POLL_THREAD_RUNNING;
+    if (__atomic_compare_exchange_n(&client->pollThreadState, &expected, POLL_THREAD_DETACHED,
+                                    false, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) {
+        pthread_detach(pthread_self());
+    }
     return NULL;
 }
 
