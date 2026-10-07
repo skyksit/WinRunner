@@ -75,7 +75,7 @@ android {
         //     aborting the app at max_map_count), and the ALSA plugin in rootfs_patches asks for four
         //     periods (8-bit mono got one and failed hw_params - silent waveOut). rootfs_patches is
         //     re-extracted on an appVersion change, so the rootfs version stays at 27.
-        versionCode 57
+        versionCode 58
         versionName "11.6"
     }
 

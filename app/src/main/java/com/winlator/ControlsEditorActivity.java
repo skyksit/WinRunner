@@ -2,8 +2,13 @@ package com.winlator;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,6 +33,7 @@ import com.winlator.core.LocaleHelper;
 import com.winlator.inputcontrols.Binding;
 import com.winlator.inputcontrols.ControlElement;
 import com.winlator.inputcontrols.ControlsProfile;
+import com.winlator.inputcontrols.ControlsTheme;
 import com.winlator.inputcontrols.InputControlsManager;
 import com.winlator.math.Mathf;
 import com.winlator.core.AppUtils;
@@ -68,6 +75,7 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
         container.findViewById(R.id.BTAddElement).setOnClickListener(this);
         container.findViewById(R.id.BTRemoveElement).setOnClickListener(this);
         container.findViewById(R.id.BTElementSettings).setOnClickListener(this);
+        container.findViewById(R.id.BTTheme).setOnClickListener(this);
 
         toolbox = container.findViewById(R.id.Toolbox);
 
@@ -133,6 +141,110 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
                 }
                 else AppUtils.showToast(this, R.string.no_control_element_selected);
                 break;
+            case R.id.BTTheme:
+                if (profile == null || profile.getElements().isEmpty()) {
+                    AppUtils.showToast(this, R.string.no_profile_selected);
+                }
+                else showThemePicker(v);
+                break;
+        }
+    }
+
+    // DGPlayer: one tap recolours every element of the profile (colours + opacity).
+    private void showThemePicker(View anchorView) {
+        final int padding = (int)UnitUtils.dpToPx(8);
+        final int chipSize = (int)UnitUtils.dpToPx(36);
+        final PopupWindow[] popupWindow = {null};
+
+        LinearLayout list = new LinearLayout(this);
+        list.setOrientation(LinearLayout.VERTICAL);
+        list.setPadding(padding, padding, padding, padding);
+
+        TextView title = new TextView(this);
+        title.setText(R.string.color_theme);
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        title.setPadding(padding, 0, padding, padding);
+        list.addView(title);
+
+        TypedValue rowBackground = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, rowBackground, true);
+
+        for (final ControlsTheme theme : ControlsTheme.ALL) {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setPadding(padding, padding / 2, padding * 2, padding / 2);
+            row.setBackgroundResource(rowBackground.resourceId);
+            row.setClickable(true);
+            row.setFocusable(true);
+
+            row.addView(new ThemeChipView(this, theme), new LinearLayout.LayoutParams(chipSize, chipSize));
+
+            TextView name = new TextView(this);
+            name.setText(theme.nameResId);
+            name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            name.setPadding(padding * 2, 0, 0, 0);
+            row.addView(name);
+
+            row.setOnClickListener((v) -> {
+                theme.applyTo(profile);
+                profile.save();
+                inputControlsView.invalidate();
+                if (popupWindow[0] != null) popupWindow[0].dismiss();
+                AppUtils.showToast(this, R.string.theme_applied);
+            });
+            list.addView(row);
+        }
+
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.addView(list);
+        popupWindow[0] = AppUtils.showPopupWindow(anchorView, scrollView, 240, 0);
+    }
+
+    /** Draws a theme the way ControlElement draws a round button: fill, outline, label. */
+    private static final class ThemeChipView extends View {
+        private final ControlsTheme theme;
+        private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        ThemeChipView(Context context, ControlsTheme theme) {
+            super(context);
+            this.theme = theme;
+        }
+
+        private int argb(int rgb, float opacity) {
+            return Color.argb((int)(opacity * 255), Color.red(rgb), Color.green(rgb), Color.blue(rgb));
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            float size = Math.min(getWidth(), getHeight());
+            float cx = getWidth() * 0.5f;
+            float cy = getHeight() * 0.5f;
+            float strokeWidth = UnitUtils.dpToPx(2);
+            float radius = size * 0.5f - strokeWidth;
+
+            // A dark backdrop stands in for the game screen so translucency reads the same as in game.
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(0xff303030);
+            canvas.drawRoundRect(0, 0, getWidth(), getHeight(), strokeWidth * 2, strokeWidth * 2, paint);
+
+            // The default theme renders with the stock overlay opacity (40% in game).
+            float opacity = theme.isDefault() ? InputControlsView.DEFAULT_OVERLAY_OPACITY : theme.opacity;
+            if (theme.background != null) {
+                paint.setColor(argb(theme.background, opacity));
+                canvas.drawCircle(cx, cy, radius, paint);
+            }
+
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(strokeWidth);
+            paint.setColor(argb(theme.border != null ? theme.border : 0xffffff, opacity));
+            canvas.drawCircle(cx, cy, radius, paint);
+
+            paint.setStyle(Paint.Style.FILL);
+            paint.setTextAlign(Paint.Align.CENTER);
+            paint.setTextSize(size * 0.4f);
+            paint.setColor(argb(theme.text != null ? theme.text : 0xffffff, opacity));
+            canvas.drawText("A", cx, cy - (paint.descent() + paint.ascent()) * 0.5f, paint);
         }
     }
 
