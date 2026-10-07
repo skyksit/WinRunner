@@ -32,6 +32,10 @@
     <string name="binding_left">Gán phím Trái</string>
     <string name="overlay_opacity">Độ mờ lớp phủ</string>
     <string name="opacity">Độ mờ</string>
+    <string name="border_color">Màu viền</string>
+    <string name="background_color">Màu nền</string>
+    <string name="text_color">Màu chữ</string>
+    <string name="default_color">Mặc định</string>
     <string name="profile">Hồ sơ</string>
     <string name="select_profile">Chọn hồ sơ</string>
     <string name="profile_name">Tên hồ sơ</string>

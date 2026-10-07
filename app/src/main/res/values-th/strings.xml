@@ -32,6 +32,10 @@
     <string name="binding_left">กำหนดปุ่ม ซ้าย</string>
     <string name="overlay_opacity">ความทึบของโอเวอร์เลย์</string>
     <string name="opacity">ความทึบ</string>
+    <string name="border_color">สีขอบ</string>
+    <string name="background_color">สีพื้นหลัง</string>
+    <string name="text_color">สีข้อความ</string>
+    <string name="default_color">ค่าเริ่มต้น</string>
     <string name="profile">โปรไฟล์</string>
     <string name="select_profile">เลือกโปรไฟล์</string>
     <string name="profile_name">ชื่อโปรไฟล์</string>

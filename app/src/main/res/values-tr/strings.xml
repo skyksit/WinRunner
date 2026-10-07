@@ -32,6 +32,10 @@
     <string name="binding_left">Sol Ataması</string>
     <string name="overlay_opacity">Kaplama Opaklığı</string>
     <string name="opacity">Opaklık</string>
+    <string name="border_color">Kenarlık rengi</string>
+    <string name="background_color">Arka plan rengi</string>
+    <string name="text_color">Metin rengi</string>
+    <string name="default_color">Varsayılan</string>
     <string name="profile">Profil</string>
     <string name="select_profile">Profil Seç</string>
     <string name="profile_name">Profil Adı</string>

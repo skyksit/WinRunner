@@ -32,6 +32,10 @@
     <string name="binding_left">左方向绑定</string>
     <string name="overlay_opacity">叠加层不透明度</string>
     <string name="opacity">不透明度</string>
+    <string name="border_color">边框颜色</string>
+    <string name="background_color">背景颜色</string>
+    <string name="text_color">文字颜色</string>
+    <string name="default_color">默认</string>
     <string name="profile">配置文件</string>
     <string name="select_profile">选择配置文件</string>
     <string name="profile_name">配置文件名称</string>

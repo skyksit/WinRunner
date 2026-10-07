@@ -32,6 +32,10 @@
     <string name="binding_left">Przypisanie w lewo</string>
     <string name="overlay_opacity">Krycie nakładki</string>
     <string name="opacity">Krycie</string>
+    <string name="border_color">Kolor obramowania</string>
+    <string name="background_color">Kolor tła</string>
+    <string name="text_color">Kolor tekstu</string>
+    <string name="default_color">Domyślny</string>
     <string name="profile">Profil</string>
     <string name="select_profile">Wybierz profil</string>
     <string name="profile_name">Nazwa profilu</string>

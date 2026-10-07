@@ -266,6 +266,9 @@ public class ControlsProfile implements Comparable<ControlsProfile>, GamepadSlot
                     if (elementJSONObject.has("orientation")) element.setOrientation((byte)elementJSONObject.getInt("orientation"));
                     if (elementJSONObject.has("mouseMoveMode")) element.setMouseMoveMode(true);
                     if (elementJSONObject.has("opacity")) element.setOpacity((float)elementJSONObject.getDouble("opacity"));
+                    element.setBorderColor(ControlElement.parseColor(elementJSONObject.optString("borderColor", null)));
+                    element.setBackgroundColor(ControlElement.parseColor(elementJSONObject.optString("backgroundColor", null)));
+                    element.setTextColor(ControlElement.parseColor(elementJSONObject.optString("textColor", null)));
                 }
 
                 boolean hasGamepadBinding = true;

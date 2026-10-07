@@ -32,6 +32,7 @@ import com.winlator.math.Mathf;
 import com.winlator.core.AppUtils;
 import com.winlator.core.FileUtils;
 import com.winlator.core.UnitUtils;
+import com.winlator.widget.ColorPickerView;
 import com.winlator.widget.InputControlsView;
 import com.winlator.widget.NumberPicker;
 import com.winlator.widget.SeekBar;
@@ -148,6 +149,7 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
             view.findViewById(R.id.LLRangeOptions).setVisibility(View.GONE);
             view.findViewById(R.id.LLMIDIKeyOptions).setVisibility(View.GONE);
             view.findViewById(R.id.LLRadialMenuOptions).setVisibility(View.GONE);
+            view.findViewById(R.id.LLTextColor).setVisibility(type == ControlElement.Type.TRACKPAD ? View.GONE : View.VISIBLE);
 
             switch (type) {
                 case BUTTON:
@@ -216,6 +218,33 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
             inputControlsView.invalidate();
         });
         sbOpacity.setValue(element.getOpacity() * 100);
+
+        ColorPickerView cpvBorderColor = view.findViewById(R.id.CPVBorderColor);
+        cpvBorderColor.setExtendedMode(true);
+        cpvBorderColor.setColorOrNull(element.getBorderColor());
+        cpvBorderColor.setOnColorChangeListener((picker, color) -> {
+            element.setBorderColor(color);
+            profile.save();
+            inputControlsView.invalidate();
+        });
+
+        ColorPickerView cpvBackgroundColor = view.findViewById(R.id.CPVBackgroundColor);
+        cpvBackgroundColor.setExtendedMode(true);
+        cpvBackgroundColor.setColorOrNull(element.getBackgroundColor());
+        cpvBackgroundColor.setOnColorChangeListener((picker, color) -> {
+            element.setBackgroundColor(color);
+            profile.save();
+            inputControlsView.invalidate();
+        });
+
+        ColorPickerView cpvTextColor = view.findViewById(R.id.CPVTextColor);
+        cpvTextColor.setExtendedMode(true);
+        cpvTextColor.setColorOrNull(element.getTextColor());
+        cpvTextColor.setOnColorChangeListener((picker, color) -> {
+            element.setTextColor(color);
+            profile.save();
+            inputControlsView.invalidate();
+        });
 
         CheckBox cbToggleSwitch = view.findViewById(R.id.CBToggleSwitch);
         cbToggleSwitch.setChecked(element.isToggleSwitch());

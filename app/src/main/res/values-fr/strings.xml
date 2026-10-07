@@ -32,6 +32,10 @@
     <string name="binding_left">Affectation gauche</string>
     <string name="overlay_opacity">Opacité de la superposition</string>
     <string name="opacity">Opacité</string>
+    <string name="border_color">Couleur de bordure</string>
+    <string name="background_color">Couleur de fond</string>
+    <string name="text_color">Couleur du texte</string>
+    <string name="default_color">Par défaut</string>
     <string name="profile">Profil</string>
     <string name="select_profile">Sélectionner un profil</string>
     <string name="profile_name">Nom du profil</string>

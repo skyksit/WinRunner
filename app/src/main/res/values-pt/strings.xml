@@ -32,6 +32,10 @@
     <string name="binding_left">Ligação Esquerda</string>
     <string name="overlay_opacity">Opacidade de Sobreposição</string>
     <string name="opacity">Opacidade</string>
+    <string name="border_color">Cor da borda</string>
+    <string name="background_color">Cor de fundo</string>
+    <string name="text_color">Cor do texto</string>
+    <string name="default_color">Padrão</string>
     <string name="profile">Perfil</string>
     <string name="select_profile">Selecione o Perfil</string>
     <string name="profile_name">Nome do Perfil</string>

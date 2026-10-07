@@ -3,7 +3,10 @@ package com.winlator.inputcontrols;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -81,6 +84,12 @@ public class ControlElement {
     private Binding[] bindings = {Binding.NONE, Binding.NONE, Binding.NONE, Binding.NONE};
     private float scale = 1.0f;
     private float opacity = 1.0f;
+    // DGPlayer: per-element colours as 0xRRGGBB. null keeps the stock look (white outline/text, no fill).
+    private Integer borderColor;
+    private Integer backgroundColor;
+    private Integer textColor;
+    private int iconFilterColor;
+    private PorterDuffColorFilter iconFilter;
     private short x;
     private short y;
     private int currentPointerId = -1;
@@ -245,6 +254,48 @@ public class ControlElement {
 
     public void setOpacity(float opacity) {
         this.opacity = opacity;
+    }
+
+    public Integer getBorderColor() {
+        return borderColor;
+    }
+
+    public void setBorderColor(Integer color) {
+        this.borderColor = color != null ? (color & 0xffffff) : null;
+    }
+
+    public Integer getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Integer color) {
+        this.backgroundColor = color != null ? (color & 0xffffff) : null;
+    }
+
+    public Integer getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(Integer color) {
+        this.textColor = color != null ? (color & 0xffffff) : null;
+    }
+
+    public static String colorToString(int rgb) {
+        return String.format(java.util.Locale.ENGLISH, "#%06X", rgb & 0xffffff);
+    }
+
+    /** Parses "#RRGGBB"; returns null for anything else so a bad profile never breaks rendering. */
+    public static Integer parseColor(String value) {
+        if (value == null) return null;
+        String hex = value.trim();
+        if (hex.startsWith("#")) hex = hex.substring(1);
+        if (hex.length() != 6) return null;
+        try {
+            return Integer.parseInt(hex, 16);
+        }
+        catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     public short getX() {
@@ -427,6 +478,9 @@ public class ControlElement {
         int snappingSize = inputControlsView.getSnappingSize();
         Paint paint = inputControlsView.getPaint();
         int lightColor = getLightColor();
+        int textColor = getTextColorArgb();
+        int pressedTextColor = getPressedTextColorArgb();
+        int backgroundColor = getBackgroundColorArgb();
 
         paint.setColor(propertyFlags.isSet(FLAG_SELECTED) ? getHighlightColor() : lightColor);
         paint.setStyle(Paint.Style.STROKE);
@@ -437,29 +491,32 @@ public class ControlElement {
         switch (type) {
             case BUTTON:
             case MIDI_KEY: {
-                if (propertyFlags.isSet(FLAG_PRESSED)) paint.setStyle(Paint.Style.FILL);
-
                 float cx = boundingBox.centerX();
                 float cy = boundingBox.centerY();
+                Runnable drawShape = () -> {
+                    switch (shape) {
+                        case CIRCLE:
+                            canvas.drawCircle(cx, cy, boundingBox.width() * 0.5f, paint);
+                            break;
+                        case RECT:
+                            canvas.drawRect(boundingBox, paint);
+                            break;
+                        case ROUND_RECT: {
+                            float radius = boundingBox.height() * 0.5f;
+                            canvas.drawRoundRect(boundingBox.left, boundingBox.top, boundingBox.right, boundingBox.bottom, radius, radius, paint);
+                            break;
+                        }
+                        case SQUARE: {
+                            float radius = snappingSize * 0.75f * scale;
+                            canvas.drawRoundRect(boundingBox.left, boundingBox.top, boundingBox.right, boundingBox.bottom, radius, radius, paint);
+                            break;
+                        }
+                    }
+                };
 
-                switch (shape) {
-                    case CIRCLE:
-                        canvas.drawCircle(cx, cy, boundingBox.width() * 0.5f, paint);
-                        break;
-                    case RECT:
-                        canvas.drawRect(boundingBox, paint);
-                        break;
-                    case ROUND_RECT: {
-                        float radius = boundingBox.height() * 0.5f;
-                        canvas.drawRoundRect(boundingBox.left, boundingBox.top, boundingBox.right, boundingBox.bottom, radius, radius, paint);
-                        break;
-                    }
-                    case SQUARE: {
-                        float radius = snappingSize * 0.75f * scale;
-                        canvas.drawRoundRect(boundingBox.left, boundingBox.top, boundingBox.right, boundingBox.bottom, radius, radius, paint);
-                        break;
-                    }
-                }
+                if (propertyFlags.isSet(FLAG_PRESSED)) paint.setStyle(Paint.Style.FILL);
+                else fillBackground(paint, backgroundColor, drawShape);
+                drawShape.run();
 
                 if (iconId > 0) {
                     drawIcon(canvas, cx, cy, boundingBox.width(), boundingBox.height(), iconId, true);
@@ -469,7 +526,7 @@ public class ControlElement {
                     paint.setTextSize(Math.min(getTextSizeForWidth(paint, text, boundingBox.width() - strokeWidth * 2), snappingSize * 2 * scale));
                     paint.setTextAlign(Paint.Align.CENTER);
                     paint.setStyle(Paint.Style.FILL);
-                    paint.setColor(propertyFlags.isSet(FLAG_PRESSED) ? getDarkColor() : lightColor);
+                    paint.setColor(propertyFlags.isSet(FLAG_PRESSED) ? pressedTextColor : textColor);
                     canvas.drawText(text, x, (y - ((paint.descent() + paint.ascent()) * 0.5f)), paint);
                 }
                 break;
@@ -513,13 +570,15 @@ public class ControlElement {
                     paths = new Path[]{path};
                 }
 
-                canvas.drawPath(paths[0], paint);
+                final Path dpadPath = paths[0];
+                fillBackground(paint, backgroundColor, () -> canvas.drawPath(dpadPath, paint));
+                canvas.drawPath(dpadPath, paint);
                 break;
             }
             case RANGE_BUTTON: {
                 Range range = getRange();
                 int oldColor = paint.getColor();
-                int darkColor = getDarkColor();
+                int darkColor = pressedTextColor;
 
                 float radius = snappingSize * 0.75f * scale;
                 float elementSize = scroller.getElementSize();
@@ -534,6 +593,7 @@ public class ControlElement {
                     float lineTop = boundingBox.top + strokeWidth * 0.5f;
                     float lineBottom = boundingBox.bottom - strokeWidth * 0.5f;
                     float startX = boundingBox.left;
+                    fillBackground(paint, backgroundColor, () -> canvas.drawRoundRect(boundingBox.left, boundingBox.top, boundingBox.right, boundingBox.bottom, radius, radius, paint));
                     canvas.drawRoundRect(startX, boundingBox.top, boundingBox.right, boundingBox.bottom, radius, radius, paint);
 
                     if (paths == null) {
@@ -565,7 +625,7 @@ public class ControlElement {
                                 canvas.drawRect(startX, lineTop, startX + elementSize, lineBottom, paint);
                             }
 
-                            paint.setColor(pressed ? darkColor : lightColor);
+                            paint.setColor(pressed ? darkColor : textColor);
                             paint.setTextSize(Math.min(getTextSizeForWidth(paint, text, elementSize - strokeWidth * 2), minTextSize));
                             paint.setTextAlign(Paint.Align.CENTER);
                             canvas.drawText(text, startX + elementSize * 0.5f, (y - ((paint.descent() + paint.ascent()) * 0.5f)), paint);
@@ -583,6 +643,7 @@ public class ControlElement {
                     float lineLeft = boundingBox.left + strokeWidth * 0.5f;
                     float lineRight = boundingBox.right - strokeWidth * 0.5f;
                     float startY = boundingBox.top;
+                    fillBackground(paint, backgroundColor, () -> canvas.drawRoundRect(boundingBox.left, boundingBox.top, boundingBox.right, boundingBox.bottom, radius, radius, paint));
                     canvas.drawRoundRect(boundingBox.left, startY, boundingBox.right, boundingBox.bottom, radius, radius, paint);
 
                     if (paths == null) {
@@ -614,7 +675,7 @@ public class ControlElement {
                                 canvas.drawRect(lineLeft, startY, lineRight, startY + elementSize, paint);
                             }
 
-                            paint.setColor(pressed ? darkColor : lightColor);
+                            paint.setColor(pressed ? darkColor : textColor);
                             paint.setTextSize(Math.min(getTextSizeForWidth(paint, text, boundingBox.width() - strokeWidth * 2), minTextSize));
                             paint.setTextAlign(Paint.Align.CENTER);
                             canvas.drawText(text, x, startY + elementSize * 0.5f - ((paint.descent() + paint.ascent()) * 0.5f), paint);
@@ -634,6 +695,7 @@ public class ControlElement {
                 int cx = boundingBox.centerX();
                 int cy = boundingBox.centerY();
                 int oldColor = paint.getColor();
+                fillBackground(paint, backgroundColor, () -> canvas.drawCircle(cx, cy, boundingBox.height() * 0.5f, paint));
                 canvas.drawCircle(cx, cy, boundingBox.height() * 0.5f, paint);
 
                 float thumbstickX = currentPosition != null ? currentPosition.x : cx;
@@ -651,6 +713,8 @@ public class ControlElement {
             }
             case TRACKPAD: {
                 float radius = boundingBox.height() * 0.15f;
+                final float outerRadius = radius;
+                fillBackground(paint, backgroundColor, () -> canvas.drawRoundRect(boundingBox.left, boundingBox.top, boundingBox.right, boundingBox.bottom, outerRadius, outerRadius, paint));
                 canvas.drawRoundRect(boundingBox.left, boundingBox.top, boundingBox.right, boundingBox.bottom, radius, radius, paint);
                 float offset = strokeWidth * 2.5f;
                 float innerStrokeWidth = strokeWidth * 2;
@@ -702,9 +766,13 @@ public class ControlElement {
                     paths = new Path[]{path0, path1};
                 }
 
+                fillBackground(paint, backgroundColor, () -> canvas.drawCircle(cx, cy, radius, paint));
+
                 if (propertyFlags.isSet(FLAG_VISIBLE)) {
                     float minTextSize = snappingSize * 2 * scale;
-                    int darkColor = getDarkColor();
+                    int darkColor = pressedTextColor;
+                    final Path segments = paths[0];
+                    fillBackground(paint, backgroundColor, () -> canvas.drawPath(segments, paint));
                     paint.setStrokeCap(Paint.Cap.SQUARE);
                     canvas.drawPath(paths[0], paint);
                     paint.setStrokeCap(Paint.Cap.BUTT);
@@ -730,7 +798,7 @@ public class ControlElement {
                             canvas.rotate(textAngle);
                             String text = getBindingTextAt(j++);
                             paint.setTextSize(Math.min(getTextSizeForWidth(paint, text, touchAreaRadius * 2), minTextSize));
-                            paint.setColor(propertyFlags.isSet(FLAG_PRESSED) ? darkColor : lightColor);
+                            paint.setColor(propertyFlags.isSet(FLAG_PRESSED) ? darkColor : textColor);
                             canvas.drawText(text, 0, -((paint.descent() + paint.ascent()) * 0.5f), paint);
                             canvas.restore();
                         }
@@ -754,10 +822,23 @@ public class ControlElement {
         }
     }
 
+    private ColorFilter getIconColorFilter() {
+        Integer rgb = propertyFlags.isSet(FLAG_PRESSED) ? backgroundColor : textColor;
+        if (rgb == null) {
+            return propertyFlags.isSet(FLAG_PRESSED) ? inputControlsView.getDarkColorFilter() : inputControlsView.getLightColorFilter();
+        }
+        int color = 0xff000000 | rgb;
+        if (iconFilter == null || iconFilterColor != color) {
+            iconFilter = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN);
+            iconFilterColor = color;
+        }
+        return iconFilter;
+    }
+
     private void drawIcon(Canvas canvas, float cx, float cy, float width, float height, int iconId, boolean automargin) {
         Paint paint = inputControlsView.getPaint();
         Bitmap icon = inputControlsView.getIcon((byte)iconId);
-        paint.setColorFilter(propertyFlags.isSet(FLAG_PRESSED) ? inputControlsView.getDarkColorFilter() : inputControlsView.getLightColorFilter());
+        paint.setColorFilter(getIconColorFilter());
         float snappingSize = inputControlsView.getSnappingSize();
         int margin = automargin ? (int)(snappingSize * (shape == Shape.CIRCLE || shape == Shape.SQUARE ? 2.0f : 1.0f) * scale) : 0;
         int halfSize = (int)((Math.min(width, height) - margin) * 0.5f);
@@ -780,6 +861,9 @@ public class ControlElement {
             elementJSONObject.put("bindings", bindingsJSONArray);
             elementJSONObject.put("scale", Float.valueOf(scale));
             if (opacity < 1.0f) elementJSONObject.put("opacity", Float.valueOf(opacity));
+            if (borderColor != null) elementJSONObject.put("borderColor", colorToString(borderColor));
+            if (backgroundColor != null) elementJSONObject.put("backgroundColor", colorToString(backgroundColor));
+            if (textColor != null) elementJSONObject.put("textColor", colorToString(textColor));
             elementJSONObject.put("x", (float)x / inputControlsView.getMaxWidth());
             elementJSONObject.put("y", (float)y / inputControlsView.getMaxHeight());
             elementJSONObject.put("toggleSwitch", propertyFlags.isSet(FLAG_TOGGLE_SWITCH));
@@ -1087,14 +1171,43 @@ public class ControlElement {
         }
     }
 
-    public int getLightColor() {
+    private int withAlpha(int rgb) {
         float opacity = inputControlsView.isEditMode() ? Math.max(0.15f, this.opacity) : this.opacity;
-        return Color.argb((int)(opacity * inputControlsView.getOverlayOpacity() * 255), 255, 255, 255);
+        return Color.argb((int)(opacity * inputControlsView.getOverlayOpacity() * 255), Color.red(rgb), Color.green(rgb), Color.blue(rgb));
+    }
+
+    /** Outline colour (and the fill of a pressed element). */
+    public int getLightColor() {
+        return withAlpha(borderColor != null ? borderColor : 0xffffff);
     }
 
     public int getDarkColor() {
-        float opacity = inputControlsView.isEditMode() ? Math.max(0.15f, this.opacity) : this.opacity;
-        return Color.argb((int)(opacity * inputControlsView.getOverlayOpacity() * 255), 0, 0, 0);
+        return withAlpha(0x000000);
+    }
+
+    private int getTextColorArgb() {
+        return withAlpha(textColor != null ? textColor : 0xffffff);
+    }
+
+    /** Text drawn on top of a pressed (filled with the outline colour) element. */
+    private int getPressedTextColorArgb() {
+        return backgroundColor != null ? withAlpha(backgroundColor) : getDarkColor();
+    }
+
+    /** 0 when no background colour is set, meaning the element is not filled. */
+    private int getBackgroundColorArgb() {
+        return backgroundColor != null ? withAlpha(backgroundColor) : 0;
+    }
+
+    private void fillBackground(Paint paint, int backgroundColor, Runnable drawShape) {
+        if (backgroundColor == 0) return;
+        int oldColor = paint.getColor();
+        Paint.Style oldStyle = paint.getStyle();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(backgroundColor);
+        drawShape.run();
+        paint.setStyle(oldStyle);
+        paint.setColor(oldColor);
     }
 
     public int getHighlightColor() {

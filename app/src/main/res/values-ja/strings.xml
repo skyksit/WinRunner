@@ -32,6 +32,10 @@
     <string name="binding_left">左の割り当て</string>
     <string name="overlay_opacity">オーバーレイの不透明度</string>
     <string name="opacity">不透明度</string>
+    <string name="border_color">枠線の色</string>
+    <string name="background_color">背景色</string>
+    <string name="text_color">文字色</string>
+    <string name="default_color">デフォルト</string>
     <string name="profile">プロファイル</string>
     <string name="select_profile">プロファイルを選択</string>
     <string name="profile_name">プロファイル名</string>
