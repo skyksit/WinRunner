@@ -1171,9 +1171,19 @@ public class ControlElement {
         }
     }
 
+    private boolean hasCustomColors() {
+        return borderColor != null || backgroundColor != null || textColor != null;
+    }
+
+    /**
+     * Stock elements keep upstream's element opacity × overlay opacity (40% in game, 60% in the editor).
+     * An element with its own colours uses its opacity as-is: otherwise "100%" renders at 40% in game
+     * and a different brightness in the editor, so the chosen colours never look as picked.
+     */
     private int withAlpha(int rgb) {
         float opacity = inputControlsView.isEditMode() ? Math.max(0.15f, this.opacity) : this.opacity;
-        return Color.argb((int)(opacity * inputControlsView.getOverlayOpacity() * 255), Color.red(rgb), Color.green(rgb), Color.blue(rgb));
+        float overlayOpacity = hasCustomColors() ? 1.0f : inputControlsView.getOverlayOpacity();
+        return Color.argb((int)(opacity * overlayOpacity * 255), Color.red(rgb), Color.green(rgb), Color.blue(rgb));
     }
 
     /** Outline colour (and the fill of a pressed element). */
