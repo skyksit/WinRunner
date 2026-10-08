@@ -29,7 +29,8 @@ public abstract class RootFSInstaller {
     // 26: the ntdll pair and wineserver come from a game-speed build (wine_patches/), so an
     // existing container has to re-extract the rootfs or it keeps the unscaled clock.
     // 27: quartz.dll clamps a seek before the start of the stream (DGwine patch 0003).
-    public static final byte LATEST_VERSION = 27; // TODO increment it on rootfs update
+    // 28: gdiplus.dll finds a family by its name when the full name differs (DGwine patch 0004).
+    public static final byte LATEST_VERSION = 28; // TODO increment it on rootfs update
     public static final byte UPDATE_WINEPREFIX_VERSION = 16; // set it if main wine version change
     public static final String FILENAME = "rootfs.tzst";
 

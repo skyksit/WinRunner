@@ -75,7 +75,10 @@ android {
         //     aborting the app at max_map_count), and the ALSA plugin in rootfs_patches asks for four
         //     periods (8-bit mono got one and failed hw_params - silent waveOut). rootfs_patches is
         //     re-extracted on an appVersion change, so the rootfs version stays at 27.
-        versionCode 58
+        // 59: rootfs 28 - gdiplus.dll finds a family by its name when the full name differs
+        //     (DGwine 0004). Android's Noto CJK names its regular face "<family> Regular", so GDI+
+        //     never found it and Dawn of Kagura drew no text in its message window.
+        versionCode 59
         versionName "11.6"
     }
 
