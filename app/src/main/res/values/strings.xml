@@ -114,6 +114,10 @@
     <string name="bindings">Bindings</string>
     <string name="show_touchscreen_controls">Show Touchscreen Controls</string>
     <string name="touch_vibration">Touch Vibration</string>
+    <string name="auto_hide_touchscreen_controls">Auto-hide Controls</string>
+    <string name="auto_hide_15s">15 sec</string>
+    <string name="auto_hide_30s">30 sec</string>
+    <string name="auto_hide_60s">60 sec</string>
     <string name="vibration_strength">Vibration Strength</string>
     <string name="vibration_mode_off">Off</string>
     <string name="vibration_mode_press">On Press</string>

@@ -65,6 +65,21 @@ public class InputControlsView extends View {
     private final PointF mouseMoveOffset = new PointF();
     private boolean showTouchscreenControls = true;
     private final TouchHaptics touchHaptics;
+    // DGPlayer: auto-hide. After autoHideMs without a touch the overlay fades out; the next touch
+    // brings it back. Only touches restart the timer - external gamepad input deliberately does not,
+    // since this is for players who use a gamepad and want the on-screen controls only now and then.
+    // The view stays VISIBLE (alpha only): GONE would drop focus and with it the generic-motion path
+    // that feeds the profile's stick/trigger bindings.
+    public static final String PREF_AUTO_HIDE_SECONDS = "input_controls_auto_hide_seconds";
+    public static final int[] AUTO_HIDE_SECONDS_OPTIONS = {0, 15, 30, 60};
+    public static final int DEFAULT_AUTO_HIDE_SECONDS = 60;
+    private static final long AUTO_HIDE_FADE_MS = 300;
+    private long autoHideMs = 0;
+    private boolean idleHidden = false;
+    private boolean autoHidePaused = false;
+    private boolean revealGesture = false;
+    private boolean touchDown = false;
+    private final Runnable autoHideRunnable = this::hideForIdle;
 
     public InputControlsView(Context context) {
         super(context);
@@ -246,6 +261,80 @@ public class InputControlsView extends View {
         return showTouchscreenControls;
     }
 
+    /** 0 or less turns auto-hide off. Changing it shows the controls and starts counting again. */
+    public void setAutoHideSeconds(int seconds) {
+        autoHideMs = seconds > 0 ? seconds * 1000L : 0;
+        revealFromIdle();
+        scheduleAutoHide();
+    }
+
+    /** Stops the timer and shows the controls (activity paused). */
+    public void pauseAutoHide() {
+        autoHidePaused = true;
+        removeCallbacks(autoHideRunnable);
+        revealFromIdle();
+    }
+
+    public void resumeAutoHide() {
+        autoHidePaused = false;
+        touchDown = false;
+        revealGesture = false;
+        scheduleAutoHide();
+    }
+
+    private void scheduleAutoHide() {
+        removeCallbacks(autoHideRunnable);
+        if (autoHideMs > 0 && !autoHidePaused && !touchDown && !editMode) postDelayed(autoHideRunnable, autoHideMs);
+    }
+
+    private void hideForIdle() {
+        if (idleHidden || autoHidePaused || touchDown || editMode || autoHideMs <= 0) return;
+        if (profile == null || getVisibility() != VISIBLE) {
+            // No layout on screen right now - look again later, it may be picked in the drawer.
+            scheduleAutoHide();
+            return;
+        }
+        idleHidden = true;
+        animate().cancel();
+        animate().alpha(0f).setDuration(AUTO_HIDE_FADE_MS).start();
+    }
+
+    private void revealFromIdle() {
+        if (!idleHidden) return;
+        idleHidden = false;
+        animate().cancel();
+        animate().alpha(1f).setDuration(AUTO_HIDE_FADE_MS / 2).start();
+    }
+
+    /**
+     * Auto-hide bookkeeping for one touch event. Returns true when the event belongs to a gesture
+     * that only revealed the controls: it started on a hidden element, so it must not press it.
+     * A reveal touch that misses every element goes on to the touchpad as usual.
+     */
+    private boolean handleAutoHideTouch(MotionEvent event) {
+        if (autoHideMs <= 0 && !idleHidden) return false;
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                touchDown = true;
+                removeCallbacks(autoHideRunnable);
+                revealGesture = false;
+                if (idleHidden) {
+                    revealGesture = intersectElement(event.getX(), event.getY()) != null;
+                    revealFromIdle();
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                touchDown = false;
+                boolean consumed = revealGesture;
+                revealGesture = false;
+                scheduleAutoHide();
+                return consumed;
+            }
+        }
+        return revealGesture;
+    }
+
     public void setShowTouchscreenControls(boolean showTouchscreenControls) {
         this.showTouchscreenControls = showTouchscreenControls;
     }
@@ -394,6 +483,8 @@ public class InputControlsView extends View {
                 }
             }
         }
+
+        if (!editMode && profile != null && handleAutoHideTouch(event)) return true;
 
         if (!editMode && profile != null) {
             int actionIndex = event.getActionIndex();

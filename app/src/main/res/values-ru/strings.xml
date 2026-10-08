@@ -114,6 +114,10 @@
     <string name="bindings">привязки</string>
     <string name="show_touchscreen_controls">Показать элементы управления сенсорным экраном</string>
     <string name="touch_vibration">Вибрация при касании</string>
+    <string name="auto_hide_touchscreen_controls">Автоскрытие элементов</string>
+    <string name="auto_hide_15s">15 с</string>
+    <string name="auto_hide_30s">30 с</string>
+    <string name="auto_hide_60s">60 с</string>
     <string name="vibration_strength">Сила вибрации</string>
     <string name="vibration_mode_off">Выкл.</string>
     <string name="vibration_mode_press">При нажатии</string>

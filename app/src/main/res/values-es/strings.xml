@@ -114,6 +114,10 @@
     <string name="bindings">Asignaciones</string>
     <string name="show_touchscreen_controls">Mostrar controles táctiles</string>
     <string name="touch_vibration">Vibración al tocar</string>
+    <string name="auto_hide_touchscreen_controls">Ocultar controles automáticamente</string>
+    <string name="auto_hide_15s">15 s</string>
+    <string name="auto_hide_30s">30 s</string>
+    <string name="auto_hide_60s">60 s</string>
     <string name="vibration_strength">Intensidad de vibración</string>
     <string name="vibration_mode_off">Desactivada</string>
     <string name="vibration_mode_press">Al pulsar</string>

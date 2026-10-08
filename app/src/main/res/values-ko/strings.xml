@@ -114,6 +114,10 @@
     <string name="bindings">바인딩</string>
     <string name="show_touchscreen_controls">터치스크린 컨트롤 표시</string>
     <string name="touch_vibration">터치 진동</string>
+    <string name="auto_hide_touchscreen_controls">컨트롤 자동 숨기기</string>
+    <string name="auto_hide_15s">15초</string>
+    <string name="auto_hide_30s">30초</string>
+    <string name="auto_hide_60s">60초</string>
     <string name="vibration_strength">진동 세기</string>
     <string name="vibration_mode_off">끔</string>
     <string name="vibration_mode_press">누를 때</string>

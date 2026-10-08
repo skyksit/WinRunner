@@ -147,6 +147,13 @@
         <item>@string/vibration_mode_press</item>
         <item>@string/vibration_mode_press_release</item>
     </string-array>
+    <!-- Order matches InputControlsView.AUTO_HIDE_SECONDS_OPTIONS -->
+    <string-array name="auto_hide_touchscreen_controls_entries">
+        <item>@string/vibration_mode_off</item>
+        <item>@string/auto_hide_15s</item>
+        <item>@string/auto_hide_30s</item>
+        <item>@string/auto_hide_60s</item>
+    </string-array>
     <string-array name="language_entries">
         <item>English</item>
         <item>Português</item>

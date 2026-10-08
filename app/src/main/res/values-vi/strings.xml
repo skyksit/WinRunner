@@ -114,6 +114,10 @@
     <string name="bindings">Gán phím</string>
     <string name="show_touchscreen_controls">Hiện điều khiển màn hình cảm ứng</string>
     <string name="touch_vibration">Rung khi chạm</string>
+    <string name="auto_hide_touchscreen_controls">Tự động ẩn điều khiển</string>
+    <string name="auto_hide_15s">15 giây</string>
+    <string name="auto_hide_30s">30 giây</string>
+    <string name="auto_hide_60s">60 giây</string>
     <string name="vibration_strength">Cường độ rung</string>
     <string name="vibration_mode_off">Tắt</string>
     <string name="vibration_mode_press">Khi nhấn</string>

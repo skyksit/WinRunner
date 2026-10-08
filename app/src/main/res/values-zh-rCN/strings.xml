@@ -114,6 +114,10 @@
     <string name="bindings">绑定</string>
     <string name="show_touchscreen_controls">显示触屏控制</string>
     <string name="touch_vibration">触摸振动</string>
+    <string name="auto_hide_touchscreen_controls">自动隐藏控件</string>
+    <string name="auto_hide_15s">15 秒</string>
+    <string name="auto_hide_30s">30 秒</string>
+    <string name="auto_hide_60s">60 秒</string>
     <string name="vibration_strength">振动强度</string>
     <string name="vibration_mode_off">关闭</string>
     <string name="vibration_mode_press">按下时</string>

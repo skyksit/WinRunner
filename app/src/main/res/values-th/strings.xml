@@ -114,6 +114,10 @@
     <string name="bindings">การกำหนดปุ่ม</string>
     <string name="show_touchscreen_controls">แสดงปุ่มควบคุมบนหน้าจอสัมผัส</string>
     <string name="touch_vibration">การสั่นเมื่อแตะ</string>
+    <string name="auto_hide_touchscreen_controls">ซ่อนปุ่มควบคุมอัตโนมัติ</string>
+    <string name="auto_hide_15s">15 วินาที</string>
+    <string name="auto_hide_30s">30 วินาที</string>
+    <string name="auto_hide_60s">60 วินาที</string>
     <string name="vibration_strength">ความแรงของการสั่น</string>
     <string name="vibration_mode_off">ปิด</string>
     <string name="vibration_mode_press">เมื่อกด</string>

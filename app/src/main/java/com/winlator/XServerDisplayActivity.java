@@ -399,12 +399,14 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         }
         ForegroundService.onResumeSession(this);
         UpdateChecker.onResume(this);
+        if (inputControlsView != null) inputControlsView.resumeAutoHide();
     }
 
     @Override
     public void onPause() {
         ForegroundService.onPauseSession(this);
         super.onPause();
+        if (inputControlsView != null) inputControlsView.pauseAutoHide();
         if (environment != null && !isInPictureInPictureMode()) {
             environment.onPause();
             xServerView.onPause();
@@ -913,6 +915,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         // DGPlayer layouts can carry buttons for app-side actions. The widget stays activity-agnostic
         // (ControlsEditorActivity builds one too), so the wiring lives here.
         inputControlsView.setCommandHandler(this::handleControlsCommand);
+        inputControlsView.setAutoHideSeconds(preferences.getInt(InputControlsView.PREF_AUTO_HIDE_SECONDS, InputControlsView.DEFAULT_AUTO_HIDE_SECONDS));
         inputControlsView.setVisibility(View.GONE);
         rootView.addView(inputControlsView);
 
@@ -1021,6 +1024,15 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         final CheckBox cbShowTouchscreenControls = dialog.findViewById(R.id.CBShowTouchscreenControls);
         cbShowTouchscreenControls.setChecked(inputControlsView.isShowTouchscreenControls());
 
+        // Global and persisted like tap to click: a player who wants it wants it in every game.
+        final Spinner sAutoHide = dialog.findViewById(R.id.SAutoHide);
+        int autoHideSeconds = preferences.getInt(InputControlsView.PREF_AUTO_HIDE_SECONDS, InputControlsView.DEFAULT_AUTO_HIDE_SECONDS);
+        int autoHidePosition = 0;
+        for (int i = 0; i < InputControlsView.AUTO_HIDE_SECONDS_OPTIONS.length; i++) {
+            if (InputControlsView.AUTO_HIDE_SECONDS_OPTIONS[i] == autoHideSeconds) autoHidePosition = i;
+        }
+        sAutoHide.setSelection(autoHidePosition);
+
         final View llVibrationStrength = dialog.findViewById(R.id.LLVibrationStrength);
         final SeekBar sbVibrationStrength = dialog.findViewById(R.id.SBVibrationStrength);
         sbVibrationStrength.setValue(preferences.getFloat(TouchHaptics.PREF_STRENGTH, TouchHaptics.DEFAULT_STRENGTH) * 100);
@@ -1066,6 +1078,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                               .putInt(TouchHaptics.PREF_MODE, vibrationMode)
                               .putFloat(TouchHaptics.PREF_STRENGTH, vibrationStrength).apply();
             touchpadView.setTapToClickEnabled(tapToClick);
+            int autoHidePos = Math.max(0, Math.min(sAutoHide.getSelectedItemPosition(), InputControlsView.AUTO_HIDE_SECONDS_OPTIONS.length - 1));
+            int autoHide = InputControlsView.AUTO_HIDE_SECONDS_OPTIONS[autoHidePos];
+            preferences.edit().putInt(InputControlsView.PREF_AUTO_HIDE_SECONDS, autoHide).apply();
+            inputControlsView.setAutoHideSeconds(autoHide);
             inputControlsView.setVibrationMode(vibrationMode);
             inputControlsView.setVibrationStrength(vibrationStrength);
 

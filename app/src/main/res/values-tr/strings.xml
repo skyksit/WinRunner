@@ -114,6 +114,10 @@
     <string name="bindings">Atamalar</string>
     <string name="show_touchscreen_controls">Dokunmatik Ekran Kontrollerini Göster</string>
     <string name="touch_vibration">Dokunma Titreşimi</string>
+    <string name="auto_hide_touchscreen_controls">Kontrolleri otomatik gizle</string>
+    <string name="auto_hide_15s">15 sn</string>
+    <string name="auto_hide_30s">30 sn</string>
+    <string name="auto_hide_60s">60 sn</string>
     <string name="vibration_strength">Titreşim Gücü</string>
     <string name="vibration_mode_off">Kapalı</string>
     <string name="vibration_mode_press">Basınca</string>

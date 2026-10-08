@@ -114,6 +114,10 @@
     <string name="bindings">Przypisania</string>
     <string name="show_touchscreen_controls">Pokaż sterowanie dotykowe</string>
     <string name="touch_vibration">Wibracja dotyku</string>
+    <string name="auto_hide_touchscreen_controls">Autoukrywanie sterowania</string>
+    <string name="auto_hide_15s">15 s</string>
+    <string name="auto_hide_30s">30 s</string>
+    <string name="auto_hide_60s">60 s</string>
     <string name="vibration_strength">Siła wibracji</string>
     <string name="vibration_mode_off">Wyłączona</string>
     <string name="vibration_mode_press">Przy naciśnięciu</string>

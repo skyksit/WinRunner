@@ -114,6 +114,10 @@
     <string name="bindings">割り当て</string>
     <string name="show_touchscreen_controls">タッチスクリーンコントロールを表示</string>
     <string name="touch_vibration">タッチ時の振動</string>
+    <string name="auto_hide_touchscreen_controls">コントロールの自動非表示</string>
+    <string name="auto_hide_15s">15秒</string>
+    <string name="auto_hide_30s">30秒</string>
+    <string name="auto_hide_60s">60秒</string>
     <string name="vibration_strength">振動の強さ</string>
     <string name="vibration_mode_off">オフ</string>
     <string name="vibration_mode_press">押したとき</string>

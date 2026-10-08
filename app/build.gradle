@@ -81,7 +81,7 @@ android {
         // 60: Game storage screen (StorageCleanupActivity, MANAGE_STORAGE): lists and deletes the game
         //     folders the bridge installed. Pending exports are flushed or discarded first so a deleted
         //     folder never overwrites a .save.zip; dgplayer_saves/<id>.json is kept.
-        versionCode 60
+        versionCode 61
         versionName "11.6"
     }
 

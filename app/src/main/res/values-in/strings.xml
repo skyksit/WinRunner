@@ -114,6 +114,10 @@
     <string name="bindings">Pemetaan</string>
     <string name="show_touchscreen_controls">Tampilkan Kontrol Layar Sentuh</string>
     <string name="touch_vibration">Getaran Sentuh</string>
+    <string name="auto_hide_touchscreen_controls">Sembunyikan kontrol otomatis</string>
+    <string name="auto_hide_15s">15 dtk</string>
+    <string name="auto_hide_30s">30 dtk</string>
+    <string name="auto_hide_60s">60 dtk</string>
     <string name="vibration_strength">Kekuatan Getaran</string>
     <string name="vibration_mode_off">Mati</string>
     <string name="vibration_mode_press">Saat Ditekan</string>
