@@ -37,7 +37,7 @@ abstract class PayloadInstaller {
      * payload's {@link #fingerprint} so a repackaged zip under the same game id (same dsam3 file
      * name) is detected and re-imported instead of silently running the stale install.
      */
-    private static final String INSTALLED_MARKER = ".dgp_installed";
+    static final String INSTALLED_MARKER = ".dgp_installed";
     /** How much of the zip's tail goes into the fingerprint — covers the central directory. */
     private static final int FINGERPRINT_TAIL_SIZE = 65536;
 

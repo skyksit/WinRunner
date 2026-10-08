@@ -309,7 +309,7 @@ public class GameLaunchActivity extends AppCompatActivity {
                 : manifest.getBoolean("forceFullscreen");
 
         // As late as possible, so every file the bridge itself just wrote counts as pre-existing.
-        if (saveUri != null) SaveSync.beginSession(this, container, gameId, saveUri);
+        if (saveUri != null) SaveSync.beginSession(this, container, gameId, saveUri, getIntent().getStringExtra(EXTRA_TITLE));
 
         Intent intent = new Intent(this, XServerDisplayActivity.class);
         intent.putExtra("container_id", container.id);
@@ -376,6 +376,21 @@ public class GameLaunchActivity extends AppCompatActivity {
             // the launch, which only costs a bigger extra.
             return sb.toString();
         }
+    }
+
+    /**
+     * The shared container if it already exists, without creating one (the storage screen must not
+     * build a 1.5-3 GB wineprefix just to report that nothing is installed).
+     */
+    static Container findSharedContainer(Context context, ContainerManager containerManager) {
+        int containerId = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getInt(PREF_CONTAINER_ID, -1);
+        return containerId != -1 ? containerManager.getContainerById(containerId) : null;
+    }
+
+    /** Where every imported game lives inside {@code container}: one folder per sanitized game id. */
+    static File gamesRoot(Container container) {
+        return new File(container.getRootDir(), ".wine/drive_c/"+GAMES_DIR);
     }
 
     /**

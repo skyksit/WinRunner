@@ -32,6 +32,7 @@ import com.winlator.core.LocaleHelper;
 import com.winlator.core.PreloaderDialog;
 import com.winlator.core.UpdateChecker;
 import com.winlator.xenvironment.RootFSInstaller;
+import com.winlator.bridge.StorageCleanupActivity;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final boolean DEBUG_MODE = false; // FIXME change to false
@@ -208,6 +209,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_item_settings:
                 showFragment(new SettingsFragment());
                 break;
+            case R.id.menu_item_storage:
+                drawerLayout.closeDrawer(GravityCompat.START);
+                // For a result, so BridgeSecurity sees this package as the caller (same signature).
+                startActivityForResult(new Intent(this, StorageCleanupActivity.class), 0);
+                return false; // Opens a screen of its own: keep the current fragment's item checked.
             case R.id.menu_item_about:
                 (new AboutDialog(this)).show();
                 break;

@@ -90,6 +90,18 @@
             Two-way sync of the controls-profile list with DGPlayer. Invisible: it finishes inside
             onCreate under a translucent theme. Caller is checked by BridgeSecurity.
         -->
+        <activity android:name="com.winlator.bridge.StorageCleanupActivity"
+            android:exported="true"
+            android:theme="@style/AppThemeDark"
+            android:excludeFromRecents="true"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|density|navigation">
+            <intent-filter>
+                <action android:name="com.retrople.action.MANAGE_STORAGE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name="com.winlator.bridge.ControlsSyncActivity"
             android:exported="true"
             android:theme="@style/AppThemeTransparent"

@@ -308,7 +308,7 @@ public abstract class SaveSync {
      * The game folder baseline is not reset here — it is persistent, so in-folder changes made by a
      * session that crashed are still caught at the next exit.
      */
-    static void beginSession(Context context, Container container, String gameId, Uri saveUri) {
+    static void beginSession(Context context, Container container, String gameId, Uri saveUri, String title) {
         try {
             SaveState state = SaveState.load(context, gameId);
             SaveSnapshot.Roots roots = SaveSnapshot.roots(container, gameId);
@@ -319,6 +319,8 @@ public abstract class SaveSync {
             state.saveUri = saveUri != null ? saveUri.toString() : null;
             state.sessionToken = UUID.randomUUID().toString();
             state.pendingExport = true;
+            if (title != null && !title.trim().isEmpty()) state.title = title.trim();
+            state.lastPlayedAt = System.currentTimeMillis();
             state.save(context);
             // After the state: a marker pointing at a token no state holds would distrust everyone.
             File dir = SaveState.dirFor(context);

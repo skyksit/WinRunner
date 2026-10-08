@@ -130,6 +130,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class XServerDisplayActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    /**
+     * The bridge game id of the session on screen, or null. One process, one session (singleTask), so
+     * a static is enough for the storage screen to refuse deleting the folder a game is running from.
+     */
+    public static volatile String activeBridgeGameId;
     private XServerView xServerView;
     private InputControlsView inputControlsView;
     private TouchpadView touchpadView;
@@ -194,6 +199,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         AppUtils.keepScreenOn(this);
         setContentView(R.layout.xserver_display_activity);
         ForegroundService.startSession(this);
+        activeBridgeGameId = getIntent().getStringExtra(SaveSync.EXTRA_GAME_ID);
 
         final PreloaderDialog preloaderDialog = new PreloaderDialog(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -458,6 +464,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         if (speedController != null) speedController.reset();
         Timescale.close();
         ForegroundService.stopSession(this);
+        String gameId = getIntent().getStringExtra(SaveSync.EXTRA_GAME_ID);
+        if (gameId != null && gameId.equals(activeBridgeGameId)) activeBridgeGameId = null;
         super.onDestroy();
     }
 

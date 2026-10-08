@@ -41,6 +41,8 @@ class SaveState {
     private static final String KEY_SESSION_STAMP = "sessionStamp";
     private static final String KEY_SESSION_TOKEN = "sessionToken";
     private static final String KEY_SAVE_URI = "saveUri";
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_LAST_PLAYED_AT = "lastPlayedAt";
 
     private static final String STATE_SUFFIX = ".json";
     private static final String KEY_TRACKED = "tracked";
@@ -71,6 +73,13 @@ class SaveState {
      * DGPlayer gave with that launch outlives the activity (until revoke or reboot).
      */
     String saveUri;
+    /**
+     * The caller's display title from the last launch. Only for people: the storage screen lists
+     * games by it, since a Hangul title sanitizes to an id like {@code ______2}. Null before v60.
+     */
+    String title;
+    /** When the last session started (ms). 0 = not recorded (state from before v60). */
+    long lastPlayedAt;
     /** Every path this game is known to write. Union across sessions; the export contents. */
     final Map<String, long[]> tracked = new LinkedHashMap<>();
     /** Game folder contents as of the last install or export. Persistent across sessions. */
@@ -119,6 +128,8 @@ class SaveState {
             state.sessionStamp = data.has(KEY_SESSION_STAMP) ? data.optString(KEY_SESSION_STAMP, "") : null;
             state.sessionToken = data.has(KEY_SESSION_TOKEN) ? data.optString(KEY_SESSION_TOKEN, null) : null;
             state.saveUri = data.has(KEY_SAVE_URI) ? data.optString(KEY_SAVE_URI, null) : null;
+            state.title = data.has(KEY_TITLE) ? data.optString(KEY_TITLE, null) : null;
+            state.lastPlayedAt = data.optLong(KEY_LAST_PLAYED_AT, 0L);
             readMap(data.optJSONObject(KEY_TRACKED), state.tracked);
             if (data.has(KEY_GAME_DIR_BASELINE)) {
                 state.gameDirBaseline = new LinkedHashMap<>();
@@ -154,6 +165,8 @@ class SaveState {
             if (sessionStamp != null) data.put(KEY_SESSION_STAMP, sessionStamp);
             if (sessionToken != null) data.put(KEY_SESSION_TOKEN, sessionToken);
             if (saveUri != null) data.put(KEY_SAVE_URI, saveUri);
+            if (title != null) data.put(KEY_TITLE, title);
+            if (lastPlayedAt > 0) data.put(KEY_LAST_PLAYED_AT, lastPlayedAt);
             data.put(KEY_TRACKED, writeMap(tracked));
             if (gameDirBaseline != null) data.put(KEY_GAME_DIR_BASELINE, writeMap(gameDirBaseline));
             data.put(KEY_SHARED_BASELINE, writeMap(sharedBaseline));
