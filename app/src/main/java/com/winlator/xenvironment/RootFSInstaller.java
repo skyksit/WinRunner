@@ -30,7 +30,10 @@ public abstract class RootFSInstaller {
     // existing container has to re-extract the rootfs or it keeps the unscaled clock.
     // 27: quartz.dll clamps a seek before the start of the stream (DGwine patch 0003).
     // 28: gdiplus.dll finds a family by its name when the full name differs (DGwine patch 0004).
-    public static final byte LATEST_VERSION = 28; // TODO increment it on rootfs update
+    // 29: the three winegstreamer modules handle a dynamic format change in the DirectShow MPEG
+    //     video decoder (DGwine patches 0005-0007); amstream's 32bpp SetFormat() no longer leaves
+    //     the decoder writing 24bpp rows into the surface.
+    public static final byte LATEST_VERSION = 29; // TODO increment it on rootfs update
     public static final byte UPDATE_WINEPREFIX_VERSION = 16; // set it if main wine version change
     public static final String FILENAME = "rootfs.tzst";
 

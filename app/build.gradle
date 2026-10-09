@@ -81,7 +81,12 @@ android {
         // 60: Game storage screen (StorageCleanupActivity, MANAGE_STORAGE): lists and deletes the game
         //     folders the bridge installed. Pending exports are flushed or discarded first so a deleted
         //     folder never overwrites a .save.zip; dgplayer_saves/<id>.json is kept.
-        versionCode 61
+        // 62: rootfs 29 - winegstreamer (i386/x86_64 PE + x86_64 unix, swapped as one set) handles a
+        //     dynamic format change in the DirectShow MPEG video decoder (DGwine 0005-0007, upstream
+        //     5feec037/e5d435e3/ef50cbd6). A game that plays MPEG-1 through amstream into a 32bpp
+        //     DirectDraw surface connects at RGB24 first and then SetFormat()s 32bpp; the decoder
+        //     ignored it and sheared the picture (Shogun: Total War's SEGA logo).
+        versionCode 62
         versionName "11.6"
     }
 
