@@ -34,6 +34,7 @@ import com.winlator.core.PreloaderDialog;
 import com.winlator.core.WineUtils;
 import com.winlator.widget.FrameRating;
 import com.winlator.xenvironment.RootFS;
+import com.winlator.xenvironment.RootFSInstaller;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -148,12 +149,29 @@ public class GameLaunchActivity extends AppCompatActivity {
             return;
         }
 
-        if (!RootFS.find(this).isValid()) {
+        RootFS rootFS = RootFS.find(this);
+        if (!rootFS.isValid()) {
             // First run of the fork itself. Installing the rootfs is MainActivity's job; sending the
             // user there is better than duplicating that flow inside the bridge.
             Toast.makeText(this, R.string.dgp_setup_required, Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, MainActivity.class));
             finish();
+            return;
+        }
+
+        if (rootFS.getVersion() < RootFSInstaller.LATEST_VERSION) {
+            // An app update raised the rootfs version. MainActivity re-extracts the rootfs when it
+            // starts, but a DGPlayer user never opens MainActivity, so without this check the new
+            // Wine modules silently never landed (rootfs 27 and 28 shipped that way). home/ is
+            // kept, so containers, games and saves survive; the launch carries on afterwards.
+            RootFSInstaller.install(this, success -> {
+                if (!success) {
+                    finishWithError("System files could not be updated");
+                    return;
+                }
+                preloaderDialog.show(R.string.starting_up);
+                Executors.newSingleThreadExecutor().execute(() -> prepareAndLaunch(gameId));
+            });
             return;
         }
 

@@ -86,7 +86,10 @@ android {
         //     5feec037/e5d435e3/ef50cbd6). A game that plays MPEG-1 through amstream into a 32bpp
         //     DirectDraw surface connects at RGB24 first and then SetFormat()s 32bpp; the decoder
         //     ignored it and sheared the picture (Shogun: Total War's SEGA logo).
-        versionCode 62
+        // 63: the bridge re-extracts an outdated rootfs before launching. GameLaunchActivity only
+        //     checked that a rootfs existed, and only MainActivity bumps it, so a DGPlayer user who
+        //     never opened this app kept the old Wine modules through rootfs 27, 28 and 29.
+        versionCode 63
         versionName "11.6"
     }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.winlator.MainActivity;
 import com.winlator.R;
 import com.winlator.SettingsFragment;
 import com.winlator.container.Container;
@@ -24,6 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
 
 public abstract class RootFSInstaller {
     // 26: the ntdll pair and wineserver come from a game-speed build (wine_patches/), so an
@@ -51,7 +51,17 @@ public abstract class RootFSInstaller {
         }
     }
 
-    public static void install(final MainActivity activity) {
+    public static void install(final AppCompatActivity activity) {
+        install(activity, null);
+    }
+
+    /**
+     * Re-extracts the rootfs and reports the outcome to {@code onDone} on the UI thread.
+     *
+     * <p>The bridge passes a callback so a DGPlayer launch can carry on once the files are in
+     * place; MainActivity and the settings screen have nothing to continue and pass null.
+     */
+    public static void install(final AppCompatActivity activity, final Consumer<Boolean> onDone) {
         AppUtils.keepScreenOn(activity);
         RootFS rootFS = RootFS.find(activity);
         final File rootDir = rootFS.getRootDir();
@@ -81,10 +91,11 @@ public abstract class RootFSInstaller {
             else AppUtils.showToast(activity, R.string.unable_to_install_system_files);
 
             dialog.closeOnUiThread();
+            if (onDone != null) activity.runOnUiThread(() -> onDone.accept(success));
         });
     }
 
-    public static void installIfNeeded(final MainActivity activity) {
+    public static void installIfNeeded(final AppCompatActivity activity) {
         RootFS rootFS = RootFS.find(activity);
         if (!rootFS.isValid() || rootFS.getVersion() < LATEST_VERSION) install(activity);
     }
