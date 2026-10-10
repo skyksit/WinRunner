@@ -89,7 +89,9 @@ android {
         // 63: the bridge re-extracts an outdated rootfs before launching. GameLaunchActivity only
         //     checked that a rootfs existed, and only MainActivity bumps it, so a DGPlayer user who
         //     never opened this app kept the old Wine modules through rootfs 27, 28 and 29.
-        versionCode 63
+        // 64: KEY_DGP_ZOOM_IN / KEY_DGP_ZOOM_OUT command bindings step the Magnifier zoom from an
+        //     Input Controls button (DGPlayer VPAD 🔍+ / 🔍-); the panel itself is unchanged.
+        versionCode 64
         versionName "11.6"
     }
 

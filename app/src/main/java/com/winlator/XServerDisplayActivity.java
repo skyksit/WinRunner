@@ -517,10 +517,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 if (magnifierView == null) {
                     final FrameLayout container = findViewById(R.id.FLXServerDisplay);
                     magnifierView = new MagnifierView(this);
-                    magnifierView.setZoomButtonCallback((value) -> {
-                        renderer.setMagnifierZoom(Mathf.clamp(renderer.getMagnifierZoom() + value, 1.0f, 3.0f));
-                        magnifierView.setZoomValue(renderer.getMagnifierZoom());
-                    });
+                    magnifierView.setZoomButtonCallback(this::adjustMagnifierZoom);
                     magnifierView.setZoomValue(renderer.getMagnifierZoom());
                     magnifierView.setHideButtonCallback(() -> {
                         container.removeView(magnifierView);
@@ -599,6 +596,13 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         }
         else if (binding == Binding.KEY_DGP_CHEAT) {
             showCheatSearchDialog();
+        }
+        else if (binding == Binding.KEY_DGP_ZOOM_IN || binding == Binding.KEY_DGP_ZOOM_OUT) {
+            // Same 0.25 step and 1.0..3.0 range as the Magnifier panel's +/- buttons. The panel need
+            // not be open; if it is, adjustMagnifierZoom keeps its "125%" text in sync. The indicator
+            // shows the value even at the bounds so a tap that changes nothing is still explained.
+            adjustMagnifierZoom(binding == Binding.KEY_DGP_ZOOM_IN ? 0.25f : -0.25f);
+            showTransientIndicator("🔍 " + (int) (xServerView.getRenderer().getMagnifierZoom() * 100) + "%");
         }
         else if (binding == Binding.KEY_DGP_EDIT_CONTROLS) {
             ControlsProfile profile = inputControlsView.getProfile();
@@ -973,10 +977,22 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     }
 
     private void showMouseModeIndicator(boolean touchMode) {
-        mouseModeIndicator.setText(touchMode ? "TOUCH" : "SWIPE");
+        showTransientIndicator(touchMode ? "TOUCH" : "SWIPE");
+    }
+
+    /** One-second overlay text (mouse mode, magnifier zoom). A new call replaces the previous text and restarts the timer. */
+    private void showTransientIndicator(String text) {
+        mouseModeIndicator.setText(text);
         mouseModeIndicator.setVisibility(View.VISIBLE);
         mouseModeIndicator.removeCallbacks(hideMouseModeIndicator);
         mouseModeIndicator.postDelayed(hideMouseModeIndicator, 1000);
+    }
+
+    /** Magnifier zoom by one step, shared by the Magnifier panel's +/- buttons and the KEY_DGP_ZOOM_* command bindings. */
+    private void adjustMagnifierZoom(float delta) {
+        final GLRenderer renderer = xServerView.getRenderer();
+        renderer.setMagnifierZoom(Mathf.clamp(renderer.getMagnifierZoom() + delta, 1.0f, 3.0f));
+        if (magnifierView != null) magnifierView.setZoomValue(renderer.getMagnifierZoom());
     }
 
     private void updateSpeedIndicator(SpeedController.Mode mode, float factor) {
