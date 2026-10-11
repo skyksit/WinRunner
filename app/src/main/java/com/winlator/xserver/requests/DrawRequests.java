@@ -150,6 +150,35 @@ public abstract class DrawRequests {
         dstDrawable.copyArea(srcX, srcY, dstX, dstY, width, height, srcDrawable, graphicsContext.getFunction());
     }
 
+    public static void polyPoint(XClient client, XInputStream inputStream, XOutputStream outputStream) throws XRequestError {
+        CoordinateMode coordinateMode = CoordinateMode.values()[client.getRequestData()];
+        int drawableId = inputStream.readInt();
+        int gcId = inputStream.readInt();
+
+        Drawable drawable = client.xServer.drawableManager.getDrawable(drawableId);
+        if (drawable == null) throw new BadDrawable(drawableId);
+        GraphicsContext graphicsContext = client.xServer.graphicsContextManager.getGraphicsContext(gcId);
+        if (graphicsContext == null) throw new BadGraphicsContext(gcId);
+        int length = client.getRemainingRequestLength();
+
+        short[] points = new short[length / 2];
+        int i = 0;
+        while (length != 0) {
+            points[i++] = inputStream.readShort();
+            points[i++] = inputStream.readShort();
+            length -= 4;
+        }
+
+        if (coordinateMode == CoordinateMode.PREVIOUS) {
+            for (int j = 2; j < points.length; j += 2) {
+                points[j] += points[j-2];
+                points[j+1] += points[j-1];
+            }
+        }
+
+        drawable.drawPoints(graphicsContext.getForeground(), points);
+    }
+
     public static void polyLine(XClient client, XInputStream inputStream, XOutputStream outputStream) throws XRequestError {
         CoordinateMode coordinateMode = CoordinateMode.values()[client.getRequestData()];
         int drawableId = inputStream.readInt();

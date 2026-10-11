@@ -164,6 +164,19 @@ public class Drawable extends XResource {
         forceUpdate();
     }
 
+    public void drawPoints(int color, short... points) {
+        if (this.data == null || points.length < 2) return;
+        short stride = this.getStride();
+        for (int i = 0; i + 1 < points.length; i += 2) {
+            short x = points[i], y = points[i+1];
+            // Unlike fillRect(int...), skip off-surface points instead of clamping them onto the edge.
+            if (x < 0 || y < 0 || x >= width || y >= height) continue;
+            fillRect(x, y, (short)1, (short)1, color, stride, this.data);
+        }
+        this.data.rewind();
+        forceUpdate();
+    }
+
     public void drawLines(int color, int lineWidth, short... points) {
         for (int i = 2; i < points.length; i += 2) {
             drawLine(points[i-2], points[i-1], points[i+0], points[i+1], color, (short)lineWidth);

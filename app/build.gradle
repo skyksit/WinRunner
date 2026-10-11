@@ -91,7 +91,9 @@ android {
         //     never opened this app kept the old Wine modules through rootfs 27, 28 and 29.
         // 64: KEY_DGP_ZOOM_IN / KEY_DGP_ZOOM_OUT command bindings step the Magnifier zoom from an
         //     Input Controls button (DGPlayer VPAD 🔍+ / 🔍-); the panel itself is unchanged.
-        versionCode 64
+        // 65: X server implements PolyPoint (GDI SetPixel) and answers unknown opcodes with
+        //     BadImplementation instead of throwing through JNI, which killed the X server.
+        versionCode 65
         versionName "11.6"
     }
 

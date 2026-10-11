@@ -5,6 +5,7 @@ import com.winlator.xconnector.RequestHandler;
 import com.winlator.xconnector.XInputStream;
 import com.winlator.xconnector.XOutputStream;
 import com.winlator.xconnector.XStreamLock;
+import com.winlator.xserver.errors.BadImplementation;
 import com.winlator.xserver.errors.XRequestError;
 import com.winlator.xserver.extensions.Extension;
 import com.winlator.xserver.requests.AtomRequests;
@@ -343,6 +344,11 @@ public class XClientRequestHandler implements RequestHandler {
                             DrawRequests.copyArea(client, inputStream, outputStream);
                         }
                         break;
+                    case ClientOpcodes.POLY_POINT:
+                        try (XLock lock = client.xServer.lock(XServer.Lockable.DRAWABLE_MANAGER, XServer.Lockable.GRAPHIC_CONTEXT_MANAGER)) {
+                            DrawRequests.polyPoint(client, inputStream, outputStream);
+                        }
+                        break;
                     case ClientOpcodes.POLY_LINE:
                         try (XLock lock = client.xServer.lock(XServer.Lockable.DRAWABLE_MANAGER, XServer.Lockable.GRAPHIC_CONTEXT_MANAGER)) {
                             DrawRequests.polyLine(client, inputStream, outputStream);
@@ -418,7 +424,9 @@ public class XClientRequestHandler implements RequestHandler {
                         client.skipRequest();
                         break;
                     default:
-                        throw new UnsupportedOperationException("Unsupported opcode "+opcode+".");
+                        // Throwing here escapes through JNI and aborts the whole X server (the game then
+                        // blocks forever on its next reply). Report BadImplementation like a real server.
+                        throw new BadImplementation();
                 }
             }
         }
