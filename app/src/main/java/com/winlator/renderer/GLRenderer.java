@@ -55,6 +55,12 @@ public class GLRenderer implements GLSurfaceView.Renderer, WindowManager.OnWindo
     private boolean toggleFullscreen = false;
     protected boolean viewportNeedsUpdate = true;
     private boolean cursorVisible = true;
+    /**
+     * Draw the default arrow where the window asks for an invisible cursor. For game tools only
+     * (GameTools): a save editor that hides the pointer is unusable by touch, while games hide it
+     * on purpose to draw their own.
+     */
+    private volatile boolean forceCursorVisible = false;
     private float cursorScale = 1.0f;
     private int cursorBackColor = 0xffffff;
     private int cursorForeColor = 0x000000;
@@ -264,6 +270,7 @@ public class GLRenderer implements GLSurfaceView.Renderer, WindowManager.OnWindo
 
             if (cursor != null) {
                 if (cursor.isVisible()) renderCursorDrawable(cursor.cursorImage, x - cursor.hotSpotX, y - cursor.hotSpotY);
+                else if (forceCursorVisible) renderCursorDrawable(rootCursorDrawable, x, y);
             }
             else renderCursorDrawable(rootCursorDrawable, x, y);
         }
@@ -352,6 +359,11 @@ public class GLRenderer implements GLSurfaceView.Renderer, WindowManager.OnWindo
 
     public void setCursorVisible(boolean cursorVisible) {
         this.cursorVisible = cursorVisible;
+        xServerView.requestRender();
+    }
+
+    public void setForceCursorVisible(boolean forceCursorVisible) {
+        this.forceCursorVisible = forceCursorVisible;
         xServerView.requestRender();
     }
 

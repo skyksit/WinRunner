@@ -39,7 +39,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.winlator.alsaserver.ALSAClient;
 import com.winlator.bridge.ControlsReturn;
 import com.winlator.bridge.GameLaunchActivity;
+import com.winlator.bridge.GameTools;
 import com.winlator.bridge.SaveSync;
+import com.winlator.bridge.ToolLibraryDialog;
 import com.winlator.cheat.CheatSearchDialog;
 import com.winlator.cheat.CheatSession;
 import com.winlator.cheat.CheatStore;
@@ -124,6 +126,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
@@ -184,6 +188,11 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private String[] cdPaths;
     private String[] cdLabels;
     private int currentCdIndex = 0;
+    // Helper programs from the manifest's tool= lines (GameTools); unix paths and drawer names.
+    private String[] toolPaths;
+    private String[] toolNames;
+    /** Between starting a tool and the game coming back; one tool at a time. */
+    private final AtomicBoolean toolActive = new AtomicBoolean(false);
     private SpeedController speedController;
     /** Created on first use; only when the bridge caller allowed it (CheatSession.EXTRA_CHEAT_SEARCH). */
     private CheatSession cheatSession;
@@ -220,6 +229,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         cdLabels = getIntent().getStringArrayExtra("cd_labels");
         // Swapping only means anything with two or more discs; single-CD games stay menu-free.
         menu.findItem(R.id.menu_item_change_disc).setVisible(cdPaths != null && cdPaths.length > 1);
+        toolPaths = getIntent().getStringArrayExtra(GameTools.EXTRA_TOOL_PATHS);
+        toolNames = getIntent().getStringArrayExtra(GameTools.EXTRA_TOOL_NAMES);
+        menu.findItem(R.id.menu_item_game_tools).setVisible(toolPaths != null && toolNames != null
+                && toolPaths.length > 0 && toolPaths.length == toolNames.length);
         // The caller decides (DGPlayer: premium). Launches from our own UI never show it.
         menu.findItem(R.id.menu_item_cheat_search).setVisible(getIntent().getBooleanExtra(CheatSession.EXTRA_CHEAT_SEARCH, false));
         // Saved cheats apply from the start of the game, without the dialog ever being opened.
@@ -513,6 +526,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 showCheatSearchDialog();
                 drawerLayout.closeDrawers();
                 break;
+            case R.id.menu_item_game_tools:
+                showGameToolsDialog();
+                drawerLayout.closeDrawers();
+                break;
             case R.id.menu_item_magnifier:
                 if (magnifierView == null) {
                     final FrameLayout container = findViewById(R.id.FLXServerDisplay);
@@ -676,6 +693,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         // returning them to the game library they pressed Play from.
         if (intent.getBooleanExtra("from_bridge", false)) {
             Runnable work = () -> {
+                // A game tool still open on Exit: its picks sit in a tracked folder (UdieToo: the
+                // save folder) and must not end up in the save archive.
+                GameTools.unstage(stagedMarker());
                 // Ahead of finish(), so Android cannot reclaim the process mid-export once the task
                 // is gone. exportOnExit never throws and no-ops when the caller sent no save_uri.
                 SaveSync.exportOnExit(this, container, intent.getStringExtra(SaveSync.EXTRA_GAME_ID),
@@ -1264,6 +1284,111 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 dialog.dismiss();
             })
             .show();
+    }
+
+    /** Drawer "Game Tools": pick one when the package ships several, then confirm. */
+    private void showGameToolsDialog() {
+        if (toolPaths == null || toolNames == null) return;
+        if (toolActive.get()) {
+            AppUtils.showToast(this, R.string.game_tool_already_open);
+            return;
+        }
+        if (toolPaths.length == 1) {
+            confirmGameTool(0);
+            return;
+        }
+        ToolLibraryDialog.builder(this)
+            .setTitle(R.string.game_tools)
+            .setItems(toolNames, (dialog, which) -> confirmGameTool(which))
+            .show();
+    }
+
+    private void confirmGameTool(int index) {
+        ToolLibraryDialog.builder(this)
+            .setTitle(toolNames[index])
+            .setMessage(getString(R.string.game_tool_confirm, toolNames[index]))
+            .setPositiveButton(R.string.game_tool_open, (dialog, which) -> pickFromLibrary(index))
+            .setNegativeButton(android.R.string.cancel, null)
+            .show();
+    }
+
+    /** With a toolLibrary= in the manifest the player first picks what the tool should find. */
+    private void pickFromLibrary(int index) {
+        String libraryDir = getIntent().getStringExtra(GameTools.EXTRA_LIBRARY_DIR);
+        if (libraryDir == null) {
+            startGameTool(index, Collections.emptyList());
+            return;
+        }
+        new ToolLibraryDialog(this, new File(libraryDir), picked -> startGameTool(index, picked))
+            .show(getString(R.string.game_tool_library_title));
+    }
+
+    private File stagedMarker() {
+        String marker = getIntent().getStringExtra(GameTools.EXTRA_LIBRARY_MARKER);
+        return marker != null ? new File(marker) : null;
+    }
+
+    /**
+     * Runs a tool in place of the game (see GameTools for why the game has to stop): the guest
+     * command starts the tool and, once it closes, the game again; here the game is stopped as soon
+     * as the tool is running - not before, or a tool that fails to start would leave no game - and
+     * the drawer is kept from starting a second tool until the game is back.
+     */
+    private void startGameTool(int index, List<File> picked) {
+        if (!toolActive.compareAndSet(false, true)) return;
+        String gamePath = getIntent().getStringExtra("exec_path");
+        String target = getIntent().getStringExtra(GameTools.EXTRA_LIBRARY_TARGET);
+        String toolDos = WineUtils.unixToDOSPath(toolPaths[index], container);
+        String gameDos = WineUtils.unixToDOSPath(gamePath, container);
+        String params = GameTools.chainParameters(toolDos, gameDos,
+                getIntent().getStringExtra(GameLaunchActivity.EXTRA_EXEC_ARGS));
+        Log.i("DGPlayerBridge", "tool: start "+toolDos+" -> start.exe "+params);
+
+        final String toolPath = toolPaths[index];
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                // Before the tool starts, so its file dialog lists them the first time it opens.
+                if (!picked.isEmpty() && target != null) {
+                    GameTools.unstage(stagedMarker());
+                    GameTools.stage(picked, new File(target), stagedMarker());
+                }
+                winHandler.exec("start.exe", params);
+                if (!waitForProcess(toolPath, true, 20_000)) {
+                    Log.w("DGPlayerBridge", "tool: did not start "+toolDos);
+                    runOnUiThread(() -> AppUtils.showToast(this, R.string.game_tool_failed));
+                    return;
+                }
+                GameTools.stopProcesses(gamePath);
+                // Tools may ask for an invisible pointer (UdieToo does over its whole window), which
+                // leaves a touch user clicking blind; the game, which draws its own, gets it back.
+                xServerView.getRenderer().setForceCursorVisible(true);
+                // The guest restarts the game when the tool closes; wait for that, then a moment
+                // for the game to appear, before allowing another tool.
+                while (!exiting.get() && !GameTools.findProcesses(toolPath).isEmpty()) Thread.sleep(1000);
+                xServerView.getRenderer().setForceCursorVisible(false);
+                GameTools.unstage(stagedMarker());
+                waitForProcess(gamePath, true, 20_000);
+            }
+            catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            finally {
+                xServerView.getRenderer().setForceCursorVisible(false);
+                // Also when the tool never started; the files must not outlive the tool session.
+                if (!exiting.get()) GameTools.unstage(stagedMarker());
+                toolActive.set(false);
+            }
+        });
+    }
+
+    /** Polls until an executable is (or is no longer) running; false on timeout or session exit. */
+    private boolean waitForProcess(String exePath, boolean running, long timeoutMs) throws InterruptedException {
+        long deadline = System.currentTimeMillis() + timeoutMs;
+        while (!exiting.get() && System.currentTimeMillis() < deadline) {
+            if (GameTools.findProcesses(exePath).isEmpty() != running) return true;
+            Thread.sleep(250);
+        }
+        return false;
     }
 
     @Override

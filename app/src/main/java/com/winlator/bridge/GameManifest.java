@@ -42,6 +42,12 @@ import java.util.Map;
  * The discs share the container's single CD-ROM drive (X:) and are swapped from the in-game menu,
  * mirroring how multi-disc games ran on a one-drive PC.
  *
+ * <p>{@code tool} may repeat as well: each names a helper program shipped inside the game folder
+ * (a save editor, a configuration utility) and optionally the name the drawer shows for it:
+ * <pre>tool=UdieToo.exe -&gt; Item Editor</pre>
+ * The drawer's Game Tools entry runs it in the same session in place of the game, which restarts
+ * once the tool is closed - see {@link GameTools}.
+ *
  * <h3>On-device edits — the override file</h3>
  *
  * <p>DGPlayer lets the player edit these settings on the device and sends the result as the
@@ -65,11 +71,13 @@ class GameManifest {
     private static final String KEY_COPY = "copy";
     private static final String KEY_REG = "reg";
     private static final String KEY_CD = "cd";
+    private static final String KEY_TOOL = "tool";
 
     private final Map<String, String> values = new HashMap<>();
     private final List<String[]> copies = new ArrayList<>();
     private final List<String> regFiles = new ArrayList<>();
     private final List<String[]> cds = new ArrayList<>();
+    private final List<String[]> tools = new ArrayList<>();
 
     private GameManifest() {}
 
@@ -160,6 +168,13 @@ class GameManifest {
                 String label = arrow > 0 ? value.substring(arrow+2).trim() : "";
                 if (!dir.isEmpty()) manifest.cds.add(new String[]{dir, label.isEmpty() ? null : label});
             }
+            else if (key.equals(KEY_TOOL)) {
+                // tool=<exe relative to the game folder> [-> <display name>], repeatable.
+                int arrow = value.indexOf("->");
+                String exe = (arrow >= 0 ? value.substring(0, arrow) : value).trim();
+                String name = arrow >= 0 ? value.substring(arrow+2).trim() : "";
+                if (!exe.isEmpty()) manifest.tools.add(new String[]{exe, name.isEmpty() ? null : name});
+            }
             else manifest.values.put(key, value);
         }
         return manifest;
@@ -178,6 +193,11 @@ class GameManifest {
     /** Each entry is {discDirRelativeToGameDir, volumeLabelOrNull}, in disc order. */
     List<String[]> getCds() {
         return cds;
+    }
+
+    /** Each entry is {exeRelativeToGameDir, displayNameOrNull}, in manifest order. */
+    List<String[]> getTools() {
+        return tools;
     }
 
     String get(String key) {

@@ -363,6 +363,17 @@
     <!-- Cheat search -->
     <string name="cheat_search">Pencarian Cheat</string>
     <string name="cheat_not_available">Pencarian Cheat tidak tersedia untuk peluncuran ini (DGPlayer premium).</string>
+    <string name="game_tools">Alat Game</string>
+    <string name="game_tool_confirm">%1$s dibuka sebagai pengganti game. Game ditutup selama digunakan dan dimulai lagi saat Anda menutup %1$s.\n\nProgres yang belum disimpan di game akan hilang, jadi simpan dulu di game.</string>
+    <string name="game_tool_open">Buka</string>
+    <string name="game_tool_already_open">Alat game sudah terbuka.</string>
+    <string name="game_tool_failed">Alat gagal dijalankan.</string>
+    <string name="game_tool_library_title">Pilih item untuk ditambahkan</string>
+    <string name="game_tool_library_search">Cari berdasarkan nama</string>
+    <string name="game_tool_library_skip">Buka tanpa item</string>
+    <string name="game_tool_library_open_with">Buka dengan %1$d</string>
+    <string name="game_tool_library_results">%1$d ditemukan</string>
+    <string name="game_tool_library_limit">Maksimal %1$d sekaligus</string>
     <string name="cheat_process">Proses</string>
     <string name="cheat_value_size">Ukuran nilai</string>
     <string name="cheat_size_4">4 byte (sebagian besar angka)</string>

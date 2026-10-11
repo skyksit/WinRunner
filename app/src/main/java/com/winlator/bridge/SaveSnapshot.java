@@ -48,6 +48,8 @@ abstract class SaveSnapshot {
         GameManifest.FILENAME.toLowerCase(Locale.ENGLISH),
         // Rewritten by the bridge on every launch from the manifest_ini extra.
         GameManifest.OVERRIDE_FILENAME.toLowerCase(Locale.ENGLISH),
+        // Bridge bookkeeping of a game tool's temporary files (GameTools).
+        GameTools.STAGED_MARKER,
         "desktop.ini", "thumbs.db"
     ));
     /** Wine/system owned and shared by every game in the container — never one game's save. */

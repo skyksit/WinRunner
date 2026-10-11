@@ -362,6 +362,17 @@
     <string name="game_speed_help">Ajusta a escala do relógio que o jogo lê. O avanço rápido é limitado pelo desempenho livre do dispositivo; jogos que contam o próprio tempo com rdtsc não são afetados.</string>
     <string name="cheat_search">Busca de Cheats</string>
     <string name="cheat_not_available">A Busca de Cheats não está disponível para esta execução (DGPlayer premium).</string>
+    <string name="game_tools">Ferramentas do jogo</string>
+    <string name="game_tool_confirm">%1$s abre no lugar do jogo. O jogo é fechado enquanto você o usa e reinicia quando você fecha %1$s.\n\nO progresso não salvo no jogo será perdido, então salve primeiro no jogo.</string>
+    <string name="game_tool_open">Abrir</string>
+    <string name="game_tool_already_open">Uma ferramenta do jogo já está aberta.</string>
+    <string name="game_tool_failed">Não foi possível iniciar a ferramenta.</string>
+    <string name="game_tool_library_title">Escolher itens para adicionar</string>
+    <string name="game_tool_library_search">Pesquisar por nome</string>
+    <string name="game_tool_library_skip">Abrir sem itens</string>
+    <string name="game_tool_library_open_with">Abrir com %1$d</string>
+    <string name="game_tool_library_results">%1$d encontrados</string>
+    <string name="game_tool_library_limit">No máximo %1$d por vez</string>
     <string name="cheat_process">Processo</string>
     <string name="cheat_value_size">Tamanho do valor</string>
     <string name="cheat_size_4">4 bytes (a maioria dos números)</string>

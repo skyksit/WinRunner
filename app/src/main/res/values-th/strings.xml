@@ -363,6 +363,17 @@
     <!-- Cheat search -->
     <string name="cheat_search">ค้นหาสูตรโกง</string>
     <string name="cheat_not_available">ไม่สามารถใช้การค้นหาสูตรโกงกับการเปิดครั้งนี้ได้ (DGPlayer premium)</string>
+    <string name="game_tools">เครื่องมือเกม</string>
+    <string name="game_tool_confirm">%1$s จะเปิดแทนเกม ระหว่างใช้งานเกมจะถูกปิด และจะเริ่มใหม่เมื่อคุณปิด %1$s\n\nความคืบหน้าที่ยังไม่ได้บันทึกในเกมจะหายไป ดังนั้นโปรดบันทึกในเกมก่อน</string>
+    <string name="game_tool_open">เปิด</string>
+    <string name="game_tool_already_open">มีเครื่องมือเกมเปิดอยู่แล้ว</string>
+    <string name="game_tool_failed">ไม่สามารถเริ่มเครื่องมือได้</string>
+    <string name="game_tool_library_title">เลือกไอเทมที่จะเพิ่ม</string>
+    <string name="game_tool_library_search">ค้นหาตามชื่อ</string>
+    <string name="game_tool_library_skip">เปิดโดยไม่เพิ่มไอเทม</string>
+    <string name="game_tool_library_open_with">เปิดพร้อม %1$d</string>
+    <string name="game_tool_library_results">พบ %1$d</string>
+    <string name="game_tool_library_limit">เลือกได้ครั้งละไม่เกิน %1$d</string>
     <string name="cheat_process">โปรเซส</string>
     <string name="cheat_value_size">ขนาดค่า</string>
     <string name="cheat_size_4">4 ไบต์ (ตัวเลขส่วนใหญ่)</string>

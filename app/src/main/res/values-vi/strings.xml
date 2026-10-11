@@ -363,6 +363,17 @@
     <!-- Cheat search -->
     <string name="cheat_search">Tìm mã gian lận</string>
     <string name="cheat_not_available">Tìm mã gian lận không khả dụng cho lần khởi chạy này (DGPlayer premium).</string>
+    <string name="game_tools">Công cụ trò chơi</string>
+    <string name="game_tool_confirm">%1$s sẽ mở thay cho trò chơi. Trò chơi sẽ đóng trong khi bạn dùng và khởi động lại khi bạn đóng %1$s.\n\nTiến trình chưa lưu trong trò chơi sẽ bị mất, vì vậy hãy lưu trong trò chơi trước.</string>
+    <string name="game_tool_open">Mở</string>
+    <string name="game_tool_already_open">Đã có một công cụ trò chơi đang mở.</string>
+    <string name="game_tool_failed">Không thể khởi động công cụ.</string>
+    <string name="game_tool_library_title">Chọn vật phẩm để thêm</string>
+    <string name="game_tool_library_search">Tìm theo tên</string>
+    <string name="game_tool_library_skip">Mở không kèm vật phẩm</string>
+    <string name="game_tool_library_open_with">Mở với %1$d</string>
+    <string name="game_tool_library_results">Tìm thấy %1$d</string>
+    <string name="game_tool_library_limit">Tối đa %1$d mỗi lần</string>
     <string name="cheat_process">Tiến trình</string>
     <string name="cheat_value_size">Kích thước giá trị</string>
     <string name="cheat_size_4">4 byte (hầu hết các số)</string>

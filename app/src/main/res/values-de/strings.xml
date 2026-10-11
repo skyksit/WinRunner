@@ -368,6 +368,17 @@
     <!-- Cheat search -->
     <string name="cheat_search">Cheat-Suche</string>
     <string name="cheat_not_available">Die Cheat-Suche ist für diesen Start nicht verfügbar (DGPlayer Premium).</string>
+    <string name="game_tools">Spielwerkzeuge</string>
+    <string name="game_tool_confirm">%1$s wird anstelle des Spiels geöffnet. Das Spiel wird währenddessen beendet und startet neu, wenn du %1$s schließt.\n\nNicht im Spiel gespeicherter Fortschritt geht verloren – speichere also zuerst im Spiel.</string>
+    <string name="game_tool_open">Öffnen</string>
+    <string name="game_tool_already_open">Ein Spielwerkzeug ist bereits geöffnet.</string>
+    <string name="game_tool_failed">Das Werkzeug konnte nicht gestartet werden.</string>
+    <string name="game_tool_library_title">Gegenstände auswählen</string>
+    <string name="game_tool_library_search">Nach Namen suchen</string>
+    <string name="game_tool_library_skip">Ohne Gegenstände öffnen</string>
+    <string name="game_tool_library_open_with">Mit %1$d öffnen</string>
+    <string name="game_tool_library_results">%1$d gefunden</string>
+    <string name="game_tool_library_limit">Höchstens %1$d auf einmal</string>
     <string name="cheat_process">Prozess</string>
     <string name="cheat_value_size">Wertgröße</string>
     <string name="cheat_size_4">4 Bytes (die meisten Zahlen)</string>

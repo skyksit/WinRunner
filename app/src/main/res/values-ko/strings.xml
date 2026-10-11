@@ -368,6 +368,17 @@
     <!-- Cheat search -->
     <string name="cheat_search">치트 검색</string>
     <string name="cheat_not_available">이번 실행에서는 치트 검색을 사용할 수 없습니다 (DGPlayer 프리미엄).</string>
+    <string name="game_tools">게임 도구</string>
+    <string name="game_tool_confirm">%1$s 을(를) 게임 대신 엽니다. 사용하는 동안 게임은 종료되고, %1$s 을(를) 닫으면 게임이 다시 실행됩니다.\n\n게임에서 저장하지 않은 진행 상황은 사라지니 먼저 게임에서 저장하세요.</string>
+    <string name="game_tool_open">열기</string>
+    <string name="game_tool_already_open">게임 도구가 이미 열려 있습니다.</string>
+    <string name="game_tool_failed">도구를 실행하지 못했습니다.</string>
+    <string name="game_tool_library_title">넣을 아이템 선택</string>
+    <string name="game_tool_library_search">이름으로 검색</string>
+    <string name="game_tool_library_skip">아이템 없이 열기</string>
+    <string name="game_tool_library_open_with">%1$d개 넣고 열기</string>
+    <string name="game_tool_library_results">%1$d개 찾음</string>
+    <string name="game_tool_library_limit">한 번에 %1$d개까지 고를 수 있습니다</string>
     <string name="cheat_process">프로세스</string>
     <string name="cheat_value_size">값 크기</string>
     <string name="cheat_size_4">4바이트 (대부분의 숫자)</string>

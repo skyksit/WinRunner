@@ -294,6 +294,10 @@ public class GameLaunchActivity extends AppCompatActivity {
         // recreated container the package default would land first and the restore - which only
         // fills gaps in the shared roots there - would skip the player's copy.
         applyCopies(container, manifest, gameDir, gameId, payloadReinstalled);
+        // A game tool's picks left behind by a crash or a killed session. After the restore, which
+        // brings them back if that session's export caught them (the marker lists only files the
+        // bridge copied, never one the player had), and before the session baseline.
+        GameTools.unstage(new File(gameDir, GameTools.STAGED_MARKER));
 
         // Everything below edits the prefix's registry hives as plain files, so it has to happen
         // while Wine is stopped — i.e. before XServerDisplayActivity starts.
@@ -311,6 +315,7 @@ public class GameLaunchActivity extends AppCompatActivity {
 
         int controlsProfileId = importControlsProfile(manifest, gameDir);
         String[][] cdDiscs = prepareCdDiscs(manifest, gameDir);
+        String[][] tools = prepareTools(manifest, gameDir);
 
         // Arguments travel in their own extra, never glued onto exec_path: XServerDisplayActivity runs
         // exec_path through unixToDOSPath (every '/' becomes '\') and then splits it on the last
@@ -366,6 +371,16 @@ public class GameLaunchActivity extends AppCompatActivity {
         if (cdDiscs != null) {
             intent.putExtra("cd_paths", cdDiscs[0]);
             intent.putExtra("cd_labels", cdDiscs[1]);
+        }
+        if (tools != null) {
+            intent.putExtra(GameTools.EXTRA_TOOL_PATHS, tools[0]);
+            intent.putExtra(GameTools.EXTRA_TOOL_NAMES, tools[1]);
+            String[] library = prepareToolLibrary(container, manifest, gameDir);
+            if (library != null) {
+                intent.putExtra(GameTools.EXTRA_LIBRARY_DIR, library[0]);
+                intent.putExtra(GameTools.EXTRA_LIBRARY_TARGET, library[1]);
+                intent.putExtra(GameTools.EXTRA_LIBRARY_MARKER, new File(gameDir, GameTools.STAGED_MARKER).getAbsolutePath());
+            }
         }
 
         handler.post(() -> {
@@ -597,6 +612,66 @@ public class GameLaunchActivity extends AppCompatActivity {
 
         if (paths.isEmpty()) return null;
         return new String[][]{paths.toArray(new String[0]), labels.toArray(new String[0])};
+    }
+
+    /**
+     * Resolves the manifest's {@code tool=} entries to executables inside the game folder.
+     *
+     * @return {absolutePaths[], displayNames[]} for the launch intent, or null when there is none
+     */
+    private String[][] prepareTools(GameManifest manifest, File gameDir) {
+        List<String> paths = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        for (String[] tool : manifest.getTools()) {
+            File exe = new File(gameDir, tool[0].replace('\\', '/'));
+            try {
+                // Same guard as the cd entries: the manifest is untrusted text.
+                if (!exe.getCanonicalPath().startsWith(gameDir.getCanonicalPath()+File.separator)
+                        || !exe.isFile()) {
+                    Log.w(TAG, "skipping tool entry, unusable: "+tool[0]);
+                    continue;
+                }
+            }
+            catch (IOException e) {
+                Log.w(TAG, "skipping tool entry, unresolvable: "+tool[0], e);
+                continue;
+            }
+            paths.add(exe.getAbsolutePath());
+            names.add(tool[1] != null ? tool[1] : FileUtils.getBasename(exe.getName()));
+        }
+        if (paths.isEmpty()) return null;
+        return new String[][]{paths.toArray(new String[0]), names.toArray(new String[0])};
+    }
+
+    /**
+     * Resolves {@code toolLibrary=<folder in the game> -> <DOS folder>} (see GameTools).
+     *
+     * @return {libraryDir, stagingDir} as unix paths, or null when unset or unusable
+     */
+    private String[] prepareToolLibrary(Container container, GameManifest manifest, File gameDir) {
+        String value = manifest.get(GameTools.KEY_LIBRARY);
+        if (value == null) return null;
+        int arrow = value.indexOf("->");
+        if (arrow < 0) {
+            Log.w(TAG, "skipping toolLibrary, no target: "+value);
+            return null;
+        }
+        File library = new File(gameDir, value.substring(0, arrow).trim().replace('\\', '/'));
+        String target = WineUtils.dosToUnixPath(value.substring(arrow+2).trim(), container);
+        try {
+            // The library must come from the package; the target may be anywhere the tool looks
+            // (UdieToo: the save folder), which is why only copies with recorded paths ever go there.
+            if (!library.getCanonicalPath().startsWith(gameDir.getCanonicalPath()+File.separator)
+                    || !library.isDirectory() || target.isEmpty()) {
+                Log.w(TAG, "skipping toolLibrary, unusable: "+value);
+                return null;
+            }
+        }
+        catch (IOException e) {
+            Log.w(TAG, "skipping toolLibrary, unresolvable: "+value, e);
+            return null;
+        }
+        return new String[]{library.getAbsolutePath(), target};
     }
 
     /**

@@ -368,6 +368,17 @@
     <!-- Cheat search -->
     <string name="cheat_search">Búsqueda de trucos</string>
     <string name="cheat_not_available">La búsqueda de trucos no está disponible en este inicio (DGPlayer premium).</string>
+    <string name="game_tools">Herramientas del juego</string>
+    <string name="game_tool_confirm">%1$s se abre en lugar del juego. El juego se cierra mientras lo usas y se vuelve a iniciar al cerrar %1$s.\n\nEl progreso que no hayas guardado en el juego se perderá, así que guarda primero en el juego.</string>
+    <string name="game_tool_open">Abrir</string>
+    <string name="game_tool_already_open">Ya hay una herramienta del juego abierta.</string>
+    <string name="game_tool_failed">La herramienta no se pudo iniciar.</string>
+    <string name="game_tool_library_title">Elegir objetos para añadir</string>
+    <string name="game_tool_library_search">Buscar por nombre</string>
+    <string name="game_tool_library_skip">Abrir sin objetos</string>
+    <string name="game_tool_library_open_with">Abrir con %1$d</string>
+    <string name="game_tool_library_results">%1$d encontrados</string>
+    <string name="game_tool_library_limit">Hasta %1$d a la vez</string>
     <string name="cheat_process">Proceso</string>
     <string name="cheat_value_size">Tamaño del valor</string>
     <string name="cheat_size_4">4 bytes (la mayoría de números)</string>

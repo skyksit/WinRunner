@@ -368,6 +368,17 @@
     <!-- Cheat search -->
     <string name="cheat_search">チート検索</string>
     <string name="cheat_not_available">今回の起動ではチート検索を利用できません（DGPlayer プレミアム）。</string>
+    <string name="game_tools">ゲームツール</string>
+    <string name="game_tool_confirm">%1$s をゲームの代わりに開きます。使用中はゲームが終了し、%1$s を閉じるとゲームが再び起動します。\n\nゲーム内で保存していない進行状況は失われるため、先にゲームで保存してください。</string>
+    <string name="game_tool_open">開く</string>
+    <string name="game_tool_already_open">ゲームツールはすでに開いています。</string>
+    <string name="game_tool_failed">ツールを起動できませんでした。</string>
+    <string name="game_tool_library_title">追加するアイテムを選択</string>
+    <string name="game_tool_library_search">名前で検索</string>
+    <string name="game_tool_library_skip">アイテムなしで開く</string>
+    <string name="game_tool_library_open_with">%1$d個入れて開く</string>
+    <string name="game_tool_library_results">%1$d件</string>
+    <string name="game_tool_library_limit">一度に%1$d個まで選べます</string>
     <string name="cheat_process">プロセス</string>
     <string name="cheat_value_size">値のサイズ</string>
     <string name="cheat_size_4">4バイト（ほとんどの数値）</string>
