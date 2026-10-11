@@ -497,4 +497,15 @@
     <string name="app_update_new">App Update (new)</string>
     <string name="update_available_in_menu">A new version is available - Menu > App Update</string>
     <string name="update_closes_game">Installing the update closes the game. Save your progress first.</string>
+    <string name="macro_edit">Edit macro</string>
+    <string name="macro_title">Macro (keys in order)</string>
+    <string name="macro_wait">Wait</string>
+    <string name="macro_hold">Hold per step: %1$d ms</string>
+    <string name="macro_merge">Combine with previous</string>
+    <string name="macro_merge_hint">Long-press a key to add it to the previous step</string>
+    <string name="macro_empty">Tap keys below to add steps in order</string>
+    <string name="macro_use_recorded_timing">Use recorded timing</string>
+    <string name="macro_directions">Directions</string>
+    <string name="macro_other_keys">Other keys</string>
+    <string name="macro_remove">Remove macro</string>
 </resources>

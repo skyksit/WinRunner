@@ -213,6 +213,32 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/LLMacro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TVMacroSummary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/BTMacro"
+                style="@style/ButtonNeutral"
+                android:layout_height="36dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:textSize="14sp"
+                android:text="@string/macro_edit" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/LLBindings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

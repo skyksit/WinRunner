@@ -419,7 +419,10 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     public void onPause() {
         ForegroundService.onPauseSession(this);
         super.onPause();
-        if (inputControlsView != null) inputControlsView.pauseAutoHide();
+        if (inputControlsView != null) {
+            inputControlsView.pauseAutoHide();
+            inputControlsView.cancelMacro();
+        }
         if (environment != null && !isInPictureInPictureMode()) {
             environment.onPause();
             xServerView.onPause();
@@ -1016,6 +1019,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     }
 
     private void updateSpeedIndicator(SpeedController.Mode mode, float factor) {
+        if (inputControlsView != null) inputControlsView.setGameSpeedFactor(mode == SpeedController.Mode.NORMAL ? 1.0f : factor);
         if (speedIndicator == null) return;
         if (mode == SpeedController.Mode.NORMAL) {
             speedIndicator.setVisibility(View.GONE);

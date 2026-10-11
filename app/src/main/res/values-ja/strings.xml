@@ -439,4 +439,15 @@
     <string name="app_update_new">アプリのアップデート (新バージョン)</string>
     <string name="update_available_in_menu">新しいバージョンがあります - メニュー > アプリのアップデート</string>
     <string name="update_closes_game">アップデートをインストールするとゲームが終了します。先に進行状況を保存してください。</string>
+    <string name="macro_edit">マクロ編集</string>
+    <string name="macro_title">マクロ（順番に入力）</string>
+    <string name="macro_wait">待機</string>
+    <string name="macro_hold">1ステップの保持: %1$d ms</string>
+    <string name="macro_merge">前のステップと同時</string>
+    <string name="macro_merge_hint">キーを長押しすると前のステップに合成されます</string>
+    <string name="macro_empty">下のキーを押して順番に追加</string>
+    <string name="macro_use_recorded_timing">録画したタイミングを使用</string>
+    <string name="macro_directions">方向</string>
+    <string name="macro_other_keys">その他のキー</string>
+    <string name="macro_remove">マクロを解除</string>
 </resources>

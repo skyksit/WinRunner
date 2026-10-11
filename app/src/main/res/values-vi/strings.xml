@@ -434,4 +434,15 @@
     <string name="app_update_new">Cập nhật ứng dụng (mới)</string>
     <string name="update_available_in_menu">Có phiên bản mới - Menu > Cập nhật ứng dụng</string>
     <string name="update_closes_game">Cài bản cập nhật sẽ đóng trò chơi. Hãy lưu tiến trình trước.</string>
+    <string name="macro_edit">Sửa macro</string>
+    <string name="macro_title">Macro (phím theo thứ tự)</string>
+    <string name="macro_wait">Chờ</string>
+    <string name="macro_hold">Giữ mỗi bước: %1$d ms</string>
+    <string name="macro_merge">Cùng với bước trước</string>
+    <string name="macro_merge_hint">Nhấn giữ phím để gộp vào bước trước</string>
+    <string name="macro_empty">Chạm các phím bên dưới để thêm bước theo thứ tự</string>
+    <string name="macro_use_recorded_timing">Dùng thời gian đã ghi</string>
+    <string name="macro_directions">Hướng</string>
+    <string name="macro_other_keys">Phím khác</string>
+    <string name="macro_remove">Bỏ macro</string>
 </resources>

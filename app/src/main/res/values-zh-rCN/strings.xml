@@ -439,4 +439,15 @@
     <string name="app_update_new">应用更新（新版本）</string>
     <string name="update_available_in_menu">有新版本 - 菜单 > 应用更新</string>
     <string name="update_closes_game">安装更新会关闭游戏，请先保存进度。</string>
+    <string name="macro_edit">编辑宏</string>
+    <string name="macro_title">宏（按顺序输入）</string>
+    <string name="macro_wait">等待</string>
+    <string name="macro_hold">每步保持：%1$d ms</string>
+    <string name="macro_merge">与上一步同时</string>
+    <string name="macro_merge_hint">长按按键可与上一步合并</string>
+    <string name="macro_empty">点击下方按键按顺序添加</string>
+    <string name="macro_use_recorded_timing">使用录制的时序</string>
+    <string name="macro_directions">方向</string>
+    <string name="macro_other_keys">其他按键</string>
+    <string name="macro_remove">取消宏</string>
 </resources>

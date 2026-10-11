@@ -105,6 +105,8 @@ public class ControlElement {
     private CubicBezierInterpolator interpolator;
     private Object touchTime;
     private Path[] paths;
+    // DGPlayer: non-null turns a BUTTON into a macro button (see MacroSequence). Bindings stay NONE.
+    private MacroSequence macro;
 
     public ControlElement(InputControlsView inputControlsView) {
         this.inputControlsView = inputControlsView;
@@ -144,6 +146,7 @@ public class ControlElement {
 
         iconId = 0;
         range = null;
+        macro = null;
         propertyFlags.set(FLAG_BOUNDING_BOX_NEEDS_UPDATE);
     }
 
@@ -202,6 +205,27 @@ public class ControlElement {
     public void setOrientation(byte orientation) {
         this.orientation = orientation;
         propertyFlags.set(FLAG_BOUNDING_BOX_NEEDS_UPDATE);
+    }
+
+    public MacroSequence getMacro() {
+        return type == Type.BUTTON ? macro : null;
+    }
+
+    /**
+     * Null turns the macro off and leaves an empty button for the binding spinners. A macro takes the
+     * button over completely, so the plain bindings, toggle and mouse-move mode are cleared with it.
+     */
+    public void setMacro(MacroSequence macro) {
+        this.macro = macro != null && macro.hasKeys() ? macro : null;
+        if (this.macro != null) {
+            setBinding(Binding.NONE);
+            propertyFlags.unset(FLAG_TOGGLE_SWITCH);
+            propertyFlags.unset(FLAG_MOUSE_MOVE_MODE);
+        }
+    }
+
+    public boolean isMacro() {
+        return type == Type.BUTTON && macro != null;
     }
 
     public boolean isToggleSwitch() {
@@ -423,6 +447,7 @@ public class ControlElement {
             return text;
         }
         else {
+            if (isMacro()) return macro.label();
             if (type == Type.BUTTON) {
                 StringBuilder sb = new StringBuilder();
                 for (byte i = 0; i < bindings.length; i++) {
@@ -875,6 +900,7 @@ public class ControlElement {
                 if (orientation != 0) elementJSONObject.put("orientation", orientation);
             }
             if (propertyFlags.isSet(FLAG_MOUSE_MOVE_MODE)) elementJSONObject.put("mouseMoveMode", true);
+            if (isMacro()) macro.writeTo(elementJSONObject);
 
             return elementJSONObject;
         }
@@ -902,7 +928,14 @@ public class ControlElement {
             // Every type passes through here exactly once per finger, so this is the one place a
             // new press can be detected without knowing the type.
             inputControlsView.performTouchHaptic(true);
-            if (type == Type.BUTTON) {
+            if (isMacro()) {
+                // A tap plays the whole sequence; letting go early does not cut it short.
+                inputControlsView.getMacroPlayer().play(macro);
+                propertyFlags.set(FLAG_PRESSED);
+                inputControlsView.invalidate();
+                return true;
+            }
+            else if (type == Type.BUTTON) {
                 if (isKeepButtonPressedAfterMinTime()) touchTime = System.currentTimeMillis();
                 if (!propertyFlags.isSet(FLAG_TOGGLE_SWITCH) || !propertyFlags.isSet(FLAG_SELECTED)) inputControlsView.handleInputEvent(bindings, true);
                 if (propertyFlags.isSet(FLAG_MOUSE_MOVE_MODE)) inputControlsView.getTouchpadView().mouseMove(x, y, MotionEvent.ACTION_DOWN);
@@ -1073,7 +1106,11 @@ public class ControlElement {
     public boolean handleTouchUp(int pointerId, float x, float y) {
         if (pointerId == currentPointerId) {
             inputControlsView.performTouchHaptic(false);
-            if (type == Type.BUTTON) {
+            if (isMacro()) {
+                propertyFlags.unset(FLAG_PRESSED);
+                inputControlsView.invalidate();
+            }
+            else if (type == Type.BUTTON) {
                 boolean selected = propertyFlags.isSet(FLAG_SELECTED);
                 if (isKeepButtonPressedAfterMinTime() && touchTime != null) {
                     selected = (System.currentTimeMillis() - (long)touchTime) > BUTTON_MIN_TIME_TO_KEEP_PRESSED;

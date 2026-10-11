@@ -439,4 +439,15 @@
     <string name="app_update_new">Aktualizacja aplikacji (nowa)</string>
     <string name="update_available_in_menu">Dostępna nowa wersja - Menu > Aktualizacja aplikacji</string>
     <string name="update_closes_game">Instalacja aktualizacji zamknie grę. Najpierw zapisz postęp.</string>
+    <string name="macro_edit">Edytuj makro</string>
+    <string name="macro_title">Makro (klawisze po kolei)</string>
+    <string name="macro_wait">Czekaj</string>
+    <string name="macro_hold">Przytrzymanie na krok: %1$d ms</string>
+    <string name="macro_merge">Razem z poprzednim krokiem</string>
+    <string name="macro_merge_hint">Przytrzymaj klawisz, aby połączyć go z poprzednim krokiem</string>
+    <string name="macro_empty">Dotknij klawiszy poniżej, aby dodać kroki po kolei</string>
+    <string name="macro_use_recorded_timing">Użyj nagranego czasu</string>
+    <string name="macro_directions">Kierunki</string>
+    <string name="macro_other_keys">Inne klawisze</string>
+    <string name="macro_remove">Usuń makro</string>
 </resources>

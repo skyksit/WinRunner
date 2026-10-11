@@ -433,4 +433,15 @@
     <string name="app_update_new">Обновление приложения (новое)</string>
     <string name="update_available_in_menu">Доступна новая версия - Меню > Обновление приложения</string>
     <string name="update_closes_game">Установка обновления закроет игру. Сначала сохраните прогресс.</string>
+    <string name="macro_edit">Изменить макрос</string>
+    <string name="macro_title">Макрос (клавиши по порядку)</string>
+    <string name="macro_wait">Пауза</string>
+    <string name="macro_hold">Удержание на шаг: %1$d мс</string>
+    <string name="macro_merge">Вместе с предыдущим шагом</string>
+    <string name="macro_merge_hint">Удерживайте клавишу, чтобы объединить её с предыдущим шагом</string>
+    <string name="macro_empty">Нажимайте клавиши ниже, чтобы добавить шаги по порядку</string>
+    <string name="macro_use_recorded_timing">Использовать записанный тайминг</string>
+    <string name="macro_directions">Направления</string>
+    <string name="macro_other_keys">Другие клавиши</string>
+    <string name="macro_remove">Удалить макрос</string>
 </resources>

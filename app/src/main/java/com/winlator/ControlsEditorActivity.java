@@ -29,12 +29,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.winlator.contentdialog.MacroEditorDialog;
 import com.winlator.core.LocaleHelper;
 import com.winlator.inputcontrols.Binding;
 import com.winlator.inputcontrols.ControlElement;
 import com.winlator.inputcontrols.ControlsProfile;
 import com.winlator.inputcontrols.ControlsTheme;
 import com.winlator.inputcontrols.InputControlsManager;
+import com.winlator.inputcontrols.MacroSequence;
 import com.winlator.math.Mathf;
 import com.winlator.core.AppUtils;
 import com.winlator.core.FileUtils;
@@ -261,15 +263,24 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
             view.findViewById(R.id.LLRangeOptions).setVisibility(View.GONE);
             view.findViewById(R.id.LLMIDIKeyOptions).setVisibility(View.GONE);
             view.findViewById(R.id.LLRadialMenuOptions).setVisibility(View.GONE);
+            view.findViewById(R.id.LLMacro).setVisibility(View.GONE);
+            view.findViewById(R.id.LLBindings).setVisibility(View.VISIBLE);
             view.findViewById(R.id.LLTextColor).setVisibility(type == ControlElement.Type.TRACKPAD ? View.GONE : View.VISIBLE);
 
             switch (type) {
-                case BUTTON:
+                case BUTTON: {
+                    // DGPlayer: a macro replaces the button's bindings, toggle and mouse-move mode.
+                    boolean isMacro = element.isMacro();
                     view.findViewById(R.id.LLShape).setVisibility(View.VISIBLE);
-                    view.findViewById(R.id.CBToggleSwitch).setVisibility(View.VISIBLE);
-                    view.findViewById(R.id.CBMouseMoveMode).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.CBToggleSwitch).setVisibility(isMacro ? View.GONE : View.VISIBLE);
+                    view.findViewById(R.id.CBMouseMoveMode).setVisibility(isMacro ? View.GONE : View.VISIBLE);
+                    view.findViewById(R.id.LLBindings).setVisibility(isMacro ? View.GONE : View.VISIBLE);
                     view.findViewById(R.id.LLCustomTextIcon).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.LLMacro).setVisibility(View.VISIBLE);
+                    MacroSequence macro = element.getMacro();
+                    ((TextView)view.findViewById(R.id.TVMacroSummary)).setText(macro != null ? macro.label() : getString(R.string.none));
                     break;
+                }
                 case RANGE_BUTTON:
                     view.findViewById(R.id.LLRangeOptions).setVisibility(View.VISIBLE);
                     break;
@@ -284,6 +295,19 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
 
             loadBindingSpinners(element, view);
         };
+
+        view.findViewById(R.id.BTMacro).setOnClickListener((v) -> {
+            new MacroEditorDialog(this, element.getMacro(), (macro) -> {
+                element.setMacro(macro);
+                // Leaving a macro: start from a clean button instead of the NONE bindings it kept.
+                if (macro == null) element.setBinding(Binding.NONE);
+                ((CheckBox)view.findViewById(R.id.CBToggleSwitch)).setChecked(element.isToggleSwitch());
+                ((CheckBox)view.findViewById(R.id.CBMouseMoveMode)).setChecked(element.isMouseMoveMode());
+                profile.save();
+                updateLayout.run();
+                inputControlsView.invalidate();
+            }).show();
+        });
 
         loadTypeSpinner(element, view.findViewById(R.id.SType), updateLayout);
         loadShapeSpinner(element, view.findViewById(R.id.SShape));

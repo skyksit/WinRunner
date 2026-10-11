@@ -269,6 +269,8 @@ public class ControlsProfile implements Comparable<ControlsProfile>, GamepadSlot
                     element.setBorderColor(ControlElement.parseColor(elementJSONObject.optString("borderColor", null)));
                     element.setBackgroundColor(ControlElement.parseColor(elementJSONObject.optString("backgroundColor", null)));
                     element.setTextColor(ControlElement.parseColor(elementJSONObject.optString("textColor", null)));
+                    // DGPlayer: macro button. Ignored unless the element is a BUTTON (getMacro checks).
+                    element.setMacro(MacroSequence.fromJSON(elementJSONObject));
                 }
 
                 boolean hasGamepadBinding = true;

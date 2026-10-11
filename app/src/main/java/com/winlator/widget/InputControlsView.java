@@ -26,6 +26,7 @@ import com.winlator.inputcontrols.ControlsProfile;
 import com.winlator.inputcontrols.ExternalController;
 import com.winlator.inputcontrols.ExternalControllerBinding;
 import com.winlator.inputcontrols.GamepadState;
+import com.winlator.inputcontrols.MacroPlayer;
 import com.winlator.inputcontrols.TouchHaptics;
 import com.winlator.math.Mathf;
 import com.winlator.winhandler.WinHandler;
@@ -80,6 +81,9 @@ public class InputControlsView extends View {
     private boolean revealGesture = false;
     private boolean touchDown = false;
     private final Runnable autoHideRunnable = this::hideForIdle;
+    // DGPlayer: macro buttons. One player for the whole layout - a new macro cancels the running one.
+    private final MacroPlayer macroPlayer = new MacroPlayer(this);
+    private float gameSpeedFactor = 1.0f;
 
     public InputControlsView(Context context) {
         super(context);
@@ -250,6 +254,8 @@ public class InputControlsView extends View {
     }
 
     public synchronized void setProfile(ControlsProfile profile) {
+        // The old layout's macro would keep pressing keys no button on screen can stop any more.
+        macroPlayer.cancel();
         if (profile != null) {
             this.profile = profile;
             deselectAllElements();
@@ -266,6 +272,30 @@ public class InputControlsView extends View {
         autoHideMs = seconds > 0 ? seconds * 1000L : 0;
         revealFromIdle();
         scheduleAutoHide();
+    }
+
+    public MacroPlayer getMacroPlayer() {
+        return macroPlayer;
+    }
+
+    /** Releases whatever a playing macro still holds - the activity is going away from the game. */
+    public void cancelMacro() {
+        macroPlayer.cancel();
+    }
+
+    /** The speed controller's factor, so macro steps last the same game time in slow motion. */
+    public float getGameSpeedFactor() {
+        return gameSpeedFactor;
+    }
+
+    public void setGameSpeedFactor(float gameSpeedFactor) {
+        this.gameSpeedFactor = gameSpeedFactor;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        macroPlayer.cancel();
+        super.onDetachedFromWindow();
     }
 
     /** Stops the timer and shows the controls (activity paused). */

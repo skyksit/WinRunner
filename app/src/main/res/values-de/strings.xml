@@ -439,4 +439,15 @@
     <string name="app_update_new">App-Update (neu)</string>
     <string name="update_available_in_menu">Neue Version verfügbar - Menü > App-Update</string>
     <string name="update_closes_game">Die Installation des Updates beendet das Spiel. Speichere zuerst deinen Fortschritt.</string>
+    <string name="macro_edit">Makro bearbeiten</string>
+    <string name="macro_title">Makro (Tasten der Reihe nach)</string>
+    <string name="macro_wait">Warten</string>
+    <string name="macro_hold">Haltezeit pro Schritt: %1$d ms</string>
+    <string name="macro_merge">Mit vorherigem Schritt</string>
+    <string name="macro_merge_hint">Taste lange drücken, um sie mit dem vorherigen Schritt zu kombinieren</string>
+    <string name="macro_empty">Unten Tasten antippen, um Schritte hinzuzufügen</string>
+    <string name="macro_use_recorded_timing">Aufgenommenes Timing verwenden</string>
+    <string name="macro_directions">Richtungen</string>
+    <string name="macro_other_keys">Weitere Tasten</string>
+    <string name="macro_remove">Makro entfernen</string>
 </resources>

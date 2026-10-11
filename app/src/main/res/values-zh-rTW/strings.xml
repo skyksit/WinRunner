@@ -439,4 +439,15 @@
     <string name="app_update_new">應用程式更新（新版本）</string>
     <string name="update_available_in_menu">有新版本 - 選單 > 應用程式更新</string>
     <string name="update_closes_game">安裝更新會關閉遊戲，請先儲存進度。</string>
+    <string name="macro_edit">編輯巨集</string>
+    <string name="macro_title">巨集（依序輸入）</string>
+    <string name="macro_wait">等待</string>
+    <string name="macro_hold">每步保持：%1$d ms</string>
+    <string name="macro_merge">與上一步同時</string>
+    <string name="macro_merge_hint">長按按鍵可與上一步合併</string>
+    <string name="macro_empty">點選下方按鍵依序新增</string>
+    <string name="macro_use_recorded_timing">使用錄製的時序</string>
+    <string name="macro_directions">方向</string>
+    <string name="macro_other_keys">其他按鍵</string>
+    <string name="macro_remove">取消巨集</string>
 </resources>

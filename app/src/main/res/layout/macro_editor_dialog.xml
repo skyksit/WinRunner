@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!-- Fixed width like cheat_search_dialog: rows are added at run time, so wrap_content would
+         make the dialog resize with every step, and the narrow default squeezes the key spinners. -->
+    <LinearLayout
+        android:layout_width="520dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/TVEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:alpha="0.6"
+            android:text="@string/macro_empty" />
+
+        <HorizontalScrollView
+            android:id="@+id/HSVSteps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:id="@+id/LLSteps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/macro_directions" />
+
+            <RadioGroup
+                android:id="@+id/RGDirectionSource"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/RBKeyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/keyboard" />
+
+                <RadioButton
+                    android:id="@+id/RBGamepad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gamepad" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp">
+
+            <LinearLayout
+                android:id="@+id/LLDirections"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp">
+
+            <LinearLayout
+                android:id="@+id/LLQuickKeys"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/macro_other_keys" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/SKeyType"
+                style="@style/ComboBox"
+                android:layout_width="0dp"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:id="@+id/SKey"
+                style="@style/ComboBox"
+                android:layout_width="0dp"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1.4" />
+
+            <TextView
+                android:id="@+id/BTAddKey"
+                style="@style/ButtonNeutral"
+                android:layout_marginStart="4dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/add" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/CBMerge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/macro_merge" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.6"
+            android:text="@string/macro_merge_hint"
+            android:textSize="12sp" />
+
+        <CheckBox
+            android:id="@+id/CBStepTimes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/macro_use_recorded_timing"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/TVHold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <com.winlator.widget.SeekBar
+            android:id="@+id/SBHold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:maxValue="300"
+            app:minValue="33"
+            app:step="1"
+            app:suffix=" ms" />
+
+        <TextView
+            android:id="@+id/BTRemoveMacro"
+            style="@style/ButtonNeutral"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:text="@string/macro_remove"
+            android:visibility="gone" />
+    </LinearLayout>
+</ScrollView>

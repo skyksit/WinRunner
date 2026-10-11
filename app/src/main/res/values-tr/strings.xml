@@ -434,4 +434,15 @@
     <string name="app_update_new">Uygulama Güncellemesi (yeni)</string>
     <string name="update_available_in_menu">Yeni sürüm mevcut - Menü > Uygulama Güncellemesi</string>
     <string name="update_closes_game">Güncellemeyi yüklemek oyunu kapatır. Önce ilerlemenizi kaydedin.</string>
+    <string name="macro_edit">Makroyu düzenle</string>
+    <string name="macro_title">Makro (tuşlar sırayla)</string>
+    <string name="macro_wait">Bekle</string>
+    <string name="macro_hold">Adım başına basılı tutma: %1$d ms</string>
+    <string name="macro_merge">Önceki adımla birlikte</string>
+    <string name="macro_merge_hint">Bir tuşa uzun basınca önceki adımla birleştirilir</string>
+    <string name="macro_empty">Adımları sırayla eklemek için aşağıdaki tuşlara dokunun</string>
+    <string name="macro_use_recorded_timing">Kaydedilen zamanlamayı kullan</string>
+    <string name="macro_directions">Yönler</string>
+    <string name="macro_other_keys">Diğer tuşlar</string>
+    <string name="macro_remove">Makroyu kaldır</string>
 </resources>

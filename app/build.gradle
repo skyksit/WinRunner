@@ -93,7 +93,10 @@ android {
         //     Input Controls button (DGPlayer VPAD 🔍+ / 🔍-); the panel itself is unchanged.
         // 65: X server implements PolyPoint (GDI SetPixel) and answers unknown opcodes with
         //     BadImplementation instead of throwing through JNI, which killed the X server.
-        versionCode 67
+        // 68: macro buttons - a BUTTON with a `sequence` plays its keys one step after another
+        //     (MacroSequence/MacroPlayer), edited in the element settings (MacroEditorDialog).
+        //     DGPlayer strips macro elements before sending a layout to an older build.
+        versionCode 68
         versionName "11.6"
     }
 

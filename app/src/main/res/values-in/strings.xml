@@ -434,4 +434,15 @@
     <string name="app_update_new">Pembaruan Aplikasi (baru)</string>
     <string name="update_available_in_menu">Versi baru tersedia - Menu > Pembaruan Aplikasi</string>
     <string name="update_closes_game">Memasang pembaruan akan menutup game. Simpan progres Anda terlebih dahulu.</string>
+    <string name="macro_edit">Edit makro</string>
+    <string name="macro_title">Makro (tombol berurutan)</string>
+    <string name="macro_wait">Tunggu</string>
+    <string name="macro_hold">Tahan per langkah: %1$d ms</string>
+    <string name="macro_merge">Bersama langkah sebelumnya</string>
+    <string name="macro_merge_hint">Tekan lama tombol untuk menggabungkannya dengan langkah sebelumnya</string>
+    <string name="macro_empty">Ketuk tombol di bawah untuk menambah langkah berurutan</string>
+    <string name="macro_use_recorded_timing">Gunakan waktu rekaman</string>
+    <string name="macro_directions">Arah</string>
+    <string name="macro_other_keys">Tombol lain</string>
+    <string name="macro_remove">Hapus makro</string>
 </resources>

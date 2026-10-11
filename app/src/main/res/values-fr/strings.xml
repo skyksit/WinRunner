@@ -439,4 +439,15 @@
     <string name="app_update_new">Mise à jour de l\'appli (nouvelle)</string>
     <string name="update_available_in_menu">Nouvelle version disponible - Menu > Mise à jour de l\'appli</string>
     <string name="update_closes_game">L\'installation de la mise à jour ferme le jeu. Sauvegardez d\'abord votre progression.</string>
+    <string name="macro_edit">Modifier la macro</string>
+    <string name="macro_title">Macro (touches dans l’ordre)</string>
+    <string name="macro_wait">Attente</string>
+    <string name="macro_hold">Maintien par étape : %1$d ms</string>
+    <string name="macro_merge">Avec l’étape précédente</string>
+    <string name="macro_merge_hint">Appui long sur une touche pour la combiner avec l’étape précédente</string>
+    <string name="macro_empty">Touchez les touches ci-dessous pour ajouter des étapes</string>
+    <string name="macro_use_recorded_timing">Utiliser le timing enregistré</string>
+    <string name="macro_directions">Directions</string>
+    <string name="macro_other_keys">Autres touches</string>
+    <string name="macro_remove">Supprimer la macro</string>
 </resources>
