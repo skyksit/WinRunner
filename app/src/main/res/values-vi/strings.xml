@@ -209,6 +209,7 @@
     <string name="disable_mouse_input">Tắt đầu vào chuột</string>
     <string name="move_cursor_to_touchpoint">Di chuyển con trỏ tới điểm chạm</string>
     <string name="tap_to_left_click">Chạm để nhấp trái</string>
+    <string name="pinch_to_zoom">Chụm hai ngón để phóng to</string>
     <string name="dpi_font_size">DPI (Cỡ chữ)</string>
     <string name="gamepad_model">Mẫu gamepad</string>
     <string name="file_manager">Trình quản lý tệp</string>

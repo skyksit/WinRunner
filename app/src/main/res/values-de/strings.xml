@@ -214,6 +214,7 @@
     <string name="disable_mouse_input">Mauseingabe deaktivieren</string>
     <string name="move_cursor_to_touchpoint">Cursor zum Berührungspunkt bewegen</string>
     <string name="tap_to_left_click">Tippen für Linksklick</string>
+    <string name="pinch_to_zoom">Mit zwei Fingern zoomen</string>
     <string name="dpi_font_size">DPI (Schriftgröße)</string>
     <string name="gamepad_model">Gamepad-Modell</string>
     <string name="file_manager">Dateimanager</string>

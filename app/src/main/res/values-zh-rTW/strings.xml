@@ -214,6 +214,7 @@
     <string name="disable_mouse_input">停用滑鼠輸入</string>
     <string name="move_cursor_to_touchpoint">將游標移至觸控點</string>
     <string name="tap_to_left_click">輕觸即左鍵點擊</string>
+    <string name="pinch_to_zoom">雙指捏合縮放</string>
     <string name="dpi_font_size">DPI（字型大小）</string>
     <string name="gamepad_model">手把型號</string>
     <string name="file_manager">檔案管理員</string>

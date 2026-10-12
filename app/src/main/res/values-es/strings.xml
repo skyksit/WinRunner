@@ -214,6 +214,7 @@
     <string name="disable_mouse_input">Desactivar entrada del ratón</string>
     <string name="move_cursor_to_touchpoint">Mover el cursor al punto de toque</string>
     <string name="tap_to_left_click">Tocar para clic izquierdo</string>
+    <string name="pinch_to_zoom">Pellizcar con dos dedos para ampliar</string>
     <string name="dpi_font_size">DPI (Tamaño de fuente)</string>
     <string name="gamepad_model">Modelo de gamepad</string>
     <string name="file_manager">Administrador de archivos</string>

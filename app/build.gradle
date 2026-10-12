@@ -96,7 +96,10 @@ android {
         // 68: macro buttons - a BUTTON with a `sequence` plays its keys one step after another
         //     (MacroSequence/MacroPlayer), edited in the element settings (MacroEditorDialog).
         //     DGPlayer strips macro elements before sending a layout to an older build.
-        versionCode 68
+        // 69: pinch to zoom - an Input Controls dialog option turns two fingers into a Magnifier
+        //     pinch; absolute (TOUCH) taps map through the zoom and hold its pan while down.
+        //     The game tool item picker no longer clips its last rows in landscape.
+        versionCode 69
         versionName "11.6"
     }
 

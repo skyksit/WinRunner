@@ -88,7 +88,6 @@ import com.winlator.inputcontrols.ControlsProfile;
 import com.winlator.inputcontrols.ExternalController;
 import com.winlator.inputcontrols.InputControlsManager;
 import com.winlator.inputcontrols.TouchHaptics;
-import com.winlator.math.Mathf;
 import com.winlator.renderer.GLRenderer;
 import com.winlator.renderer.ViewTransformation;
 import com.winlator.services.ForegroundService;
@@ -97,6 +96,7 @@ import com.winlator.speed.SpeedController;
 import com.winlator.speed.Timescale;
 import com.winlator.widget.FrameRating;
 import com.winlator.widget.InputControlsView;
+import com.winlator.widget.MagnifierMath;
 import com.winlator.widget.MagnifierView;
 import com.winlator.widget.SeekBar;
 import com.winlator.widget.TouchpadView;
@@ -921,6 +921,22 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         touchpadView.setFourFingersTapCallback(() -> {
             if (!drawerLayout.isDrawerOpen(GravityCompat.START)) drawerLayout.openDrawer(GravityCompat.START);
         });
+        touchpadView.setPinchToZoomEnabled(preferences.getBoolean(TouchpadView.PREF_PINCH_TO_ZOOM, TouchpadView.DEFAULT_PINCH_TO_ZOOM));
+        touchpadView.setMagnifierZoomCallback(new TouchpadView.MagnifierZoomCallback() {
+            @Override
+            public float getZoom() {
+                return xServerView.getRenderer().getMagnifierZoom();
+            }
+
+            @Override
+            public void setZoom(float zoom) {
+                int before = (int)(xServerView.getRenderer().getMagnifierZoom() * 100);
+                setMagnifierZoom(zoom);
+                int after = (int)(xServerView.getRenderer().getMagnifierZoom() * 100);
+                // A pinch sends dozens of updates a second; only a new percentage is worth a redraw of the text.
+                if (after != before) showTransientIndicator("🔍 " + after + "%");
+            }
+        });
         rootView.addView(touchpadView);
         // The side menu needs a free Android cursor; capture comes back once it closes.
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -1013,8 +1029,13 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
     /** Magnifier zoom by one step, shared by the Magnifier panel's +/- buttons and the KEY_DGP_ZOOM_* command bindings. */
     private void adjustMagnifierZoom(float delta) {
+        setMagnifierZoom(xServerView.getRenderer().getMagnifierZoom() + delta);
+    }
+
+    /** Magnifier zoom set outright (pinch to zoom), clamped like the steps and mirrored on the panel. */
+    private void setMagnifierZoom(float zoom) {
         final GLRenderer renderer = xServerView.getRenderer();
-        renderer.setMagnifierZoom(Mathf.clamp(renderer.getMagnifierZoom() + delta, 1.0f, 3.0f));
+        renderer.setMagnifierZoom(MagnifierMath.clamp(zoom));
         if (magnifierView != null) magnifierView.setZoomValue(renderer.getMagnifierZoom());
     }
 
@@ -1060,6 +1081,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         final CheckBox cbTapToClick = dialog.findViewById(R.id.CBTapToClick);
         cbTapToClick.setChecked(touchpadView.isTapToClickEnabled());
+
+        final CheckBox cbPinchToZoom = dialog.findViewById(R.id.CBPinchToZoom);
+        cbPinchToZoom.setChecked(touchpadView.isPinchToZoomEnabled());
 
         final CheckBox cbShowTouchscreenControls = dialog.findViewById(R.id.CBShowTouchscreenControls);
         cbShowTouchscreenControls.setChecked(inputControlsView.isShowTouchscreenControls());
@@ -1112,12 +1136,15 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             // Unlike the rest of this dialog, tap to click and the vibration settings are global and
             // persisted here, so the same values show up in Settings and survive the session.
             boolean tapToClick = cbTapToClick.isChecked();
+            boolean pinchToZoom = cbPinchToZoom.isChecked();
             int vibrationMode = sVibrationMode.getSelectedItemPosition();
             float vibrationStrength = sbVibrationStrength.getValue() / 100.0f;
             preferences.edit().putBoolean(TouchpadView.PREF_TAP_TO_CLICK, tapToClick)
+                              .putBoolean(TouchpadView.PREF_PINCH_TO_ZOOM, pinchToZoom)
                               .putInt(TouchHaptics.PREF_MODE, vibrationMode)
                               .putFloat(TouchHaptics.PREF_STRENGTH, vibrationStrength).apply();
             touchpadView.setTapToClickEnabled(tapToClick);
+            touchpadView.setPinchToZoomEnabled(pinchToZoom);
             int autoHidePos = Math.max(0, Math.min(sAutoHide.getSelectedItemPosition(), InputControlsView.AUTO_HIDE_SECONDS_OPTIONS.length - 1));
             int autoHide = InputControlsView.AUTO_HIDE_SECONDS_OPTIONS[autoHidePos];
             preferences.edit().putInt(InputControlsView.PREF_AUTO_HIDE_SECONDS, autoHide).apply();

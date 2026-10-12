@@ -209,6 +209,7 @@
     <string name="disable_mouse_input">Nonaktifkan Input Mouse</string>
     <string name="move_cursor_to_touchpoint">Pindahkan Kursor ke Titik Sentuh</string>
     <string name="tap_to_left_click">Ketuk untuk Klik Kiri</string>
+    <string name="pinch_to_zoom">Cubit Dua Jari untuk Memperbesar</string>
     <string name="dpi_font_size">DPI (Ukuran Font)</string>
     <string name="gamepad_model">Model Gamepad</string>
     <string name="file_manager">Pengelola File</string>

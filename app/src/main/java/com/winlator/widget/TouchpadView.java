@@ -46,6 +46,27 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     private boolean scrolling = false;
     private final XServer xServer;
     private Runnable fourFingersTapCallback;
+    public static final String PREF_PINCH_TO_ZOOM = "pinch_to_zoom";
+    public static final boolean DEFAULT_PINCH_TO_ZOOM = false;
+
+    /** Reads and sets the magnifier zoom; the owner keeps the panel and indicator in step. */
+    public interface MagnifierZoomCallback {
+        float getZoom();
+        void setZoom(float zoom);
+    }
+
+    // Pinch to zoom: two fingers drive the magnifier instead of the wheel / drag gestures.
+    private boolean pinchToZoomEnabled = DEFAULT_PINCH_TO_ZOOM;
+    private MagnifierZoomCallback magnifierZoomCallback;
+    private float pinchStartDistance;
+    private float pinchStartZoom;
+    private boolean pinchEngaged;
+    /**
+     * Set once a pinch has two fingers down, cleared when the last finger lifts. Meanwhile no
+     * finger moves the cursor or clicks: lifting one finger first would otherwise leave the other
+     * to jump the cursor or fire a tap.
+     */
+    private boolean pinchGestureLocked;
     private final float[] xform = XForm.getInstance();
     private static final String POINTER_TAG = "DGPointer";
     private static final long RECAPTURE_THROTTLE_MS = 200;
@@ -198,6 +219,8 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
                 scrolling = false;
                 fingers[pointerId] = new Finger(event.getX(actionIndex), event.getY(actionIndex));
                 numFingers++;
+                if (numFingers == 1 && moveCursorToTouchpoint) xServer.getRenderer().setMagnifierPanLocked(true);
+                if (numFingers == 2 && pinchToZoomEnabled && magnifierZoomCallback != null) beginPinch();
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (event.isFromSource(InputDevice.SOURCE_MOUSE)) {
@@ -216,6 +239,7 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
                                 handleFingerUp(fingers[i]);
                                 fingers[i] = null;
                                 numFingers--;
+                                if (numFingers == 0) onAllFingersUp();
                             }
                         }
                     }
@@ -228,11 +252,13 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
                     handleFingerUp(fingers[pointerId]);
                     fingers[pointerId] = null;
                     numFingers--;
+                    if (numFingers == 0) onAllFingersUp();
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
                 for (byte i = 0; i < MAX_FINGERS; i++) fingers[i] = null;
                 numFingers = 0;
+                onAllFingersUp();
                 break;
         }
 
@@ -242,14 +268,15 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     private void handleFingerUp(Finger finger1) {
         switch (numFingers) {
             case 1:
-                if (finger1.isTap()) {
-                    if (moveCursorToTouchpoint) xServer.injectPointerMove(finger1.x, finger1.y);
+                // The last finger of a pinch is not a tap.
+                if (finger1.isTap() && !pinchGestureLocked) {
+                    if (moveCursorToTouchpoint) injectAbsolutePointerMove(finger1.x, finger1.y);
                     if (tapToClickEnabled) pressPointerButtonLeft(finger1);
                 }
                 break;
             case 2:
                 Finger finger2 = findSecondFinger(finger1);
-                if (finger2 != null && finger1.isTap()) pressPointerButtonRight(finger1);
+                if (finger2 != null && finger1.isTap() && !pinchGestureLocked) pressPointerButtonRight(finger1);
                 break;
             case 4:
                 if (fourFingersTapCallback != null) {
@@ -266,6 +293,12 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     }
 
     private void handleFingerMove(Finger finger1) {
+        // Checked before isEnabled(): zooming is not mouse input, so a profile that disables the
+        // mouse still pinches. The on-screen trackpad (mouseMoveFinger) is not one of the fingers.
+        if (pinchGestureLocked && finger1 != mouseMoveFinger) {
+            if (numFingers == 2) updatePinch();
+            return;
+        }
         if (!isEnabled()) return;
         boolean skipPointerMove = false;
 
@@ -298,7 +331,7 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
 
         if (!scrolling && numFingers <= 2 && !skipPointerMove) {
             if (moveCursorToTouchpoint && numFingers == 1) {
-                xServer.injectPointerMove(finger1.x, finger1.y);
+                injectAbsolutePointerMove(finger1.x, finger1.y);
             }
             else {
                 int dx = finger1.deltaX();
@@ -329,6 +362,64 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
                 mouseMoveFinger = null;
                 break;
         }
+    }
+
+    /**
+     * Moves the X pointer to the content shown at a view point (already through {@link #xform}).
+     * The magnifier draws X content scaled and panned, so without this an absolute touch or mouse
+     * position lands on the unmagnified spot instead of the one under it.
+     */
+    private void injectAbsolutePointerMove(int x, int y) {
+        float[] frame = xServer.getRenderer().getMagnifierFrame();
+        xServer.injectPointerMove(MagnifierMath.toContent(x, frame[1], frame[0]), MagnifierMath.toContent(y, frame[2], frame[0]));
+    }
+
+    private float twoFingerDistance() {
+        Finger finger1 = null, finger2 = null;
+        for (byte i = 0; i < MAX_FINGERS; i++) {
+            if (fingers[i] == null) continue;
+            if (finger1 == null) finger1 = fingers[i];
+            else if (finger2 == null) finger2 = fingers[i];
+        }
+        if (finger1 == null || finger2 == null) return 0;
+        return (float)Math.hypot(finger1.x - finger2.x, finger1.y - finger2.y);
+    }
+
+    private void beginPinch() {
+        pinchGestureLocked = true;
+        pinchEngaged = false;
+        pinchStartDistance = twoFingerDistance();
+        pinchStartZoom = magnifierZoomCallback.getZoom();
+        // A one-finger tap may still hold the left button for its 30ms release; let it finish, but
+        // a drag-lock press from this gesture must not outlive it.
+        if (fingerPointerButtonLeft != null && fingerPointerButtonLeft != mouseMoveFinger) releasePointerButtonLeft(fingerPointerButtonLeft);
+    }
+
+    private void updatePinch() {
+        float distance = twoFingerDistance();
+        if (!pinchEngaged) {
+            if (!MagnifierMath.pinchEngaged(pinchStartDistance, distance)) return;
+            pinchEngaged = true;
+        }
+        magnifierZoomCallback.setZoom(MagnifierMath.pinchZoom(pinchStartZoom, pinchStartDistance, distance));
+    }
+
+    private void onAllFingersUp() {
+        pinchGestureLocked = false;
+        pinchEngaged = false;
+        xServer.getRenderer().setMagnifierPanLocked(false);
+    }
+
+    public boolean isPinchToZoomEnabled() {
+        return pinchToZoomEnabled;
+    }
+
+    public void setPinchToZoomEnabled(boolean pinchToZoomEnabled) {
+        this.pinchToZoomEnabled = pinchToZoomEnabled;
+    }
+
+    public void setMagnifierZoomCallback(MagnifierZoomCallback magnifierZoomCallback) {
+        this.magnifierZoomCallback = magnifierZoomCallback;
     }
 
     private Finger findSecondFinger(Finger finger) {
@@ -445,6 +536,10 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
                     break;
                 case MotionEvent.ACTION_HOVER_MOVE:
                     float[] transformedPoint = XForm.transformPoint(xform, event.getX(), event.getY());
+                    // Not injectAbsolutePointerMove: a hovering mouse has no "down" to hold the
+                    // magnifier's pan still, and inverting a pan that follows the cursor makes the
+                    // view drift toward the mouse on every event. Uncorrected, the mouse position
+                    // maps onto the whole X screen and the view follows it - stable.
                     xServer.injectPointerMove((int)transformedPoint[0], (int)transformedPoint[1]);
                     handled = true;
                     break;

@@ -214,6 +214,7 @@
     <string name="disable_mouse_input">マウス入力を無効化</string>
     <string name="move_cursor_to_touchpoint">タッチした位置にカーソルを移動</string>
     <string name="tap_to_left_click">タップで左クリック</string>
+    <string name="pinch_to_zoom">2本指ピンチで拡大/縮小</string>
     <string name="dpi_font_size">DPI（フォントサイズ）</string>
     <string name="gamepad_model">ゲームパッドのモデル</string>
     <string name="file_manager">ファイルマネージャー</string>

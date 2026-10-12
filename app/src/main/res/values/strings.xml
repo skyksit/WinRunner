@@ -270,6 +270,7 @@
     <string name="disable_mouse_input">Disable Mouse Input</string>
     <string name="move_cursor_to_touchpoint">Move Cursor to Touchpoint</string>
     <string name="tap_to_left_click">Tap to Left Click</string>
+    <string name="pinch_to_zoom">Pinch with Two Fingers to Zoom</string>
     <string name="dpi_font_size">DPI (Font Size)</string>
     <string name="gamepad_model">Gamepad Model</string>
     <string name="file_manager">File Manager</string>

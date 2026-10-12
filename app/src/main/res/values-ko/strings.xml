@@ -214,6 +214,7 @@
     <string name="disable_mouse_input">마우스 입력 사용 안 함</string>
     <string name="move_cursor_to_touchpoint">터치 위치로 커서 이동</string>
     <string name="tap_to_left_click">탭하여 왼쪽 클릭</string>
+    <string name="pinch_to_zoom">두 손가락 핀치로 확대/축소</string>
     <string name="dpi_font_size">DPI (글꼴 크기)</string>
     <string name="gamepad_model">게임패드 모델</string>
     <string name="file_manager">파일 관리자</string>

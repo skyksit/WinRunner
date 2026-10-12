@@ -214,6 +214,7 @@
     <string name="disable_mouse_input">Отключить ввод с помощью мыши</string>
     <string name="move_cursor_to_touchpoint">Переместите курсор в точку касания</string>
     <string name="tap_to_left_click">Касание для щелчка левой кнопкой</string>
+    <string name="pinch_to_zoom">Масштаб щипком двумя пальцами</string>
     <string name="dpi_font_size">DPI (Размер шрифта)</string>
     <string name="gamepad_model">Модель геймпада</string>
     <string name="file_manager">Файловый менеджер</string>

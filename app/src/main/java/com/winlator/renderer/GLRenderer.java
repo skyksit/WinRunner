@@ -64,8 +64,17 @@ public class GLRenderer implements GLSurfaceView.Renderer, WindowManager.OnWindo
     private float cursorScale = 1.0f;
     private int cursorBackColor = 0xffffff;
     private int cursorForeColor = 0x000000;
-    private boolean screenOffsetYRelativeToCursor = false;
-    private float magnifierZoom = 1.0f;
+    // Written by the UI thread (soft keyboard, magnifier commands, pinch), read by the GL thread.
+    private volatile boolean screenOffsetYRelativeToCursor = false;
+    private volatile float magnifierZoom = 1.0f;
+    /**
+     * What the last frame showed: screen = X * zoom - pan (X-screen units). Published for
+     * TouchpadView, which inverts it so an absolute touch lands on the content under the finger.
+     * Kept as one array swapped whole, so a reader never mixes two frames.
+     */
+    private volatile float[] magnifierFrame = {1.0f, 0, 0};
+    /** While set, the pan stays where it was instead of following the cursor (see setMagnifierPanLocked). */
+    private volatile boolean magnifierPanLocked = false;
     protected short surfaceWidth;
     protected short surfaceHeight;
     public final EffectComposer effectComposer = new EffectComposer(this);
@@ -139,15 +148,28 @@ public class GLRenderer implements GLSurfaceView.Renderer, WindowManager.OnWindo
         float pointerX = 0;
         float pointerY = 0;
         float magnifierZoom = !screenOffsetYRelativeToCursor ? this.magnifierZoom : 1.0f;
+        float[] lastFrame = magnifierFrame;
 
-        if (magnifierZoom != 1.0f) {
-            pointerX = Mathf.clamp(xServer.pointer.getX() * magnifierZoom - xServer.screenInfo.width * 0.5f, 0, xServer.screenInfo.width * Math.abs(1.0f - magnifierZoom));
+        if (magnifierPanLocked && lastFrame[0] == magnifierZoom) {
+            // An absolute touch is down: following the cursor it moves would scroll the view under
+            // the finger on every move, and the finger would chase its own pan.
+            pointerX = lastFrame[1];
+            pointerY = lastFrame[2];
+        }
+        else {
+            if (magnifierZoom != 1.0f) {
+                pointerX = Mathf.clamp(xServer.pointer.getX() * magnifierZoom - xServer.screenInfo.width * 0.5f, 0, xServer.screenInfo.width * Math.abs(1.0f - magnifierZoom));
+            }
+
+            if (screenOffsetYRelativeToCursor || magnifierZoom != 1.0f) {
+                float scaleY = magnifierZoom != 1.0f ? Math.abs(1.0f - magnifierZoom) : 0.5f;
+                float offsetY = xServer.screenInfo.height * (screenOffsetYRelativeToCursor ? 0.25f : 0.5f);
+                pointerY = Mathf.clamp(xServer.pointer.getY() * magnifierZoom - offsetY, 0, xServer.screenInfo.height * scaleY);
+            }
         }
 
-        if (screenOffsetYRelativeToCursor || magnifierZoom != 1.0f) {
-            float scaleY = magnifierZoom != 1.0f ? Math.abs(1.0f - magnifierZoom) : 0.5f;
-            float offsetY = xServer.screenInfo.height * (screenOffsetYRelativeToCursor ? 0.25f : 0.5f);
-            pointerY = Mathf.clamp(xServer.pointer.getY() * magnifierZoom - offsetY, 0, xServer.screenInfo.height * scaleY);
+        if (lastFrame[0] != magnifierZoom || lastFrame[1] != pointerX || lastFrame[2] != pointerY) {
+            magnifierFrame = new float[]{magnifierZoom, pointerX, pointerY};
         }
 
         XForm.makeTransform(tmpXForm2, -pointerX, -pointerY, magnifierZoom, magnifierZoom, 0);
@@ -416,6 +438,21 @@ public class GLRenderer implements GLSurfaceView.Renderer, WindowManager.OnWindo
     public void setMagnifierZoom(float magnifierZoom) {
         this.magnifierZoom = magnifierZoom;
         xServerView.requestRender();
+    }
+
+    /** {zoom, panX, panY} the last frame was drawn with; screen = X * zoom - pan. Do not modify. */
+    public float[] getMagnifierFrame() {
+        return magnifierFrame;
+    }
+
+    /**
+     * Holds the magnified view still while an absolute touch is down. Released, the view follows
+     * the cursor again and re-centres on it once.
+     */
+    public void setMagnifierPanLocked(boolean locked) {
+        if (magnifierPanLocked == locked) return;
+        magnifierPanLocked = locked;
+        if (!locked) xServerView.requestRender();
     }
 
     public int[] getPixelsARGB(int x, int y, int width, int height, boolean flipY) {
