@@ -103,7 +103,11 @@ public final class ToolLibraryDialog {
         adapter = new RowAdapter();
         list.setAdapter(adapter);
         list.setOnItemClickListener((parent, view, position, id) -> onRowClicked(rows.get(position)));
-        content.addView(list, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(320)));
+        // 320dp is the preferred height, not a fixed one: the weight lets the list give up height when
+        // the dialog does not fit (landscape phone). A fixed height overflowed the dialog's custom
+        // panel, which clipped the list's bottom - the last rows sat under the buttons and could not
+        // be scrolled into view or picked.
+        content.addView(list, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(320), 1f));
 
         dialog = builder
             .setTitle(title)
