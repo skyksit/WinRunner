@@ -136,6 +136,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
+        // Opened from the in-game Input Controls dialog: Back returns to the game like the toolbar arrow,
+        // with RESULT_OK so the dialog reloads the edited profiles (not to the Containers screen).
+        if (editInputControls) {
+            setResult(RESULT_OK);
+            finish();
+            return;
+        }
         if (currentFragment != null && currentFragment.isVisible()) {
             if (currentFragment instanceof BaseFileManagerFragment) {
                 BaseFileManagerFragment fileManagerFragment = (BaseFileManagerFragment)currentFragment;

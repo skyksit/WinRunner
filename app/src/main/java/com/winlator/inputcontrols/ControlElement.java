@@ -1208,19 +1208,16 @@ public class ControlElement {
         }
     }
 
-    private boolean hasCustomColors() {
-        return borderColor != null || backgroundColor != null || textColor != null;
-    }
-
     /**
-     * Stock elements keep upstream's element opacity × overlay opacity (40% in game, 60% in the editor).
-     * An element with its own colours uses its opacity as-is: otherwise "100%" renders at 40% in game
-     * and a different brightness in the editor, so the chosen colours never look as picked.
+     * Element opacity × overlay opacity, for every element - coloured (themed) ones included, so the
+     * one Overlay Opacity slider dims the whole pad (a 50% theme at 30% overlay draws at 15%).
+     * The editor renders with the same overlay value as the game; its floor applies to the product
+     * so a faint element can still be found and picked there.
      */
     private int withAlpha(int rgb) {
-        float opacity = inputControlsView.isEditMode() ? Math.max(0.15f, this.opacity) : this.opacity;
-        float overlayOpacity = hasCustomColors() ? 1.0f : inputControlsView.getOverlayOpacity();
-        return Color.argb((int)(opacity * overlayOpacity * 255), Color.red(rgb), Color.green(rgb), Color.blue(rgb));
+        float alpha = this.opacity * inputControlsView.getOverlayOpacity();
+        if (inputControlsView.isEditMode()) alpha = Math.max(0.15f, alpha);
+        return Color.argb((int)(alpha * 255), Color.red(rgb), Color.green(rgb), Color.blue(rgb));
     }
 
     /** Outline colour (and the fill of a pressed element). */

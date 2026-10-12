@@ -41,6 +41,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class InputControlsView extends View {
+    public static final String PREF_OVERLAY_OPACITY = "overlay_opacity";
     public static final float DEFAULT_OVERLAY_OPACITY = 0.4f;
     private boolean editMode = false;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);

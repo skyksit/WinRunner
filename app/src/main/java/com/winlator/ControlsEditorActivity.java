@@ -1,6 +1,7 @@
 package com.winlator;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,8 +29,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.winlator.contentdialog.MacroEditorDialog;
+import com.winlator.core.Callback;
 import com.winlator.core.LocaleHelper;
 import com.winlator.inputcontrols.Binding;
 import com.winlator.inputcontrols.ControlElement;
@@ -63,9 +66,11 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
         AppUtils.hideSystemUI(this);
         setContentView(R.layout.controls_editor_activity);
 
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         inputControlsView = new InputControlsView(this);
         inputControlsView.setEditMode(true);
-        inputControlsView.setOverlayOpacity(0.6f);
+        // DGPlayer: the editor shows the game's overlay opacity (was a fixed 60%) so the slider below previews it.
+        inputControlsView.setOverlayOpacity(preferences.getFloat(InputControlsView.PREF_OVERLAY_OPACITY, InputControlsView.DEFAULT_OVERLAY_OPACITY));
 
         profile = InputControlsManager.loadProfile(this, ControlsProfile.getProfileFile(this, getIntent().getIntExtra("profile_id", 0)));
         ((TextView)findViewById(R.id.TVProfileName)).setText(profile.getName());
@@ -80,6 +85,23 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
         container.findViewById(R.id.BTTheme).setOnClickListener(this);
 
         toolbox = container.findViewById(R.id.Toolbox);
+
+        final SeekBar sbOverlayOpacity = container.findViewById(R.id.SBOverlayOpacity);
+        sbOverlayOpacity.setValue(inputControlsView.getOverlayOpacity() * 100);
+        final SeekBar.OnValueChangeListener applyOverlayOpacity = (seekBar, value) -> {
+            float overlayOpacity = value / 100.0f;
+            preferences.edit().putFloat(InputControlsView.PREF_OVERLAY_OPACITY, overlayOpacity).apply();
+            inputControlsView.setOverlayOpacity(overlayOpacity);
+            inputControlsView.invalidate();
+        };
+        sbOverlayOpacity.setOnValueChangeListener(applyOverlayOpacity);
+        // -/+ move one slider step. setValue() clamps and snaps but does not notify, so apply by hand.
+        final Callback<Integer> stepOverlayOpacity = (direction) -> {
+            sbOverlayOpacity.setValue(sbOverlayOpacity.getValue() + direction * sbOverlayOpacity.getStep());
+            applyOverlayOpacity.onValueChangeListener(sbOverlayOpacity, sbOverlayOpacity.getValue());
+        };
+        container.findViewById(R.id.BTOverlayOpacityDown).setOnClickListener((v) -> stepOverlayOpacity.call(-1));
+        container.findViewById(R.id.BTOverlayOpacityUp).setOnClickListener((v) -> stepOverlayOpacity.call(1));
 
         final PointF startPoint = new PointF();
         final boolean[] isActionDown = {false};
@@ -180,7 +202,7 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
             row.setClickable(true);
             row.setFocusable(true);
 
-            row.addView(new ThemeChipView(this, theme), new LinearLayout.LayoutParams(chipSize, chipSize));
+            row.addView(new ThemeChipView(this, theme, inputControlsView.getOverlayOpacity()), new LinearLayout.LayoutParams(chipSize, chipSize));
 
             TextView name = new TextView(this);
             name.setText(theme.nameResId);
@@ -206,11 +228,13 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
     /** Draws a theme the way ControlElement draws a round button: fill, outline, label. */
     private static final class ThemeChipView extends View {
         private final ControlsTheme theme;
+        private final float overlayOpacity;
         private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        ThemeChipView(Context context, ControlsTheme theme) {
+        ThemeChipView(Context context, ControlsTheme theme, float overlayOpacity) {
             super(context);
             this.theme = theme;
+            this.overlayOpacity = overlayOpacity;
         }
 
         private int argb(int rgb, float opacity) {
@@ -230,8 +254,8 @@ public class ControlsEditorActivity extends AppCompatActivity implements View.On
             paint.setColor(0xff303030);
             canvas.drawRoundRect(0, 0, getWidth(), getHeight(), strokeWidth * 2, strokeWidth * 2, paint);
 
-            // The default theme renders with the stock overlay opacity (40% in game).
-            float opacity = theme.isDefault() ? InputControlsView.DEFAULT_OVERLAY_OPACITY : theme.opacity;
+            // As in game: the theme's element opacity × the current overlay opacity.
+            float opacity = theme.opacity * overlayOpacity;
             if (theme.background != null) {
                 paint.setColor(argb(theme.background, opacity));
                 canvas.drawCircle(cx, cy, radius, paint);

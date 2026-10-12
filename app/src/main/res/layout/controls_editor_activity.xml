@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/FLContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,62 +10,109 @@
         android:id="@+id/Toolbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:background="@drawable/input_controls_toolbar"
-        android:gravity="center_vertical"
         android:padding="4dp">
-
-        <ImageButton
-            android:id="@+id/BTMove"
-            style="@style/ToolButton"
-            android:src="@drawable/icon_move"  />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/BTMove"
+                style="@style/ToolButton"
+                android:src="@drawable/icon_move"  />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="#ffffff"
+                    android:text="@string/profile" />
+
+                <TextView
+                    android:id="@+id/TVProfileName"
+                    android:layout_width="wrap_content"
+                    android:textColor="?attr/colorAccent"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <View style="@style/VerticalLine" />
+
+            <ImageButton
+                android:id="@+id/BTAddElement"
+                style="@style/ToolButton"
+                android:src="@drawable/icon_add"  />
+
+            <ImageButton
+                android:id="@+id/BTRemoveElement"
+                style="@style/ToolButton"
+                android:src="@drawable/icon_remove"  />
+
+            <ImageButton
+                android:id="@+id/BTElementSettings"
+                style="@style/ToolButton"
+                android:src="@drawable/icon_settings"  />
+
+            <ImageButton
+                android:id="@+id/BTTheme"
+                style="@style/ToolButton"
+                android:contentDescription="@string/color_theme"
+                android:src="@drawable/icon_palette"  />
+        </LinearLayout>
+
+        <!-- DGPlayer: the global Overlay Opacity, also in Input Controls settings. Multiplies every element's opacity. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:paddingLeft="8dp"
-            android:paddingRight="8dp">
+            android:paddingRight="4dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="#ffffff"
-                android:text="@string/profile" />
+                android:text="@string/overlay_opacity" />
+
+            <!-- -/+ step the slider by 5%: the thin track is easy to miss on a small screen. -->
+            <TextView
+                android:id="@+id/BTOverlayOpacityDown"
+                style="@style/OverlayOpacityStepButton"
+                android:layout_marginLeft="4dp"
+                android:contentDescription="-"
+                android:text="−" />
+
+            <com.winlator.widget.SeekBar
+                android:id="@+id/SBOverlayOpacity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:suffix="%"
+                app:step="5"
+                app:minValue="10"
+                app:maxValue="100" />
 
             <TextView
-                android:id="@+id/TVProfileName"
-                android:layout_width="wrap_content"
-                android:textColor="?attr/colorAccent"
-                android:textSize="14sp"
-                android:layout_height="wrap_content" />
+                android:id="@+id/BTOverlayOpacityUp"
+                style="@style/OverlayOpacityStepButton"
+                android:contentDescription="+"
+                android:text="+" />
         </LinearLayout>
-
-        <View style="@style/VerticalLine" />
-
-        <ImageButton
-            android:id="@+id/BTAddElement"
-            style="@style/ToolButton"
-            android:src="@drawable/icon_add"  />
-
-        <ImageButton
-            android:id="@+id/BTRemoveElement"
-            style="@style/ToolButton"
-            android:src="@drawable/icon_remove"  />
-
-        <ImageButton
-            android:id="@+id/BTElementSettings"
-            style="@style/ToolButton"
-            android:src="@drawable/icon_settings"  />
-
-        <ImageButton
-            android:id="@+id/BTTheme"
-            style="@style/ToolButton"
-            android:contentDescription="@string/color_theme"
-            android:src="@drawable/icon_palette"  />
     </LinearLayout>
 </FrameLayout>

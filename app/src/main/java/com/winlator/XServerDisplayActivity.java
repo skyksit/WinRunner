@@ -369,16 +369,19 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == MainActivity.EDIT_INPUT_CONTROLS_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (editInputControlsCallback != null) {
-                editInputControlsCallback.run();
-                editInputControlsCallback = null;
+        if (requestCode == MainActivity.EDIT_INPUT_CONTROLS_REQUEST_CODE) {
+            // The Overlay Opacity slider saves on every move, so pick it up however the screen was left.
+            applyOverlayOpacityPreference();
+            if (resultCode == Activity.RESULT_OK) {
+                if (editInputControlsCallback != null) editInputControlsCallback.run();
+                returnControlsProfile();
             }
-            returnControlsProfile();
+            editInputControlsCallback = null;
         }
         else if (requestCode == EDIT_CONTROLS_PROFILE_REQUEST_CODE) {
             // resultCode ignored: ControlsEditorActivity never sets one, it writes every change
             // straight to the profile file. That file is what has to be picked up again.
+            applyOverlayOpacityPreference();
             reloadInputControls();
             returnControlsProfile();
         }
@@ -952,7 +955,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         });
 
         inputControlsView = new InputControlsView(this);
-        inputControlsView.setOverlayOpacity(preferences.getFloat("overlay_opacity", InputControlsView.DEFAULT_OVERLAY_OPACITY));
+        inputControlsView.setOverlayOpacity(preferences.getFloat(InputControlsView.PREF_OVERLAY_OPACITY, InputControlsView.DEFAULT_OVERLAY_OPACITY));
         inputControlsView.setTouchpadView(touchpadView);
         inputControlsView.setXServer(xServer);
         // DGPlayer layouts can carry buttons for app-side actions. The widget stays activity-agnostic
@@ -1056,6 +1059,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         dialog.setIcon(R.drawable.icon_input_controls);
 
         final Spinner sProfile = dialog.findViewById(R.id.SProfile);
+        // Matched by id, not instance: loadProfiles(true) after the settings screen builds new objects.
+        final int[] spinnerProfileId = {inputControlsView.getProfile() != null ? inputControlsView.getProfile().id : 0};
         Runnable loadProfileSpinner = () -> {
             ArrayList<ControlsProfile> profiles = inputControlsManager.getProfiles(true);
             ArrayList<String> profileItems = new ArrayList<>();
@@ -1063,7 +1068,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             profileItems.add("-- "+getString(R.string.disabled)+" --");
             for (int i = 0; i < profiles.size(); i++) {
                 ControlsProfile profile = profiles.get(i);
-                if (profile == inputControlsView.getProfile()) selectedPosition = i + 1;
+                if (spinnerProfileId[0] > 0 && profile.id == spinnerProfileId[0]) selectedPosition = i + 1;
                 profileItems.add(profile.getName());
             }
 
@@ -1117,12 +1122,16 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         dialog.findViewById(R.id.BTSettings).setOnClickListener((v) -> {
             int position = sProfile.getSelectedItemPosition();
+            int selectedProfileId = position > 0 ? inputControlsManager.getProfiles().get(position - 1).id : 0;
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("edit_input_controls", true);
-            intent.putExtra("selected_profile_id", position > 0 ? inputControlsManager.getProfiles().get(position - 1).id : 0);
+            intent.putExtra("selected_profile_id", selectedProfileId);
             editInputControlsCallback = () -> {
-                hideInputControls();
-                inputControlsManager.loadProfiles(true);
+                // Keep both the running layout and the dialog's pending choice: the settings screen only
+                // edits profiles, it must not switch the controls off (it used to land on "-- Disabled --").
+                if (inputControlsView.getProfile() != null) reloadInputControls();
+                else inputControlsManager.loadProfiles(true);
+                spinnerProfileId[0] = selectedProfileId;
                 loadProfileSpinner.run();
             };
             startActivityForResult(intent, MainActivity.EDIT_INPUT_CONTROLS_REQUEST_CODE);
@@ -1198,6 +1207,12 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
      * parsed once, on first draw, and nothing tells it when the editor or the bridge rewrites the
      * file underneath.
      */
+    /** The settings screen and the controls editor both write the global Overlay Opacity; re-read it on return. */
+    private void applyOverlayOpacityPreference() {
+        inputControlsView.setOverlayOpacity(preferences.getFloat(InputControlsView.PREF_OVERLAY_OPACITY, InputControlsView.DEFAULT_OVERLAY_OPACITY));
+        inputControlsView.invalidate();
+    }
+
     private void reloadInputControls() {
         ControlsProfile current = inputControlsView.getProfile();
         if (current == null) return;

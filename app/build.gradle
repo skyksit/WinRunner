@@ -99,7 +99,10 @@ android {
         // 69: pinch to zoom - an Input Controls dialog option turns two fingers into a Magnifier
         //     pinch; absolute (TOUCH) taps map through the zoom and hold its pan while down.
         //     The game tool item picker no longer clips its last rows in landscape.
-        versionCode 69
+        // 70: Overlay Opacity multiplies themed (coloured) elements too, the editor previews it with a
+        //     -/+ slider row under the theme button, and returning from the in-game settings no longer
+        //     switches Input Controls to "Disabled".
+        versionCode 70
         versionName "11.6"
     }
 

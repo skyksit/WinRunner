@@ -12,7 +12,7 @@ public final class ControlsTheme {
     public final Integer border;
     public final Integer background;
     public final Integer text;
-    /** Coloured elements skip the overlay opacity, so a theme brings its own or the pad would hide the game. */
+    /** Element opacity; the overlay opacity multiplies it in game and in the editor like any other element. */
     public final float opacity;
 
     private ControlsTheme(int nameResId, Integer border, Integer background, Integer text, float opacity) {
@@ -24,7 +24,7 @@ public final class ControlsTheme {
     }
 
     public static final ControlsTheme[] ALL = {
-        // Clears the colours: back to the stock white outline × overlay opacity.
+        // Clears the colours: back to the stock white outline at full element opacity.
         new ControlsTheme(R.string.theme_default, null, null, null, 1.0f),
         new ControlsTheme(R.string.theme_dark, 0xffffff, 0x000000, 0xffffff, 0.6f),
         new ControlsTheme(R.string.theme_neon_green, 0x39ff14, 0x0a0a0a, 0x39ff14, 0.7f),

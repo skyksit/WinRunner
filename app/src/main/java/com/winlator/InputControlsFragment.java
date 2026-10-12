@@ -130,8 +130,8 @@ public class InputControlsFragment extends Fragment {
         updateLayout.run();
 
         SeekBar sbOverlayOpacity = view.findViewById(R.id.SBOverlayOpacity);
-        sbOverlayOpacity.setOnValueChangeListener((seekBar, value) -> preferences.edit().putFloat("overlay_opacity", value / 100.0f).apply());
-        sbOverlayOpacity.setValue(preferences.getFloat("overlay_opacity", InputControlsView.DEFAULT_OVERLAY_OPACITY) * 100);
+        sbOverlayOpacity.setOnValueChangeListener((seekBar, value) -> preferences.edit().putFloat(InputControlsView.PREF_OVERLAY_OPACITY, value / 100.0f).apply());
+        sbOverlayOpacity.setValue(preferences.getFloat(InputControlsView.PREF_OVERLAY_OPACITY, InputControlsView.DEFAULT_OVERLAY_OPACITY) * 100);
 
         final TextView tvVibrationStrength = view.findViewById(R.id.TVVibrationStrength);
         final SeekBar sbVibrationStrength = view.findViewById(R.id.SBVibrationStrength);
