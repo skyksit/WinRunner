@@ -33,7 +33,9 @@ public abstract class RootFSInstaller {
     // 29: the three winegstreamer modules handle a dynamic format change in the DirectShow MPEG
     //     video decoder (DGwine patches 0005-0007); amstream's 32bpp SetFormat() no longer leaves
     //     the decoder writing 24bpp rows into the surface.
-    public static final byte LATEST_VERSION = 29; // TODO increment it on rootfs update
+    // 30: winex11.so commits a Unicode keysym as IME text (DGwine patches-winlator/0002) - the X server
+    //     has no XKB, so Hangul from the soft keyboard was dropped; ImeInputView sends it this way.
+    public static final byte LATEST_VERSION = 30; // TODO increment it on rootfs update
     public static final byte UPDATE_WINEPREFIX_VERSION = 16; // set it if main wine version change
     public static final String FILENAME = "rootfs.tzst";
 

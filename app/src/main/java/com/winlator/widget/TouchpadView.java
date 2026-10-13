@@ -71,6 +71,7 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     private static final String POINTER_TAG = "DGPointer";
     private static final long RECAPTURE_THROTTLE_MS = 200;
     private final boolean capturePointerOnExternalMouse;
+    private View captureFocusView;
     private long lastRecaptureAttempt = 0;
     private boolean captureSuspended = false;
 
@@ -105,9 +106,18 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
             Log.i(POINTER_TAG, "ensurePointerCapture: skipped, window has no focus");
             return;
         }
-        if (!hasFocus()) requestFocus();
+        // Captured events go to the focused view. When another view owns focus for the session
+        // (the IME editor), it must stay focused and forward them here - taking focus back would
+        // detach the IME every time the mouse is recaptured.
+        View focusOwner = captureFocusView != null ? captureFocusView : this;
+        if (!focusOwner.hasFocus()) focusOwner.requestFocus();
         Log.i(POINTER_TAG, "ensurePointerCapture: request (focused=" + hasFocus() + ", touchMode=" + isInTouchMode() + ")");
         requestPointerCapture();
+    }
+
+    /** The view that keeps focus during the session and forwards captured events to {@link #onCapturedPointer}. */
+    public void setCaptureFocusView(View view) {
+        this.captureFocusView = view;
     }
 
     /** While suspended (e.g. the side menu is open) the Android cursor is left free to use the UI. */

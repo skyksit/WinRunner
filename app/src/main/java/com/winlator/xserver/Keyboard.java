@@ -4,7 +4,6 @@ import android.view.KeyEvent;
 
 import androidx.collection.ArraySet;
 
-import com.winlator.core.AppUtils;
 import com.winlator.core.Bitmask;
 import com.winlator.inputcontrols.ExternalController;
 
@@ -122,14 +121,39 @@ public class Keyboard {
         }
         else if (action == KeyEvent.ACTION_MULTIPLE) {
             String chars = event.getCharacters();
-            if (chars != null && chars.length() == 1) {
-                int keysym = chars.charAt(0);
-                XKeycode xKeycode = getCustomXKeycodeForKeysym(keysym);
-                xServer.injectKeyPress(xKeycode, keysym);
-                AppUtils.runDelayed(() -> xServer.injectKeyRelease(xKeycode), 30);
+            if (chars != null) {
+                for (int i = 0; i < chars.length(); ) {
+                    int codePoint = chars.codePointAt(i);
+                    i += Character.charCount(codePoint);
+                    typeUnicode(codePoint);
+                }
             }
         }
         return true;
+    }
+
+    /**
+     * Types one character that has no key of its own, on a spare keycode bound to its keysym.
+     *
+     * <p>Latin-1 keysyms equal their code points; anything above is the Unicode keysym
+     * {@code 0x01000000 | codePoint}. Passing the raw code point instead - which this did - names an
+     * unrelated keysym, and Hangul came out as nothing. The X server has no XKB, so libX11 in the
+     * guest still turns a Unicode keysym into no text; the container's winex11 (DGwine patch 0002)
+     * commits it as IME text instead.
+     *
+     * <p>Released straight away: the next character may reuse the keycode (the same syllable twice
+     * gets the same one), and a key that is still down would swallow that press. Order is safe even
+     * when a spare keycode is rebound - the server sends MappingNotify ahead of the KeyPress on the
+     * same event stream, after every earlier event for that keycode.
+     */
+    public void typeUnicode(int codePoint) {
+        if (codePoint < 0x20 || codePoint == 0x7F || codePoint > 0x10FFFF) return;
+        int keysym = codePoint <= 0xFF ? codePoint : 0x01000000 | codePoint;
+        XKeycode xKeycode = getCustomXKeycodeForKeysym(keysym);
+        android.util.Log.d("ImeInputView", "typeUnicode keysym=0x" + Integer.toHexString(keysym) + " keycode=" + xKeycode.id);
+        xServer.injectKeyRelease(xKeycode);
+        xServer.injectKeyPress(xKeycode, keysym);
+        xServer.injectKeyRelease(xKeycode);
     }
 
     private XKeycode getCustomXKeycodeForKeysym(int keysym) {

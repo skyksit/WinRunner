@@ -95,6 +95,7 @@ import com.winlator.speed.GameSpeed;
 import com.winlator.speed.SpeedController;
 import com.winlator.speed.Timescale;
 import com.winlator.widget.FrameRating;
+import com.winlator.widget.ImeInputView;
 import com.winlator.widget.InputControlsView;
 import com.winlator.widget.MagnifierMath;
 import com.winlator.widget.MagnifierView;
@@ -198,6 +199,11 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private CheatSession cheatSession;
     private TextView speedIndicator;
     private TextView mouseModeIndicator;
+    /** The soft keyboard's editor; see ImeInputView for why text cannot go as key events alone. */
+    private ImeInputView imeInputView;
+    /** Hangul (or other) text the keyboard is still composing, which the game cannot be given yet. */
+    private TextView composingIndicator;
+    private android.content.BroadcastReceiver debugImeReceiver;
     private final Runnable hideMouseModeIndicator = () -> mouseModeIndicator.setVisibility(View.GONE);
 
     @Override
@@ -223,6 +229,11 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         ProcessHelper.removeAllDebugCallbacks();
         boolean enableLogs = preferences.getBoolean("enable_wine_debug", false) || preferences.getInt("box64_logs", 0) >= 1;
         if (enableLogs) ProcessHelper.addDebugCallback(debugDialog = new DebugDialog(this));
+        // Debug builds: guest stdout/stderr to logcat (tag WineLog), so a WINEDEBUG set through the
+        // game's envVars can be read over adb without the in-app log window.
+        if ((getApplicationInfo().flags & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+            ProcessHelper.addDebugCallback(line -> Log.d("WineLog", line));
+        }
         Menu menu = navigationView.getMenu();
         menu.findItem(R.id.menu_item_logs).setVisible(enableLogs);
         cdPaths = getIntent().getStringArrayExtra("cd_paths");
@@ -426,6 +437,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             inputControlsView.pauseAutoHide();
             inputControlsView.cancelMacro();
         }
+        if (imeInputView != null) imeInputView.clearComposing();
         if (environment != null && !isInPictureInPictureMode()) {
             environment.onPause();
             xServerView.onPause();
@@ -476,6 +488,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
     @Override
     protected void onDestroy() {
+        if (debugImeReceiver != null) unregisterReceiver(debugImeReceiver);
         if (cheatSession != null) cheatSession.close();
         winHandler.stop();
         if (environment != null) environment.stopEnvironmentComponents();
@@ -505,7 +518,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         final GLRenderer renderer = xServerView.getRenderer();
         switch (item.getItemId()) {
             case R.id.menu_item_keyboard:
-                AppUtils.showKeyboard(this);
+                toggleSoftKeyboard();
                 drawerLayout.closeDrawers();
                 break;
             case R.id.menu_item_input_controls:
@@ -608,7 +621,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         }
         else if (binding == Binding.KEY_DGP_KEYBOARD) {
             // Already a toggle (InputMethodManager.toggleSoftInput).
-            AppUtils.showKeyboard(this);
+            toggleSoftKeyboard();
         }
         else if (binding == Binding.KEY_DGP_MENU) {
             // Opens the drawer, or closes it when it is already open.
@@ -979,6 +992,59 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         rootView.addView(mouseModeIndicator);
         speedController.setListener((mode, factor) -> runOnUiThread(() -> updateSpeedIndicator(mode, factor)));
 
+        // Third line under the indicators: the keyboard covers the bottom of the screen.
+        composingIndicator = createOverlayIndicator((int)UnitUtils.dpToPx(56));
+        rootView.addView(composingIndicator);
+        imeInputView = new ImeInputView(this, new ImeInputView.Callback() {
+            @Override
+            public void onKeyEvent(KeyEvent event) {
+                // The same way the keyboard's own key events used to arrive.
+                dispatchKeyEvent(event);
+            }
+
+            @Override
+            public void onUnicodeChar(int codePoint) {
+                xServer.keyboard.typeUnicode(codePoint);
+            }
+
+            @Override
+            public void onComposingText(CharSequence text) {
+                composingIndicator.setText(text);
+                composingIndicator.setVisibility(text.length() > 0 ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public boolean onCapturedPointer(MotionEvent event) {
+                return touchpadView.onCapturedPointer(touchpadView, event);
+            }
+
+            @Override
+            public boolean onGenericMotion(MotionEvent event) {
+                return inputControlsView.getVisibility() == View.VISIBLE && inputControlsView.onGenericMotionEvent(event);
+            }
+        });
+        rootView.addView(imeInputView, new FrameLayout.LayoutParams(1, 1));
+        // The editor is focused from the start (see ImeInputView), so a Bluetooth keyboard's IME
+        // composition works before the soft keyboard was ever opened. Keep that focus from showing
+        // the soft keyboard on its own: it stays a toggle (drawer / KEY_DGP_KEYBOARD).
+        getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
+                | android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        touchpadView.setCaptureFocusView(imeInputView);
+        imeInputView.requestFocus();
+        // Debug builds only: `am broadcast -a com.retrople.debug.IME_COMMIT --es text <text>` types
+        // through the same path a keyboard commit takes, so Hangul can be tested without a hand on
+        // the device (adb `input text` cannot send it).
+        if ((getApplicationInfo().flags & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+            debugImeReceiver = new android.content.BroadcastReceiver() {
+                @Override
+                public void onReceive(android.content.Context context, Intent intent) {
+                    String text = intent.getStringExtra("text");
+                    if (text != null) imeInputView.debugCommit(text);
+                }
+            };
+            registerReceiver(debugImeReceiver, new android.content.IntentFilter("com.retrople.debug.IME_COMMIT"));
+        }
+
         if (shortcut != null) {
             String controlsProfile = shortcut.getExtra("controlsProfile");
             if (!controlsProfile.isEmpty()) {
@@ -1000,6 +1066,16 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
         if (MainActivity.DEBUG_MODE) rootView.addView(AppUtils.createDebugMsgTextView(this));
         AppUtils.observeSoftKeyboardVisibility(drawerLayout, renderer::setScreenOffsetYRelativeToCursor);
+    }
+
+    /**
+     * Shows or hides the soft keyboard against {@link #imeInputView}. The keyboard binds to the
+     * focused view, and only that one is a text editor; another view (the controls overlay asks for
+     * focus) would leave the keyboard sending bare key events, which carry no Hangul.
+     */
+    private void toggleSoftKeyboard() {
+        imeInputView.requestFocus();
+        AppUtils.showKeyboard(this);
     }
 
     /** Top centre, so it stays clear of the FPS HUD in the corner. */
@@ -1173,7 +1249,8 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
 
     private void showInputControls(ControlsProfile profile) {
         inputControlsView.setVisibility(View.VISIBLE);
-        inputControlsView.requestFocus();
+        // Joystick motion reaches the overlay through the focused editor's forwarding.
+        if (imeInputView != null) imeInputView.requestFocus(); else inputControlsView.requestFocus();
         inputControlsView.setProfile(profile);
 
         touchpadView.setSensitivity(profile.getCursorSpeed() * globalCursorSpeed);

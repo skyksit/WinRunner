@@ -102,7 +102,7 @@ android {
         // 70: Overlay Opacity multiplies themed (coloured) elements too, the editor previews it with a
         //     -/+ slider row under the theme button, and returning from the in-game settings no longer
         //     switches Input Controls to "Disabled".
-        versionCode 70
+        versionCode 71
         versionName "11.6"
     }
 
@@ -170,6 +170,10 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // Diagnostics only: `-PdgwDebuggable` builds a release-signed APK that `run-as` accepts,
+            // so it installs over the release build with `adb install -r` and keeps the containers.
+            debuggable project.hasProperty('dgwDebuggable')
 
             if (releaseSigningReady) {
                 signingConfig signingConfigs.release
