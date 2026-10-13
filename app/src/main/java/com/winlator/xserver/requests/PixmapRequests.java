@@ -3,6 +3,7 @@ package com.winlator.xserver.requests;
 import com.winlator.xconnector.XInputStream;
 import com.winlator.xconnector.XOutputStream;
 import com.winlator.xserver.Drawable;
+import com.winlator.xserver.DrawableManager;
 import com.winlator.xserver.Pixmap;
 import com.winlator.xserver.XClient;
 import com.winlator.xserver.errors.BadDrawable;
@@ -14,8 +15,9 @@ public abstract class PixmapRequests {
         byte depth = client.getRequestData();
         int pixmapId = inputStream.readInt();
         int drawableId = inputStream.readInt();
-        short width = inputStream.readShort();
-        short height = inputStream.readShort();
+        short width = DrawableManager.readDimension(inputStream.readUnsignedShort());
+        short height = DrawableManager.readDimension(inputStream.readUnsignedShort());
+        DrawableManager.checkStorageSize(width, height);
 
         if (!client.isValidResourceId(pixmapId)) throw new BadIdChoice(pixmapId);
 

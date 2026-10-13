@@ -1,13 +1,35 @@
 package com.winlator.xserver;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.winlator.core.Callback;
 import com.winlator.renderer.Texture;
+import com.winlator.xserver.errors.BadAlloc;
+import com.winlator.xserver.errors.BadValue;
 
 public class DrawableManager extends XResourceManager implements XResourceManager.OnResourceLifecycleListener {
     private final XServer xServer;
     private final SparseArray<Drawable> drawables = new SparseArray<>();
+
+    // DGPlayer: a drawable's pixels are allocated up front (width * height * 4), unlike a real X
+    // server where a window has no storage of its own. 8192x8192 is far beyond any screen here.
+    private static final long MAX_STORAGE_BYTES = 8192L * 8192L * 4L;
+
+    /**
+     * DGPlayer: X sizes are CARD16 (1..65535) but this server keeps them in shorts. Reading them
+     * as signed turned 65535 into -1, and the negative ByteBuffer capacity aborted the whole app
+     * (Empire Earth creates such a window at startup). Clamp to the short range instead.
+     */
+    public static short readDimension(int unsignedValue) throws BadValue {
+        if (unsignedValue <= 0) throw new BadValue(unsignedValue);
+        if (unsignedValue > Short.MAX_VALUE) Log.w("XServer", "clamping drawable dimension "+unsignedValue);
+        return (short)Math.min(unsignedValue, Short.MAX_VALUE);
+    }
+
+    public static void checkStorageSize(short width, short height) throws BadAlloc {
+        if ((long)width * height * 4L > MAX_STORAGE_BYTES) throw new BadAlloc();
+    }
 
     public DrawableManager(XServer xServer) {
         this.xServer = xServer;

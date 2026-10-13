@@ -8,6 +8,7 @@ import com.winlator.xconnector.XOutputStream;
 import com.winlator.xconnector.XStreamLock;
 import com.winlator.core.Bitmask;
 import com.winlator.xserver.Drawable;
+import com.winlator.xserver.DrawableManager;
 import com.winlator.xserver.Property;
 import com.winlator.xserver.Visual;
 import com.winlator.xserver.Window;
@@ -41,12 +42,13 @@ public abstract class WindowRequests {
 
         short x = inputStream.readShort();
         short y = inputStream.readShort();
-        short width = inputStream.readShort();
-        short height = inputStream.readShort();
+        short width = DrawableManager.readDimension(inputStream.readUnsignedShort());
+        short height = DrawableManager.readDimension(inputStream.readUnsignedShort());
         short borderWidth = inputStream.readShort();
         WindowAttributes.WindowClass windowClass = WindowAttributes.WindowClass.values()[(byte)inputStream.readShort()];
         Visual visual = client.xServer.pixmapManager.getVisual(inputStream.readInt());
         Bitmask valueMask = new Bitmask(inputStream.readInt());
+        if (windowClass != WindowAttributes.WindowClass.INPUT_ONLY) DrawableManager.checkStorageSize(width, height);
 
         Window window = client.xServer.windowManager.createWindow(windowId, parent, x, y, width, height, windowClass, visual, depth, client);
         window.setBorderWidth(borderWidth);
