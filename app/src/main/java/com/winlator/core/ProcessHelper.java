@@ -1,8 +1,10 @@
 package com.winlator.core;
 
 import android.os.Process;
+import android.os.SystemClock;
 import android.system.Os;
 import android.util.Log;
+import android.system.ErrnoException;
 import android.system.OsConstants;
 
 import androidx.annotation.NonNull;
@@ -356,5 +358,118 @@ public abstract class ProcessHelper {
         }
 
         return result;
+    }
+
+    /**
+     * Every process of this uid whose executable lives inside {@code rootDir}: box64 (which is what
+     * wineserver, winhandler and every .exe really are), pulseaudio and any other rootfs helper.
+     * Unlike {@link #getChildProcesses()} this depends neither on the parent pid nor on pid
+     * ordering, so it also finds guests that init adopted after the process that spawned them went
+     * away, and guests older than the current app process (a relaunched session runs in a new
+     * process with a higher pid than the leftovers of the old one).
+     */
+    public static List<Integer> getGuestProcessPids(File rootDir) {
+        String[] roots = rootPathForms(rootDir);
+        String[] entries = (new File("/proc")).list((file, name) -> name.matches("[0-9]+"));
+        if (entries == null) return Collections.emptyList();
+        int self = Os.getpid();
+        ArrayList<Integer> result = new ArrayList<>();
+        for (String entry : entries) {
+            int pid;
+            try {
+                pid = Integer.parseInt(entry);
+            }
+            catch (NumberFormatException e) {
+                continue;
+            }
+            if (pid != self && isGuestProcess(pid, roots)) result.add(pid);
+        }
+        return result;
+    }
+
+    /**
+     * Sends SIGTERM to every guest process (see {@link #getGuestProcessPids}) so wineserver and the
+     * game can run their exit handlers, then SIGKILL to whatever is still alive after
+     * {@code graceMillis}. A grace of 0 goes straight to SIGKILL. Returns "pid name" for each
+     * process that was still running when called, empty when there was nothing to do.
+     */
+    public static List<String> killGuestProcesses(File rootDir, long graceMillis) {
+        List<Integer> pids = getGuestProcessPids(rootDir);
+        if (pids.isEmpty()) return Collections.emptyList();
+        ArrayList<String> names = new ArrayList<>(pids.size());
+        for (int pid : pids) names.add(pid+" "+getProcessName(pid));
+
+        int signal = graceMillis > 0 ? OsConstants.SIGTERM : OsConstants.SIGKILL;
+        for (int pid : pids) Process.sendSignal(pid, signal);
+
+        if (graceMillis > 0) {
+            long deadline = SystemClock.uptimeMillis() + graceMillis;
+            List<Integer> alive = pids;
+            while (!alive.isEmpty() && SystemClock.uptimeMillis() < deadline) {
+                SystemClock.sleep(50);
+                alive = stillAlive(alive);
+            }
+            for (int pid : alive) Process.sendSignal(pid, OsConstants.SIGKILL);
+        }
+        return names;
+    }
+
+    private static String[] rootPathForms(File rootDir) {
+        // /data/user/0/<pkg> and /data/data/<pkg> are the same directory; /proc/<pid>/exe reports
+        // whichever spelling the launcher used, so accept both plus the canonical form.
+        String raw = rootDir.getAbsolutePath();
+        String canonical;
+        try {
+            canonical = rootDir.getCanonicalPath();
+        }
+        catch (IOException e) {
+            canonical = raw;
+        }
+        String alt = raw;
+        if (raw.startsWith("/data/user/0/")) alt = "/data/data/"+raw.substring("/data/user/0/".length());
+        else if (raw.startsWith("/data/data/")) alt = "/data/user/0/"+raw.substring("/data/data/".length());
+        return new String[]{raw+"/", canonical+"/", alt+"/"};
+    }
+
+    private static boolean isGuestProcess(int pid, String[] roots) {
+        String exe = null;
+        try {
+            exe = Os.readlink("/proc/"+pid+"/exe");
+        }
+        catch (ErrnoException e) {
+            // ENOENT: a zombie or a kernel thread. EACCES: not dumpable. Fall through to the name.
+        }
+        if (exe != null) {
+            int deleted = exe.indexOf(" (deleted)");
+            if (deleted > 0) exe = exe.substring(0, deleted);
+            return startsWithAny(exe, roots);
+        }
+        // Same heuristic as getChildProcesses(): with hidepid=2 every pid we can see is our uid,
+        // so a process called wineserver or something.exe can only be one of our guests.
+        String name = getProcessName(pid);
+        return startsWithAny(name, roots) || name.contains("wine") || name.toLowerCase().endsWith(".exe");
+    }
+
+    private static boolean startsWithAny(String value, String[] prefixes) {
+        for (String prefix : prefixes) if (value.startsWith(prefix)) return true;
+        return false;
+    }
+
+    private static List<Integer> stillAlive(List<Integer> pids) {
+        ArrayList<Integer> alive = new ArrayList<>();
+        for (int pid : pids) {
+            // A zombie keeps its /proc entry until init reaps it; its stat state is Z.
+            try (BufferedReader reader = new BufferedReader(new FileReader("/proc/"+pid+"/stat"))) {
+                String line = reader.readLine();
+                if (line == null) continue;
+                int close = line.lastIndexOf(')');
+                if (close < 0 || close+2 >= line.length()) continue;
+                if (line.charAt(close+2) != 'Z') alive.add(pid);
+            }
+            catch (IOException e) {
+                // gone
+            }
+        }
+        return alive;
     }
 }

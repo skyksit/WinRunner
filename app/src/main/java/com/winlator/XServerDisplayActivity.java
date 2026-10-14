@@ -492,6 +492,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         if (cheatSession != null) cheatSession.close();
         winHandler.stop();
         if (environment != null) environment.stopEnvironmentComponents();
+        terminateGuestProcesses("destroy", 0);
         // Back to 1x first: the audio and Present scales are static, and a relaunched session that
         // reuses this process must not inherit them. Then invalidate the mapping, so any guest
         // process still holding it falls back to real time.
@@ -699,12 +700,31 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         return execPath != null ? FileUtils.getBasename(execPath) : "winrunner";
     }
 
+    /**
+     * Kills every guest process that is still alive once the environment is down. Stopping the
+     * components only kills the launcher's direct child (box64 running start.exe) and takes the X
+     * server away; wineserver, winhandler and the game itself were reparented to init long ago and
+     * survived that whenever the session was replaced through {@link #onNewIntent} - the relaunch
+     * keeps this process alive, so nothing closed their pipes, and the old game kept spinning at a
+     * full core next to the new one (Corum3: the new session showed 1.5 fps until the old
+     * Corum3.exe was killed by hand). Guests are found by executable path under the rootfs, which
+     * holds across the process restart that a relaunch does.
+     */
+    private void terminateGuestProcesses(String when, long graceMillis) {
+        if (rootFS == null) return;
+        List<String> killed = ProcessHelper.killGuestProcesses(rootFS.getRootDir(), graceMillis);
+        if (!killed.isEmpty()) Log.w("DGPlayerBridge", "guest processes still alive at "+when+", terminated: "+killed);
+    }
+
     private void exit() {
         // Set before stopping the guest, because stopping it re-enters exit() from the waitFor thread.
         if (!exiting.compareAndSet(false, true)) return;
 
         winHandler.stop();
         if (environment != null) environment.stopEnvironmentComponents();
+        // Before the save export below: a game that is still running could write after the
+        // archive was taken, and a leftover one would keep burning a core under the next session.
+        terminateGuestProcesses("exit", 1000);
 
         final Intent intent = getIntent();
         // Launched by DGPlayer: just end this task so the caller's app comes back to the foreground.
@@ -815,6 +835,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     }
 
     private void setupXEnvironment() {
+        // Guests of a previous process life (crash, force-stop while the relaunch was in flight)
+        // would otherwise share wineserver sockets and CPU with the session about to start.
+        terminateGuestProcesses("session start", 0);
         String rootPath = rootFS.getRootDir().getPath();
         envVars.put("MESA_DEBUG", "silent");
         envVars.put("MESA_NO_ERROR", "1");
