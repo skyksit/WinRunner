@@ -55,6 +55,18 @@ jobs:
           echo "DGW_KEYSTORE_FILE=$KS" >> "$GITHUB_ENV"
           if [ -n "$DGW_KEYSTORE_BASE64" ]; then echo "STABLE_SIGNATURE=1" >> "$GITHUB_ENV"; fi
 
+      # Firebase Crashlytics config. Without the secret the app builds without Crashlytics.
+      - name: Write google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            printf '%s' "$GOOGLE_SERVICES_JSON" > app/app/google-services.json
+            echo "CRASHLYTICS=1" >> "$GITHUB_ENV"
+          else
+            echo "::warning::GOOGLE_SERVICES_JSON secret is not set. The APK is built without Crashlytics."
+          fi
+
       - name: Build release APK
         working-directory: app
         env:
@@ -64,6 +76,8 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew --no-daemon :app:assembleRelease
+          # Native stack traces in Crashlytics need the unstripped symbols of this exact build.
+          if [ "$CRASHLYTICS" = "1" ]; then ./gradlew --no-daemon :app:uploadCrashlyticsSymbolFileRelease; fi
 
       - name: Collect APK
         run: |
