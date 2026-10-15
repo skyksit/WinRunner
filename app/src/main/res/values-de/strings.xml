@@ -436,6 +436,7 @@
     <string name="allow_unknown_sources_hint">Um das Update zu installieren, erlaube dieser App auf dem nächsten Bildschirm, unbekannte Apps zu installieren, und kehre dann zurück.</string>
     <string name="check_for_updates">Nach Updates suchen</string>
     <string name="auto_check_updates">Automatisch nach Updates suchen</string>
+    <string name="send_crash_reports">Absturzberichte senden</string>
     <string name="app_update">App-Update</string>
     <string name="app_update_new">App-Update (neu)</string>
     <string name="update_available_in_menu">Neue Version verfügbar - Menü > App-Update</string>

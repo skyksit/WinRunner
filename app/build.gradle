@@ -1,5 +1,15 @@
 apply plugin: 'com.android.application'
 
+// Crashlytics (see CrashReporter). google-services.json holds the Firebase project and stays out of
+// this public repository: put it at app/google-services.json locally, CI writes it from the
+// GOOGLE_SERVICES_JSON secret. Without it the Firebase plugins are skipped and nothing is reported.
+def firebaseConfigured = file('google-services.json').exists()
+if (firebaseConfigured) {
+    apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.firebase.crashlytics'
+}
+else logger.warn('app/google-services.json not found - building without Crashlytics.')
+
 // GameLaunchActivity only accepts callers signed with our certificate, so debug builds have to be
 // signed with the same keystore DGPlayer uses or the bridge rejects it. Point local.properties at it:
 //   dgp.debug.keystore=D:/studyspace/dgplayer-app/dsam3/debug.keystore
@@ -163,6 +173,13 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
+            if (firebaseConfigured) {
+                // Debug builds never report (CrashReporter), so their mappings need not go up either.
+                firebaseCrashlytics {
+                    mappingFileUploadEnabled false
+                }
+            }
+
             ndk {
                 abiFilters 'arm64-v8a'
             }
@@ -174,6 +191,13 @@ android {
             // Diagnostics only: `-PdgwDebuggable` builds a release-signed APK that `run-as` accepts,
             // so it installs over the release build with `adb install -r` and keeps the containers.
             debuggable project.hasProperty('dgwDebuggable')
+
+            if (firebaseConfigured) {
+                // Native symbols go up with :app:uploadCrashlyticsSymbolFileRelease (release.yml).
+                firebaseCrashlytics {
+                    nativeSymbolUploadEnabled true
+                }
+            }
 
             if (releaseSigningReady) {
                 signingConfig signingConfigs.release
@@ -233,6 +257,9 @@ dependencies {
     implementation 'org.tukaani:xz:1.7'
     implementation 'org.apache.commons:commons-compress:1.20'
     implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-crashlytics-ndk'
     testImplementation 'junit:junit:4.13.2'
     // android.jar's org.json is a stub on the JVM; SavedCheatsTest needs the real one.
     testImplementation 'org.json:json:20231013'

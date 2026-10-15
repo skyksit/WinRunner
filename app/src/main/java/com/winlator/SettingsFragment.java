@@ -46,6 +46,7 @@ import com.winlator.contentdialog.SoundFontTestDialog;
 import com.winlator.core.AppUtils;
 import com.winlator.core.ArrayUtils;
 import com.winlator.core.Callback;
+import com.winlator.core.CrashReporter;
 import com.winlator.core.DefaultVersion;
 import com.winlator.core.FileUtils;
 import com.winlator.core.GeneralComponents;
@@ -153,6 +154,9 @@ public class SettingsFragment extends Fragment {
         final CheckBox cbAutoCheckUpdates = view.findViewById(R.id.CBAutoCheckUpdates);
         cbAutoCheckUpdates.setChecked(preferences.getBoolean(UpdateChecker.PREF_AUTO_CHECK, true));
 
+        final CheckBox cbSendCrashReports = view.findViewById(R.id.CBSendCrashReports);
+        cbSendCrashReports.setChecked(preferences.getBoolean(CrashReporter.PREF_ENABLED, CrashReporter.DEFAULT_ENABLED));
+
         final CheckBox cbEnableBackgroundWakelock = view.findViewById(R.id.CBEnableBackgroundWakelock);
         cbEnableBackgroundWakelock.setChecked(preferences.getBoolean("enable_background_wakelock", false));
 
@@ -247,6 +251,7 @@ public class SettingsFragment extends Fragment {
             editor.putBoolean("open_android_browser_from_wine", cbOpenAndroidBrowserFromWine.isChecked());
             editor.putBoolean("use_android_clipboard_on_wine", cbUseAndroidClipboardOnWine.isChecked());
             editor.putBoolean(UpdateChecker.PREF_AUTO_CHECK, cbAutoCheckUpdates.isChecked());
+            editor.putBoolean(CrashReporter.PREF_ENABLED, cbSendCrashReports.isChecked());
             editor.putBoolean("enable_background_protection", cbEnableBackgroundProtection.isChecked());
             editor.putBoolean("enable_background_wakelock", cbEnableBackgroundWakelock.isChecked());
             editor.putBoolean("save_mem_on_run_from_steam", cbSaveMemOnRunFromSteam.isChecked());
@@ -281,6 +286,7 @@ public class SettingsFragment extends Fragment {
             else if (preferences.contains("wine_debug_channels")) editor.remove("wine_debug_channels");
 
             if (editor.commit()) {
+                CrashReporter.apply(getContext());
                 if (!restartApp) {
                     NavigationView navigationView = getActivity().findViewById(R.id.NavigationView);
                     navigationView.setCheckedItem(R.id.menu_item_containers);

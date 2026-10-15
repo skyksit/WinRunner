@@ -307,6 +307,13 @@
                         android:layout_marginTop="8dp" />
 
                     <CheckBox
+                        android:id="@+id/CBSendCrashReports"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/send_crash_reports"
+                        android:layout_marginTop="8dp" />
+
+                    <CheckBox
                         android:id="@+id/CBEnableBackgroundProtection"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

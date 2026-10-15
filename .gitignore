@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+# Firebase project config (Crashlytics). Kept out of this public repo; CI writes it from a secret.
+/app/google-services.json
