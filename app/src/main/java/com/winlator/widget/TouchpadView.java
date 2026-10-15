@@ -21,6 +21,10 @@ import com.winlator.winhandler.WinHandler;
 import com.winlator.xserver.Pointer;
 import com.winlator.xserver.XServer;
 
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 public class TouchpadView extends View implements View.OnCapturedPointerListener {
     private static final byte MAX_FINGERS = 4;
     private static final short MAX_TWO_FINGERS_SCROLL_DISTANCE = 350;
@@ -74,6 +78,8 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     private View captureFocusView;
     private long lastRecaptureAttempt = 0;
     private boolean captureSuspended = false;
+    /** External (Bluetooth/USB) mouse input; touch still injects directly. See {@link MouseInputQueue}. */
+    private final MouseInputQueue mouseInputQueue;
 
     public TouchpadView(Context context, XServer xServer, boolean capturePointerOnExternalMouse) {
         super(context);
@@ -84,6 +90,8 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
         setFocusable(true);
         setFocusableInTouchMode(false);
         updateXform(AppUtils.getScreenWidth(), AppUtils.getScreenHeight(), xServer.screenInfo.width, xServer.screenInfo.height);
+
+        mouseInputQueue = createMouseInputQueue(xServer);
 
         this.capturePointerOnExternalMouse = capturePointerOnExternalMouse;
         if (capturePointerOnExternalMouse) {
@@ -135,6 +143,33 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
         Log.i(POINTER_TAG, "onPointerCaptureChange: hasCapture=" + hasCapture);
         // No immediate re-request: capture is usually lost with window focus, and asking again
         // then would loop. The next uncaptured mouse event or focus gain takes it back.
+    }
+
+    private static MouseInputQueue createMouseInputQueue(XServer xServer) {
+        // One thread keeps the order; it ends when the mouse is idle and comes back on the next event.
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), runnable -> {
+            Thread thread = new Thread(runnable, "MouseInput");
+            thread.setDaemon(true);
+            return thread;
+        });
+        executor.allowCoreThreadTimeOut(true);
+        return new MouseInputQueue(executor, new MouseInputQueue.Sink() {
+            @Override
+            public void moveTo(int x, int y) {
+                xServer.injectPointerMove(x, y);
+            }
+
+            @Override
+            public void moveBy(int dx, int dy) {
+                xServer.injectPointerMoveDelta(dx, dy);
+            }
+
+            @Override
+            public void button(Pointer.Button button, boolean pressed) {
+                if (pressed) xServer.injectPointerButtonPress(button);
+                else xServer.injectPointerButtonRelease(button);
+            }
+        });
     }
 
     private static StateListDrawable createTransparentBackground() {
@@ -235,7 +270,7 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
             case MotionEvent.ACTION_MOVE:
                 if (event.isFromSource(InputDevice.SOURCE_MOUSE)) {
                     float[] transformedPoint = XForm.transformPoint(xform, event.getX(), event.getY());
-                    if (isEnabled()) xServer.injectPointerMove((int)transformedPoint[0], (int)transformedPoint[1]);
+                    if (isEnabled()) mouseInputQueue.moveTo((int)transformedPoint[0], (int)transformedPoint[1]);
                 }
                 else {
                     for (byte i = 0; i < MAX_FINGERS; i++) {
@@ -528,19 +563,19 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
             switch (event.getAction()) {
                 case MotionEvent.ACTION_BUTTON_PRESS:
                     if (actionButton == MotionEvent.BUTTON_PRIMARY) {
-                        xServer.injectPointerButtonPress(Pointer.Button.BUTTON_LEFT);
+                        mouseInputQueue.button(Pointer.Button.BUTTON_LEFT, true);
                     }
                     else if (actionButton == MotionEvent.BUTTON_SECONDARY) {
-                        xServer.injectPointerButtonPress(Pointer.Button.BUTTON_RIGHT);
+                        mouseInputQueue.button(Pointer.Button.BUTTON_RIGHT, true);
                     }
                     handled = true;
                     break;
                 case MotionEvent.ACTION_BUTTON_RELEASE:
                     if (actionButton == MotionEvent.BUTTON_PRIMARY) {
-                        xServer.injectPointerButtonRelease(Pointer.Button.BUTTON_LEFT);
+                        mouseInputQueue.button(Pointer.Button.BUTTON_LEFT, false);
                     }
                     else if (actionButton == MotionEvent.BUTTON_SECONDARY) {
-                        xServer.injectPointerButtonRelease(Pointer.Button.BUTTON_RIGHT);
+                        mouseInputQueue.button(Pointer.Button.BUTTON_RIGHT, false);
                     }
                     handled = true;
                     break;
@@ -550,18 +585,18 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
                     // magnifier's pan still, and inverting a pan that follows the cursor makes the
                     // view drift toward the mouse on every event. Uncorrected, the mouse position
                     // maps onto the whole X screen and the view follows it - stable.
-                    xServer.injectPointerMove((int)transformedPoint[0], (int)transformedPoint[1]);
+                    mouseInputQueue.moveTo((int)transformedPoint[0], (int)transformedPoint[1]);
                     handled = true;
                     break;
                 case MotionEvent.ACTION_SCROLL:
                     float scrollY = event.getAxisValue(MotionEvent.AXIS_VSCROLL);
                     if (scrollY <= -1.0f) {
-                        xServer.injectPointerButtonPress(Pointer.Button.BUTTON_SCROLL_DOWN);
-                        xServer.injectPointerButtonRelease(Pointer.Button.BUTTON_SCROLL_DOWN);
+                        mouseInputQueue.button(Pointer.Button.BUTTON_SCROLL_DOWN, true);
+                        mouseInputQueue.button(Pointer.Button.BUTTON_SCROLL_DOWN, false);
                     }
                     else if (scrollY >= 1.0f) {
-                        xServer.injectPointerButtonPress(Pointer.Button.BUTTON_SCROLL_UP);
-                        xServer.injectPointerButtonRelease(Pointer.Button.BUTTON_SCROLL_UP);
+                        mouseInputQueue.button(Pointer.Button.BUTTON_SCROLL_UP, true);
+                        mouseInputQueue.button(Pointer.Button.BUTTON_SCROLL_UP, false);
                     }
                     handled = true;
                     break;
@@ -595,7 +630,7 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
             float dy = event.getY() * sensitivity;
             if (Math.abs(dy) > CURSOR_ACCELERATION_THRESHOLD) dy *= CURSOR_ACCELERATION;
 
-            xServer.injectPointerMoveDelta(Mathf.roundPoint(dx), Mathf.roundPoint(dy));
+            mouseInputQueue.moveBy(Mathf.roundPoint(dx), Mathf.roundPoint(dy));
             return true;
         }
         else {
