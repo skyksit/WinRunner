@@ -529,9 +529,10 @@ public class SettingsFragment extends Fragment {
     private void loadMIDIInputDeviceSpinner(final Spinner sMIDIInputDevice, final String selectedValue) {
         Context context = getContext();
         MidiManager mm = (MidiManager)context.getSystemService(Context.MIDI_SERVICE);
-        MidiDeviceInfo[] infos = mm.getDevices();
+        // Null on devices without the MIDI feature (seen on a OnePlus 8 Pro).
+        MidiDeviceInfo[] infos = mm != null ? mm.getDevices() : new MidiDeviceInfo[0];
 
-        if (!midiDeviceCallbackRegistered) {
+        if (mm != null && !midiDeviceCallbackRegistered) {
             midiDeviceCallbackRegistered = true;
             mm.registerDeviceCallback(new MidiManager.DeviceCallback() {
                 @Override

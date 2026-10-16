@@ -136,7 +136,8 @@ public class Shortcut {
     }
 
     public boolean isLinkPath() {
-        return path.endsWith(".lnk") || path.contains("://");
+        // A folder shortcut has no path.
+        return path != null && (path.endsWith(".lnk") || path.contains("://"));
     }
 
     public File getLinkFile() {

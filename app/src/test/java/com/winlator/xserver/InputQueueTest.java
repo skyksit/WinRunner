@@ -1,8 +1,8 @@
-package com.winlator.widget;
+package com.winlator.xserver;
 
 import static org.junit.Assert.assertEquals;
-
-import com.winlator.xserver.Pointer;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MouseInputQueueTest {
+public class InputQueueTest {
     /** Runs posted work only when asked, so a test can queue input while the "thread" is busy. */
     private static class ManualExecutor implements java.util.concurrent.Executor {
         final ArrayDeque<Runnable> tasks = new ArrayDeque<>();
@@ -26,7 +26,7 @@ public class MouseInputQueueTest {
         }
     }
 
-    private static class RecordingSink implements MouseInputQueue.Sink {
+    private static class RecordingSink implements InputQueue.Sink {
         final List<String> calls = new ArrayList<>();
 
         @Override
@@ -43,11 +43,16 @@ public class MouseInputQueueTest {
         public void button(Pointer.Button button, boolean pressed) {
             calls.add((pressed ? "press " : "release ") + button);
         }
+
+        @Override
+        public void key(XKeycode xKeycode, int keysym, boolean pressed) {
+            calls.add((pressed ? "keydown " : "keyup ") + xKeycode + (keysym != 0 ? " " + keysym : ""));
+        }
     }
 
     private final ManualExecutor executor = new ManualExecutor();
     private final RecordingSink sink = new RecordingSink();
-    private final MouseInputQueue queue = new MouseInputQueue(executor, sink);
+    private final InputQueue queue = new InputQueue(executor, sink);
 
     @Test
     public void consecutiveRelativeMovesAreMerged() {
@@ -100,6 +105,32 @@ public class MouseInputQueueTest {
         assertEquals(1, executor.tasks.size());
         executor.runAll();
         assertEquals(Arrays.asList("by 1,0", "press BUTTON_RIGHT", "release BUTTON_RIGHT", "by 0,1"), sink.calls);
+    }
+
+    @Test
+    public void keysKeepTheirOrderWithMoves() {
+        queue.moveBy(1, 0);
+        queue.key(XKeycode.KEY_SHIFT_L, 0, true);
+        queue.key(XKeycode.KEY_A, 65, true);
+        queue.moveBy(2, 0);
+        queue.moveTo(5, 5);
+        queue.key(XKeycode.KEY_A, 0, false);
+        executor.runAll();
+        assertEquals(Arrays.asList("by 1,0", "keydown KEY_SHIFT_L", "keydown KEY_A 65", "to 5,5", "keyup KEY_A"), sink.calls);
+    }
+
+    @Test
+    public void buttonStateFollowsWaitingInput() {
+        assertFalse(queue.isButtonPressed(Pointer.Button.BUTTON_LEFT, false));
+        queue.button(Pointer.Button.BUTTON_LEFT, true);
+        // Queued, not yet run: a tap must see its own press, or it would never release.
+        assertTrue(queue.isButtonPressed(Pointer.Button.BUTTON_LEFT, false));
+        queue.button(Pointer.Button.BUTTON_LEFT, false);
+        assertFalse(queue.isButtonPressed(Pointer.Button.BUTTON_LEFT, true));
+        assertFalse(queue.isButtonPressed(Pointer.Button.BUTTON_RIGHT, false));
+        executor.runAll();
+        // Nothing waiting: the pointer's own state answers.
+        assertTrue(queue.isButtonPressed(Pointer.Button.BUTTON_LEFT, true));
     }
 
     @Test

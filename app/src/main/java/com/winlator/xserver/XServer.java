@@ -18,6 +18,9 @@ import com.winlator.xserver.extensions.XInputExtension;
 
 import java.nio.charset.Charset;
 import java.util.EnumMap;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class XServer {
@@ -46,6 +49,7 @@ public class XServer {
     private WinHandler winHandler;
     private final EnumMap<Lockable, ReentrantLock> locks = new EnumMap<>(Lockable.class);
     private boolean relativeMouseMovement = false;
+    private final InputQueue inputQueue = createInputQueue();
 
     public XServer(XServerDisplayActivity activity, ScreenInfo screenInfo) {
         this.activity = activity;
@@ -145,13 +149,81 @@ public class XServer {
         return null;
     }
 
+    private InputQueue createInputQueue() {
+        // One thread keeps the order; it ends when input is idle and comes back on the next event.
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), runnable -> {
+            Thread thread = new Thread(runnable, "XInput");
+            thread.setDaemon(true);
+            return thread;
+        });
+        executor.allowCoreThreadTimeOut(true);
+        return new InputQueue(executor, new InputQueue.Sink() {
+            @Override
+            public void moveTo(int x, int y) {
+                pointerMove(x, y);
+            }
+
+            @Override
+            public void moveBy(int dx, int dy) {
+                pointerMoveDelta(dx, dy);
+            }
+
+            @Override
+            public void button(Pointer.Button button, boolean pressed) {
+                if (pressed) pointerButtonPress(button);
+                else pointerButtonRelease(button);
+            }
+
+            @Override
+            public void key(XKeycode xKeycode, int keysym, boolean pressed) {
+                if (pressed) keyPress(xKeycode, keysym);
+                else keyRelease(xKeycode);
+            }
+        });
+    }
+
+    // The inject* methods only queue the input and return; see InputQueue for why.
+
     public void injectPointerMove(int x, int y) {
+        inputQueue.moveTo(x, y);
+    }
+
+    public void injectPointerMoveDelta(int dx, int dy) {
+        inputQueue.moveBy(dx, dy);
+    }
+
+    public void injectPointerButtonPress(Pointer.Button buttonCode) {
+        inputQueue.button(buttonCode, true);
+    }
+
+    public void injectPointerButtonRelease(Pointer.Button buttonCode) {
+        inputQueue.button(buttonCode, false);
+    }
+
+    public void injectKeyPress(XKeycode xKeycode) {
+        injectKeyPress(xKeycode, 0);
+    }
+
+    public void injectKeyPress(XKeycode xKeycode, int keysym) {
+        inputQueue.key(xKeycode, keysym, true);
+    }
+
+    public void injectKeyRelease(XKeycode xKeycode) {
+        inputQueue.key(xKeycode, 0, false);
+    }
+
+    /** The button's state once the input injected so far has run; see {@link InputQueue#isButtonPressed}. */
+    public boolean isPointerButtonPressed(Pointer.Button button) {
+        return inputQueue.isButtonPressed(button, pointer.isButtonPressed(button));
+    }
+
+    private void pointerMove(int x, int y) {
         try (XLock lock = lock(Lockable.WINDOW_MANAGER, Lockable.INPUT_DEVICE)) {
             pointer.setPosition(x, y);
         }
     }
 
-    public void injectPointerMoveDelta(int dx, int dy) {
+    private void pointerMoveDelta(int dx, int dy) {
         try (XLock lock = lock(Lockable.WINDOW_MANAGER, Lockable.INPUT_DEVICE)) {
             pointer.setPosition(pointer.getX() + dx, pointer.getY() + dy);
             if (cursorLocker == null) pointer.clampPosition();
@@ -161,7 +233,7 @@ public class XServer {
         }
     }
 
-    public void injectPointerButtonPress(Pointer.Button buttonCode) {
+    private void pointerButtonPress(Pointer.Button buttonCode) {
         try (XLock lock = lock(Lockable.WINDOW_MANAGER, Lockable.INPUT_DEVICE)) {
             pointer.setButton(buttonCode, true);
 
@@ -170,7 +242,7 @@ public class XServer {
         }
     }
 
-    public void injectPointerButtonRelease(Pointer.Button buttonCode) {
+    private void pointerButtonRelease(Pointer.Button buttonCode) {
         try (XLock lock = lock(Lockable.WINDOW_MANAGER, Lockable.INPUT_DEVICE)) {
             pointer.setButton(buttonCode, false);
 
@@ -179,17 +251,13 @@ public class XServer {
         }
     }
 
-    public void injectKeyPress(XKeycode xKeycode) {
-        injectKeyPress(xKeycode, 0);
-    }
-
-    public void injectKeyPress(XKeycode xKeycode, int keysym) {
+    private void keyPress(XKeycode xKeycode, int keysym) {
         try (XLock lock = lock(Lockable.WINDOW_MANAGER, Lockable.INPUT_DEVICE)) {
             keyboard.setKeyPress(xKeycode.id, keysym);
         }
     }
 
-    public void injectKeyRelease(XKeycode xKeycode) {
+    private void keyRelease(XKeycode xKeycode) {
         try (XLock lock = lock(Lockable.WINDOW_MANAGER, Lockable.INPUT_DEVICE)) {
             keyboard.setKeyRelease(xKeycode.id);
         }
