@@ -263,6 +263,12 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         if (!isGenerateWineprefix()) {
             ContainerManager containerManager = new ContainerManager(this);
             container = containerManager.getContainerById(getIntent().getIntExtra("container_id", 0));
+            // A shortcut or caller can still point at a container that has since been removed.
+            if (container == null) {
+                AppUtils.showToast(this, R.string.container_not_found);
+                finish();
+                return;
+            }
             containerManager.activateContainer(container);
 
             boolean wineprefixNeedsUpdate = container.getExtra("wineprefixNeedsUpdate").equals("t");

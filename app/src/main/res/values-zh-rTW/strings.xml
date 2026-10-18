@@ -419,6 +419,7 @@
     <string name="cheat_narrow_down">請在遊戲中改變該數值，然後再次搜尋以縮小範圍。</string>
     <string name="cheat_no_match">沒有符合項目。按「新搜尋」重新開始。</string>
     <string name="cheat_no_process">找不到遊戲處理程序。</string>
+    <string name="container_not_found">此遊戲的容器已不存在。</string>
     <string name="cheat_start_hint">輸入遊戲中顯示的數值，然後按「開始搜尋」。</string>
     <string name="cheat_enter_value">請輸入數字。</string>
     <string name="cheat_search_failed">搜尋失敗：%1$s</string>

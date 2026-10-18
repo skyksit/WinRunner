@@ -414,6 +414,7 @@
     <string name="cheat_narrow_down">Ubah nilainya di dalam game, lalu cari lagi untuk mempersempit hasil.</string>
     <string name="cheat_no_match">Tidak ada hasil. Tekan Pencarian baru untuk mulai dari awal.</string>
     <string name="cheat_no_process">Proses game tidak ditemukan.</string>
+    <string name="container_not_found">Kontainer untuk game ini sudah tidak ada.</string>
     <string name="cheat_start_hint">Masukkan nilai yang ditampilkan di game, lalu tekan Mulai cari.</string>
     <string name="cheat_enter_value">Masukkan angka.</string>
     <string name="cheat_search_failed">Pencarian gagal: %1$s</string>

@@ -419,6 +419,7 @@
     <string name="cheat_narrow_down">Cambia el valor en el juego y vuelve a buscar para acotar los resultados.</string>
     <string name="cheat_no_match">Sin coincidencias. Pulsa Nueva búsqueda para empezar de nuevo.</string>
     <string name="cheat_no_process">No se encontró el proceso del juego.</string>
+    <string name="container_not_found">El contenedor de este juego ya no existe.</string>
     <string name="cheat_start_hint">Introduce el valor que muestra el juego y pulsa Iniciar búsqueda.</string>
     <string name="cheat_enter_value">Introduce un número.</string>
     <string name="cheat_search_failed">Error en la búsqueda: %1$s</string>

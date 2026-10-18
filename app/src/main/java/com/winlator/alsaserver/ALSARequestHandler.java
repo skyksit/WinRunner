@@ -86,8 +86,11 @@ public class ALSARequestHandler implements RequestHandler {
         ByteBuffer sharedBuffer = alsaClient.getSharedBuffer();
         ByteBuffer auxBuffer = alsaClient.getAuxBuffer();
 
-        auxBuffer.position(0).limit(requestLength);
-        sharedBuffer.position(ALSAClient.BUFFER_OFFSET).limit(ALSAClient.BUFFER_OFFSET + requestLength);
+        // The guest sized its mapping from its own buffer size; a write larger than the segment we
+        // created (seen as 7680 > 6144) is cut to what fits, a short glitch instead of a crash.
+        int length = Math.max(0, Math.min(requestLength, Math.min(sharedBuffer.capacity() - ALSAClient.BUFFER_OFFSET, auxBuffer.capacity())));
+        auxBuffer.position(0).limit(length);
+        sharedBuffer.position(ALSAClient.BUFFER_OFFSET).limit(ALSAClient.BUFFER_OFFSET + length);
         auxBuffer.put(sharedBuffer);
 
         try (XStreamLock lock = outputStream.lock()) {

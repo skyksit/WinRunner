@@ -13,7 +13,8 @@ import java.nio.ByteOrder;
 
 public abstract class MSBitmap {
     public static Bitmap decodeBuffer(int width, int height, int bitCount, ByteBuffer data) {
-        if (width == 0 || height == 0) return null;
+        if (width <= 0 || height == 0) return null;
+        if (bitCount != 1 && bitCount != 4 && bitCount != 8 && bitCount != 24 && bitCount != 32) return null;
         byte r, g, b, a;
         int i, j, x, y, line;
 
@@ -23,70 +24,49 @@ public abstract class MSBitmap {
             invertY = false;
         }
 
+        // Rows are padded to 4 bytes whatever the depth. Icons come from arbitrary game files, so a
+        // truncated or lying header must yield no icon rather than reads past the end of the data.
+        final int stride = ((width * bitCount + 31) / 32) * 4;
+        final int colorTableOffset = data.position();
+        final int colorTableSize = bitCount <= 8 ? (1 << bitCount) * 4 : 0;
+        final int pixelOffset = colorTableOffset + colorTableSize;
+        if ((long)pixelOffset + (long)stride * height > data.limit()) return null;
+
         ByteBuffer pixels = ByteBuffer.allocate(width * height * 4);
 
-        if (bitCount == 32) {
-            for (y = height - 1, i = data.position(); y >= 0; y--) {
-                line = invertY ? y : height - 1 - y;
+        for (y = height - 1; y >= 0; y--) {
+            line = invertY ? y : height - 1 - y;
+            i = pixelOffset + (height - 1 - y) * stride;
 
-                for (x = 0; x < width; x++) {
+            for (x = 0; x < width; x++) {
+                if (bitCount == 32) {
                     b = data.get(i++);
                     g = data.get(i++);
                     r = data.get(i++);
                     a = data.get(i++);
-
-                    j = line * width * 4 + x * 4;
-                    pixels.put(j+2, b);
-                    pixels.put(j+1, g);
-                    pixels.put(j+0, r);
-                    pixels.put(j+3, a);
                 }
-
-                i += width % 4;
-            }
-        }
-        else if (bitCount == 24) {
-            for (y = height - 1, i = data.position(); y >= 0; y--) {
-                line = invertY ? y : height - 1 - y;
-
-                for (x = 0; x < width; x++) {
+                else if (bitCount == 24) {
                     b = data.get(i++);
                     g = data.get(i++);
                     r = data.get(i++);
-
-                    j = line * width * 4 + x * 4;
-                    pixels.put(j+2, b);
-                    pixels.put(j+1, g);
-                    pixels.put(j+0, r);
-                    pixels.put(j+3, (byte)255);
+                    a = (byte)255;
                 }
-
-                i += width % 4;
-            }
-        }
-        else if (bitCount <= 8) {
-            final int colorTableOffset = data.position();
-            final int colorTableSize = (int)(Math.pow(2, bitCount) * 4);
-            int colorIndex;
-
-            for (y = height - 1, i = data.position() + colorTableSize; y >= 0; y--) {
-                line = invertY ? y : height - 1 - y;
-
-                for (x = 0; x < width; x++) {
-                    colorIndex = Byte.toUnsignedInt(data.get(i++)) * 4;
+                else {
+                    int bitIndex = x * bitCount;
+                    int value = Byte.toUnsignedInt(data.get(i + bitIndex / 8));
+                    int colorIndex = ((value >> (8 - bitCount - bitIndex % 8)) & ((1 << bitCount) - 1)) * 4;
 
                     b = data.get(colorTableOffset + colorIndex + 0);
                     g = data.get(colorTableOffset + colorIndex + 1);
                     r = data.get(colorTableOffset + colorIndex + 2);
-
-                    j = line * width * 4 + x * 4;
-                    pixels.put(j+2, b);
-                    pixels.put(j+1, g);
-                    pixels.put(j+0, r);
-                    pixels.put(j+3, (byte)255);
+                    a = (byte)255;
                 }
 
-                i += width % 4;
+                j = line * width * 4 + x * 4;
+                pixels.put(j+2, b);
+                pixels.put(j+1, g);
+                pixels.put(j+0, r);
+                pixels.put(j+3, a);
             }
         }
 

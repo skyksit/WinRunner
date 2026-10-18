@@ -419,6 +419,7 @@
     <string name="cheat_narrow_down">게임에서 값을 바꾼 다음 다시 검색해 범위를 좁히세요.</string>
     <string name="cheat_no_match">일치하는 항목이 없습니다. 새 검색을 눌러 다시 시작하세요.</string>
     <string name="cheat_no_process">게임 프로세스를 찾을 수 없습니다.</string>
+    <string name="container_not_found">이 게임의 컨테이너가 더 이상 없습니다.</string>
     <string name="cheat_start_hint">게임에 표시된 값을 입력하고 검색 시작을 누르세요.</string>
     <string name="cheat_enter_value">숫자를 입력하세요.</string>
     <string name="cheat_search_failed">검색 실패: %1$s</string>

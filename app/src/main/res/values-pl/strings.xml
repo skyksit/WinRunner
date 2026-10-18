@@ -419,6 +419,7 @@
     <string name="cheat_narrow_down">Zmień wartość w grze, a następnie wyszukaj ponownie, aby zawęzić wyniki.</string>
     <string name="cheat_no_match">Brak wyników. Naciśnij Nowe wyszukiwanie, aby zacząć od nowa.</string>
     <string name="cheat_no_process">Nie znaleziono procesu gry.</string>
+    <string name="container_not_found">Kontener tej gry już nie istnieje.</string>
     <string name="cheat_start_hint">Wpisz wartość widoczną w grze i naciśnij Rozpocznij wyszukiwanie.</string>
     <string name="cheat_enter_value">Wpisz liczbę.</string>
     <string name="cheat_search_failed">Wyszukiwanie nie powiodło się: %1$s</string>

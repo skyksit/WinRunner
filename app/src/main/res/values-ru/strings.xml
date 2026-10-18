@@ -413,6 +413,7 @@
     <string name="cheat_narrow_down">Измените значение в игре и повторите поиск, чтобы сузить результаты.</string>
     <string name="cheat_no_match">Совпадений нет. Нажмите «Новый поиск», чтобы начать заново.</string>
     <string name="cheat_no_process">Процесс игры не найден.</string>
+    <string name="container_not_found">Контейнер этой игры больше не существует.</string>
     <string name="cheat_start_hint">Введите значение, показанное в игре, и нажмите «Начать поиск».</string>
     <string name="cheat_enter_value">Введите число.</string>
     <string name="cheat_search_failed">Ошибка поиска: %1$s</string>

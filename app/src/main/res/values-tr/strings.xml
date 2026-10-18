@@ -414,6 +414,7 @@
     <string name="cheat_narrow_down">Oyunda değeri değiştirin, ardından daraltmak için tekrar arayın.</string>
     <string name="cheat_no_match">Eşleşme yok. Baştan başlamak için Yeni arama\'ya basın.</string>
     <string name="cheat_no_process">Oyun işlemi bulunamadı.</string>
+    <string name="container_not_found">Bu oyunun konteyneri artık mevcut değil.</string>
     <string name="cheat_start_hint">Oyunda gösterilen değeri girin ve Aramayı başlat\'a basın.</string>
     <string name="cheat_enter_value">Bir sayı girin.</string>
     <string name="cheat_search_failed">Arama başarısız: %1$s</string>

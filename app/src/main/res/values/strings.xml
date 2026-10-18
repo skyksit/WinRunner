@@ -477,6 +477,7 @@
     <string name="cheat_narrow_down">Change the value in the game, then search again to narrow them down.</string>
     <string name="cheat_no_match">No matches. Press New search to start over.</string>
     <string name="cheat_no_process">The game process was not found.</string>
+    <string name="container_not_found">The container for this game no longer exists.</string>
     <string name="cheat_start_hint">Enter the value shown in the game and press Start search.</string>
     <string name="cheat_enter_value">Enter a number.</string>
     <string name="cheat_search_failed">Search failed: %1$s</string>

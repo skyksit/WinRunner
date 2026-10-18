@@ -414,6 +414,7 @@
     <string name="cheat_narrow_down">Thay đổi giá trị trong game rồi tìm lại để thu hẹp kết quả.</string>
     <string name="cheat_no_match">Không có kết quả. Nhấn Tìm kiếm mới để bắt đầu lại.</string>
     <string name="cheat_no_process">Không tìm thấy tiến trình game.</string>
+    <string name="container_not_found">Container của trò chơi này không còn tồn tại.</string>
     <string name="cheat_start_hint">Nhập giá trị hiển thị trong game rồi nhấn Bắt đầu tìm.</string>
     <string name="cheat_enter_value">Hãy nhập một số.</string>
     <string name="cheat_search_failed">Tìm kiếm thất bại: %1$s</string>

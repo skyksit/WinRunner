@@ -53,6 +53,12 @@ public class ExternalControllerBindingsActivity extends AppCompatActivity {
         int profileId = intent.getIntExtra("profile_id", 0);
         profile = InputControlsManager.loadProfile(this, ControlsProfile.getProfileFile(this, profileId));
         String controllerId = intent.getStringExtra("controller_id");
+        // The profile can be gone by the time this opens (deleted, or the activity restored after
+        // its file was removed); there is nothing to edit then.
+        if (profile == null || controllerId == null) {
+            finish();
+            return;
+        }
 
         controller = profile.getController(controllerId);
         if (controller == null) {

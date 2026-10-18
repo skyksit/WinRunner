@@ -48,6 +48,17 @@ public class MSIcon {
         byte[] bytes = FileUtils.read(icoFile);
         if (bytes == null) return null;
 
+        // Any .ico a game ships ends up here from the icon loader's pool thread, where an uncaught
+        // exception kills the app: a truncated or malformed file just has no icon.
+        try {
+            return decodeBytes(bytes);
+        }
+        catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    private static Bitmap decodeBytes(byte[] bytes) {
         ByteBuffer data = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN);
 
         short reserved = data.getShort();
