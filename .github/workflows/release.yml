@@ -3,6 +3,9 @@ name: Release APK
 on:
   push:
     tags:
+      # wrNN = the NN-th WinRunner release; it becomes the app's versionName (app/app/build.gradle).
+      - 'wr*'
+      # Releases up to v11.6-wr39.
       - 'v*'
   workflow_dispatch:
 
