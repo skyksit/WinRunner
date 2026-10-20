@@ -47,7 +47,7 @@ public class TouchpadView extends View implements View.OnCapturedPointerListener
     private final XServer xServer;
     private Runnable fourFingersTapCallback;
     public static final String PREF_PINCH_TO_ZOOM = "pinch_to_zoom";
-    public static final boolean DEFAULT_PINCH_TO_ZOOM = false;
+    public static final boolean DEFAULT_PINCH_TO_ZOOM = true;
 
     /** Reads and sets the magnifier zoom; the owner keeps the panel and indicator in step. */
     public interface MagnifierZoomCallback {
