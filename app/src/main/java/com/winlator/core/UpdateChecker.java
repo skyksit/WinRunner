@@ -171,7 +171,9 @@ public abstract class UpdateChecker {
         dialog.setTitle(R.string.update_available);
 
         String sizeText = info.size > 0 ? String.format(Locale.ENGLISH, " · %.1f MB", info.size / 1048576.0f) : "";
-        String header = info.versionName + (info.tag.isEmpty() ? "" : " ("+info.tag+")") + sizeText;
+        // From wr40 the version name is the tag itself, so "wr40 (wr40)" would repeat it; older releases still say "11.6".
+        boolean tagRedundant = info.tag.isEmpty() || info.tag.equals(info.versionName);
+        String header = info.versionName + (tagRedundant ? "" : " ("+info.tag+")") + sizeText;
         ((TextView)dialog.findViewById(R.id.TVUpdateVersion)).setText(header);
 
         TextView tvNotes = dialog.findViewById(R.id.TVUpdateNotes);
