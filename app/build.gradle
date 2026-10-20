@@ -112,7 +112,7 @@ android {
         // 70: Overlay Opacity multiplies themed (coloured) elements too, the editor previews it with a
         //     -/+ slider row under the theme button, and returning from the in-game settings no longer
         //     switches Input Controls to "Disabled".
-        versionCode 76
+        versionCode 77
         // Version name = the release tag "wrNN": the NN-th WinRunner release, +1 per GitHub release.
         // The same text is the tag, the release title, the APK file name (WinRunner-wr40.apk), the
         // About screen and update.json, so users compare one number. Until wr39 the tags were
