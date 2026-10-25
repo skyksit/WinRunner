@@ -112,7 +112,11 @@ android {
         // 70: Overlay Opacity multiplies themed (coloured) elements too, the editor previews it with a
         //     -/+ slider row under the theme button, and returning from the in-game settings no longer
         //     switches Input Controls to "Disabled".
-        versionCode 77
+        // 78: rootfs 31 - winegstreamer flushes a seek that moves a running parser even when the
+        //     caller passed AM_SEEKING_NoFlush (DGwine 0008). 창세기전3 파트1 pauses its MP3 music
+        //     graph and rewinds it with NoFlush; the streaming thread held pin.flushing_cs while
+        //     parked on the paused renderer and the game froze at a scene change.
+        versionCode 78
         // Version name = the release tag "wrNN": the NN-th WinRunner release, +1 per GitHub release.
         // The same text is the tag, the release title, the APK file name (WinRunner-wr40.apk), the
         // About screen and update.json, so users compare one number. Until wr39 the tags were

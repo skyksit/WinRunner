@@ -35,7 +35,10 @@ public abstract class RootFSInstaller {
     //     the decoder writing 24bpp rows into the surface.
     // 30: winex11.so commits a Unicode keysym as IME text (DGwine patches-winlator/0002) - the X server
     //     has no XKB, so Hangul from the soft keyboard was dropped; ImeInputView sends it this way.
-    public static final byte LATEST_VERSION = 30; // TODO increment it on rootfs update
+    // 31: winegstreamer flushes a seek that moves a running parser even when the caller passed
+    //     AM_SEEKING_NoFlush (DGwine patch 0008); a paused music graph rewound with NoFlush no
+    //     longer deadlocks on pin.flushing_cs.
+    public static final byte LATEST_VERSION = 31; // TODO increment it on rootfs update
     public static final byte UPDATE_WINEPREFIX_VERSION = 16; // set it if main wine version change
     public static final String FILENAME = "rootfs.tzst";
 
