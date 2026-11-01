@@ -38,7 +38,11 @@ public abstract class RootFSInstaller {
     // 31: winegstreamer flushes a seek that moves a running parser even when the caller passed
     //     AM_SEEKING_NoFlush (DGwine patch 0008); a paused music graph rewound with NoFlush no
     //     longer deadlocks on pin.flushing_cs.
-    public static final byte LATEST_VERSION = 31; // TODO increment it on rootfs update
+    // 32: quartz.dll's VMR-7 default presenter draws frames into the clipping window with GDI and
+    //     converts YUV frames itself (DGwine patch 0009). The primary-surface blit made ddraw attach
+    //     a GL drawable to the game's window and destroy it when the movie ended, leaving a GDI game
+    //     black after its opening movie.
+    public static final byte LATEST_VERSION = 32; // TODO increment it on rootfs update
     public static final byte UPDATE_WINEPREFIX_VERSION = 16; // set it if main wine version change
     public static final String FILENAME = "rootfs.tzst";
 

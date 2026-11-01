@@ -116,7 +116,11 @@ android {
         //     caller passed AM_SEEKING_NoFlush (DGwine 0008). 창세기전3 파트1 pauses its MP3 music
         //     graph and rewinds it with NoFlush; the streaming thread held pin.flushing_cs while
         //     parked on the paused renderer and the game froze at a scene change.
-        versionCode 79
+        // 80: rootfs 32 - the VMR-7 default presenter draws movie frames with GDI (DGwine 0009).
+        //     Its primary-surface blit attached a GL drawable to the game's window and destroyed
+        //     it when the movie ended, so a game drawing with GDI stayed black after its opening
+        //     (Parfait ~Chocolat second brew~).
+        versionCode 80
         // Version name = the release tag "wrNN": the NN-th WinRunner release, +1 per GitHub release.
         // The same text is the tag, the release title, the APK file name (WinRunner-wr40.apk), the
         // About screen and update.json, so users compare one number. Until wr39 the tags were
